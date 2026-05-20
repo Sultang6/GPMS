@@ -1,0 +1,248 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script>
+      (function () {
+        function gpmsPublicBase() {
+          if (location.protocol === "file:") {
+            var u = location.href.split("#")[0].split("?")[0];
+            var i = u.toLowerCase().indexOf("/pages/");
+            if (i >= 0) return u.slice(0, i + 1);
+            return u.slice(0, u.lastIndexOf("/") + 1);
+          }
+          var p = location.pathname.replace(/\\/g, "/");
+          var idx = p.indexOf("/pages/");
+          if (idx >= 0) return p.slice(0, idx + 1);
+          var slash = p.lastIndexOf("/");
+          return slash >= 0 ? p.slice(0, slash + 1) : "/";
+        }
+        window.gpmsPublicBase = gpmsPublicBase;
+        var base = document.createElement("base");
+        base.href = gpmsPublicBase();
+        document.head.appendChild(base);
+      })();
+    </script>
+        <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPMS | إشعارات الطالب</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              tajawal: ["Tajawal", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+            },
+            colors: {
+              gpms: {
+                maroon: "#7A2E2E",
+                maroonDark: "#622424",
+                charcoal: "#2F343C",
+                bg: "#F4F5F7",
+              },
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, .08)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="css/GPMS.css" />
+  </head>
+
+  <body class="min-h-dvh bg-gpms-bg font-tajawal text-slate-800" data-page="student-notifications">
+    <div class="min-h-dvh lg:flex">
+      <aside
+        id="sidebar"
+        class="gpms-sidebar translate-x-full bg-gpms-charcoal text-slate-100 shadow-2xl lg:static lg:translate-x-0"
+      >
+        <div class="flex h-full flex-col">
+          <div class="px-5 pb-4 pt-5">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                <i data-lucide="graduation-cap" class="h-6 w-6 text-white"></i>
+              </div>
+              <div class="leading-tight">
+                <div class="text-sm font-bold text-white">GPMS</div>
+                <div class="text-xs text-slate-300" data-i18n="sidebarStudent">لوحة تحكم الطالب</div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="px-3 pb-5">
+            <a class="gpms-nav-item" href="pages/student/student_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span data-i18n="navDashboard">لوحة التحكم</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_project_registration.html">
+              <i data-lucide="file-plus-2" class="h-5 w-5"></i>
+              <span>تسجيل مشروع تخرج</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_submit_reports.html">
+              <i data-lucide="upload" class="h-5 w-5"></i>
+              <span>تسليم التقارير</span>
+            </a>
+            <a class="gpms-nav-item is-active" href="pages/student/student_notifications.html">
+              <i data-lucide="bell" class="h-5 w-5"></i>
+              <span>الإشعارات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_final_grade.html">
+              <i data-lucide="badge-check" class="h-5 w-5"></i>
+              <span>الدرجة النهائية</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_contact_supervisor.html">
+              <i data-lucide="messages-square" class="h-5 w-5"></i>
+              <span>التواصل مع المشرف</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/community.html">
+              <i data-lucide="users" class="h-5 w-5"></i>
+              <span data-i18n="navCommunity">المجتمع والمحادثات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/chatbot.html">
+              <i data-lucide="bot" class="h-5 w-5"></i>
+              <span data-i18n="navChatbot">المساعد الذكي</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/reference_library.html">
+              <i data-lucide="library" class="h-5 w-5"></i>
+              <span data-i18n="navReferenceLibrary">مكتبة المراجع</span>
+            </a>
+          </nav>
+
+          <div class="mt-auto border-t border-white/10 px-4 py-4">
+            <a href="GPMS.html#logout" class="gpms-nav-item">
+              <i data-lucide="log-out" class="h-5 w-5"></i>
+              <span data-i18n="navLogout">تسجيل الخروج</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-slate-950/40 lg:hidden"></div>
+
+      <div class="flex-1">
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-gpms-bg/90 backdrop-blur">
+          <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+                id="sidebarToggle"
+                aria-label="فتح القائمة"
+              >
+                <i data-lucide="menu" class="h-5 w-5"></i>
+              </button>
+              <div>
+                <h1 class="text-lg font-extrabold text-slate-900 sm:text-xl">الإشعارات</h1>
+                <p class="text-sm text-slate-500">تنبيهات مرتبطة بالتقارير والمواعيد والقرارات.</p>
+              </div>
+            </div>
+            <button id="markAllReadBtn" class="hidden sm:inline-flex gpms-pill">
+              <i data-lucide="check-check" class="h-4 w-4"></i>
+              <span>تعليم الكل كمقروء</span>
+            </button>
+          </div>
+        </header>
+
+        <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          <section class="gpms-section p-5 sm:p-6">
+            <div id="notificationsList" class="space-y-3">
+              <div class="text-center text-sm text-slate-500 py-8">جارٍ تحميل الإشعارات...</div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/gpms-i18n-extra.js"></script>
+    <script src="js/gpms-i18n.js"></script>
+    <script src="js/gpms-config.js"></script>
+    <script src="js/GPMS.js"></script>
+    <script src="js/gpms-lang-toggle.js"></script>
+    <script src="js/gpms-page-i18n.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const API = window.GPMS_CONFIG?.apiBaseUrl || "http://localhost:8000/api/v1";
+      const session = (() => { try { return JSON.parse(localStorage.getItem("gpms_session_v1")); } catch { return null; } })();
+      const token = session?.accessToken || "";
+      const authHeaders = { Authorization: `Bearer ${token}` };
+      function esc(v) { return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+      if (!token) return;
+
+      const container = document.getElementById("notificationsList");
+      const markAllBtn = document.getElementById("markAllReadBtn");
+
+      function timeAgo(dateStr) {
+        if (!dateStr) return "";
+        const diff = Date.now() - new Date(dateStr).getTime();
+        const mins = Math.floor(diff / 60000);
+        if (mins < 1) return "الآن";
+        if (mins < 60) return `منذ ${mins} دقيقة`;
+        const hrs = Math.floor(mins / 60);
+        if (hrs < 24) return `منذ ${hrs} ساعة`;
+        const days = Math.floor(hrs / 24);
+        if (days < 30) return `منذ ${days} يوم`;
+        return new Date(dateStr).toLocaleDateString("ar-SA");
+      }
+
+      function renderNotifications(items) {
+        if (!items || items.length === 0) {
+          container.innerHTML = '<div class="text-center text-sm text-slate-500 py-8">لا توجد إشعارات حالياً</div>';
+          return;
+        }
+        container.innerHTML = items.map(n => {
+          const unreadClass = n.is_read ? "bg-slate-50" : "bg-amber-50/60 border-amber-200";
+          const dot = n.is_read ? "" : '<span class="inline-block h-2 w-2 rounded-full bg-gpms-maroon ml-2"></span>';
+          return `<div class="rounded-xl border border-slate-200 ${unreadClass} p-4">
+            <div class="flex items-center justify-between gap-2">
+              <div class="text-sm font-extrabold text-slate-900">${dot}${esc(n.title || n.message || "إشعار")}</div>
+              <span class="text-xs text-slate-500 whitespace-nowrap">${timeAgo(n.created_at)}</span>
+            </div>
+            <p class="mt-2 text-sm text-slate-600">${esc(n.content || n.body || "")}</p>
+          </div>`;
+        }).join("");
+      }
+
+      async function loadNotifications() {
+        try {
+          const resp = await fetch(`${API}/notifications`, { headers: authHeaders });
+          if (!resp.ok) throw new Error();
+          const data = await resp.json();
+          const items = Array.isArray(data) ? data : (data.items || []);
+          renderNotifications(items);
+        } catch {
+          container.innerHTML = '<div class="text-center text-sm text-red-500 py-8">تعذر تحميل الإشعارات</div>';
+        }
+      }
+
+      if (markAllBtn) {
+        markAllBtn.addEventListener("click", async () => {
+          try {
+            await fetch(`${API}/notifications/mark-all-read`, {
+              method: "PATCH",
+              headers: authHeaders
+            });
+            loadNotifications();
+          } catch {
+            alert("تعذر تحديث الإشعارات");
+          }
+        });
+      }
+
+      loadNotifications();
+    });
+    </script>
+  </body>
+</html>
+

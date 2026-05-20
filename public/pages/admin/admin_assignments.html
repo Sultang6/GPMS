@@ -1,0 +1,471 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script>
+      (function () {
+        function gpmsPublicBase() {
+          if (location.protocol === "file:") {
+            var u = location.href.split("#")[0].split("?")[0];
+            var i = u.toLowerCase().indexOf("/pages/");
+            if (i >= 0) return u.slice(0, i + 1);
+            return u.slice(0, u.lastIndexOf("/") + 1);
+          }
+          var p = location.pathname.replace(/\\/g, "/");
+          var idx = p.indexOf("/pages/");
+          if (idx >= 0) return p.slice(0, idx + 1);
+          var slash = p.lastIndexOf("/");
+          return slash >= 0 ? p.slice(0, slash + 1) : "/";
+        }
+        window.gpmsPublicBase = gpmsPublicBase;
+        var base = document.createElement("base");
+        base.href = gpmsPublicBase();
+        document.head.appendChild(base);
+      })();
+    </script>
+        <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPMS | توزيع المشاريع والإشراف</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              tajawal: ["Tajawal", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+            },
+            colors: {
+              gpms: {
+                maroon: "#7A2E2E",
+                maroonDark: "#622424",
+                charcoal: "#2F343C",
+                bg: "#F4F5F7",
+              },
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, .08)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="css/GPMS.css" />
+  </head>
+
+  <body class="min-h-dvh bg-gpms-bg font-tajawal text-slate-800" data-page="admin-assign">
+    <div class="min-h-dvh lg:flex">
+      <aside
+        id="sidebar"
+        class="gpms-sidebar translate-x-full bg-gpms-charcoal text-slate-100 shadow-2xl lg:static lg:translate-x-0"
+      >
+        <div class="flex h-full flex-col">
+          <div class="px-5 pb-4 pt-5">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                <i data-lucide="graduation-cap" class="h-6 w-6 text-white"></i>
+              </div>
+              <div class="leading-tight">
+                <div class="text-sm font-bold text-white">GPMS</div>
+                <div class="text-xs text-slate-300">إدارة القسم (المنسق)</div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="px-3 pb-5">
+            <a class="gpms-nav-item" href="pages/admin/admin_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span data-i18n="navDashboard">لوحة التحكم</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_users_management.html">
+              <i data-lucide="users-round" class="h-5 w-5"></i>
+              <span>إدارة المستخدمين</span>
+            </a>
+            <a class="gpms-nav-item is-active" href="pages/admin/admin_assignments.html">
+              <i data-lucide="arrow-left-right" class="h-5 w-5"></i>
+              <span>توزيع المشاريع والإشراف</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_approve_grades.html">
+              <i data-lucide="badge-check" class="h-5 w-5"></i>
+              <span>اعتماد الدرجات النهائية</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_system_reports.html">
+              <i data-lucide="file-bar-chart-2" class="h-5 w-5"></i>
+              <span>تقارير النظام</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/community.html">
+              <i data-lucide="users" class="h-5 w-5"></i>
+              <span data-i18n="navCommunity">المجتمع والمحادثات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/chatbot.html">
+              <i data-lucide="bot" class="h-5 w-5"></i>
+              <span data-i18n="navChatbot">المساعد الذكي</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/reference_library.html">
+              <i data-lucide="library" class="h-5 w-5"></i>
+              <span data-i18n="navReferenceLibrary">مكتبة المراجع</span>
+            </a>
+          </nav>
+
+          <div class="mt-auto border-t border-white/10 px-4 py-4">
+            <a href="GPMS.html#logout" class="gpms-nav-item">
+              <i data-lucide="log-out" class="h-5 w-5"></i>
+              <span data-i18n="navLogout">تسجيل الخروج</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-slate-950/40 lg:hidden"></div>
+
+      <div class="flex-1">
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-gpms-bg/90 backdrop-blur">
+          <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+                id="sidebarToggle"
+                aria-label="فتح القائمة"
+              >
+                <i data-lucide="menu" class="h-5 w-5"></i>
+              </button>
+              <div>
+                <h1 class="text-lg font-extrabold text-slate-900 sm:text-xl">توزيع المشاريع والإشراف</h1>
+                <p class="text-sm text-slate-500">إسناد/إعادة إسناد المشرفين (واجهة).</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          <section class="grid gap-4 lg:grid-cols-3">
+            <div class="gpms-section p-5 sm:p-6 lg:col-span-1">
+              <h2 class="text-base font-extrabold text-slate-900">إنشاء/تعديل توزيع</h2>
+              <div class="mt-4 space-y-3">
+                <div>
+                  <label class="mb-2 block text-sm font-extrabold text-slate-700">المشروع</label>
+                  <select id="assignProject" class="gpms-input">
+                    <option value="">— اختر مشروعاً —</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="mb-2 block text-sm font-extrabold text-slate-700">المشرف</label>
+                  <select id="assignSupervisor" class="gpms-input">
+                    <option value="">— اختر مشرفاً —</option>
+                  </select>
+                </div>
+                <div id="assignAlert" class="hidden rounded-xl px-4 py-3 text-sm font-bold"></div>
+                <button id="assignSaveBtn" type="button" class="gpms-button w-full py-3">حفظ</button>
+              </div>
+            </div>
+
+            <div class="gpms-section p-5 sm:p-6 lg:col-span-2">
+              <div class="flex items-center justify-between gap-2">
+                <h2 class="text-base font-extrabold text-slate-900 sm:text-lg">قائمة الإسناد</h2>
+                <button class="gpms-pill">
+                  <i data-lucide="filter" class="h-4 w-4"></i>
+                  <span>تصفية</span>
+                </button>
+              </div>
+
+              <div class="mt-4 overflow-x-auto rounded-xl border border-slate-200">
+                <table class="gpms-table min-w-[860px]">
+                  <thead>
+                    <tr>
+                      <th>المشروع</th>
+                      <th>المشرف</th>
+                      <th>الحالة</th>
+                      <th>إجراء</th>
+                    </tr>
+                  </thead>
+                  <tbody id="assignmentsTableBody">
+                    <tr><td colspan="4" class="text-center text-slate-400 py-6">جاري التحميل...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="mt-8 gpms-section p-5 sm:p-6">
+            <h2 class="text-base font-extrabold text-slate-900 sm:text-lg">طلبات إضافة أعضاء الفريق</h2>
+            <p class="mt-1 text-sm text-slate-500">يرسل القائد اسم العضو وبريده؛ عند الموافقة تُنشئ حساباً (4 أرقام) وتُضافه للفريق.</p>
+            <div id="memberRequestsWrap" class="mt-4 space-y-3">
+              <div class="text-sm text-slate-500">جاري التحميل...</div>
+            </div>
+          </section>
+
+          <section class="mt-8 gpms-section p-5 sm:p-6">
+            <h2 class="text-base font-extrabold text-slate-900 sm:text-lg">الفرق المسجّلة وأعضاؤها</h2>
+            <p class="mt-1 text-sm text-slate-500">يظهر كل فريق باسمه وأعضاؤه بعد موافقة المنسق على الطلبات.</p>
+            <div id="teamsOverviewWrap" class="mt-4 space-y-3">
+              <div class="text-sm text-slate-500">جاري التحميل...</div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div id="toastContainer" class="fixed bottom-6 left-6 z-[60] flex flex-col gap-2"></div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/gpms-i18n-extra.js"></script>
+    <script src="js/gpms-i18n.js"></script>
+    <script src="js/gpms-config.js"></script>
+    <script src="js/GPMS.js"></script>
+    <script src="js/gpms-lang-toggle.js"></script>
+    <script src="js/gpms-page-i18n.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const API = window.GPMS_CONFIG?.apiBaseUrl || "http://localhost:8000/api/v1";
+      const session = (() => { try { return JSON.parse(localStorage.getItem("gpms_session_v1")); } catch { return null; } })();
+      const token = session?.accessToken || "";
+      const authHeaders = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
+      function esc(v) { return String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+      const projectSelect = document.getElementById("assignProject");
+      const supervisorSelect = document.getElementById("assignSupervisor");
+      const saveBtn = document.getElementById("assignSaveBtn");
+      const alertEl = document.getElementById("assignAlert");
+      const tb = document.getElementById("assignmentsTableBody");
+
+      let projectsList = [];
+      let supervisorsList = [];
+
+      function toast(msg, ok = true) {
+        const el = document.createElement("div");
+        el.className = `rounded-xl px-5 py-3 text-sm font-bold shadow-lg text-white transition-all ${ok ? "bg-emerald-600" : "bg-red-600"}`;
+        el.textContent = msg;
+        document.getElementById("toastContainer").appendChild(el);
+        setTimeout(() => { el.style.opacity = "0"; setTimeout(() => el.remove(), 300); }, 3500);
+      }
+
+      const statusMap = {
+        approved: { label: "مستقر", cls: "gpms-badge--approved", icon: "badge-check" },
+        active: { label: "مستقر", cls: "gpms-badge--approved", icon: "badge-check" },
+        completed: { label: "مكتمل", cls: "gpms-badge--approved", icon: "badge-check" },
+        pending: { label: "يحتاج تعيين", cls: "gpms-badge--pending", icon: "clock" },
+        delayed: { label: "متأخر", cls: "gpms-badge--delayed", icon: "alert-triangle" },
+      };
+
+      async function loadProjects() {
+        try {
+          const r = await fetch(`${API}/projects`, { headers: authHeaders });
+          if (!r.ok) throw new Error(r.status);
+          const data = await r.json();
+          projectsList = Array.isArray(data) ? data : (data.items || data.data || []);
+          projectSelect.innerHTML = `<option value="">— اختر مشروعاً —</option>` +
+            projectsList.map(p => `<option value="${esc(p.project_id)}">${esc(p.title)}</option>`).join("");
+          renderTable();
+        } catch (e) {
+          console.error("load projects:", e);
+          tb.innerHTML = `<tr><td colspan="4" class="text-center text-red-500 py-6">خطأ في تحميل المشاريع</td></tr>`;
+        }
+      }
+
+      async function loadSupervisors() {
+        try {
+          const r = await fetch(`${API}/admin/users?role=Supervisor`, { headers: authHeaders });
+          if (!r.ok) throw new Error(r.status);
+          const data = await r.json();
+          supervisorsList = Array.isArray(data) ? data : (data.items || data.data || []);
+          supervisorSelect.innerHTML = `<option value="">— اختر مشرفاً —</option>` +
+            supervisorsList.map(s => `<option value="${esc(s.user_id)}">${esc(s.full_name)}</option>`).join("");
+        } catch (e) { console.error("load supervisors:", e); }
+      }
+
+      function getSupervisorName(id) {
+        const s = supervisorsList.find(s => String(s.user_id) === String(id));
+        return s ? s.full_name : (id || "—");
+      }
+
+      function renderTable() {
+        if (!projectsList.length) {
+          tb.innerHTML = `<tr><td colspan="4" class="text-center text-slate-400 py-6">لا توجد مشاريع</td></tr>`;
+          return;
+        }
+        tb.innerHTML = projectsList.map(p => {
+          const st = statusMap[p.status] || (p.supervisor_id ? statusMap.approved : statusMap.pending);
+          return `<tr>
+            <td class="font-extrabold text-slate-900">${esc(p.title)}</td>
+            <td>${esc(getSupervisorName(p.supervisor_id))}</td>
+            <td><span class="gpms-badge ${st.cls}"><i data-lucide="${st.icon}" class="h-4 w-4"></i> ${st.label}</span></td>
+            <td><button class="gpms-pill btn-reassign" data-id="${esc(p.project_id)}" data-title="${esc(p.title)}">
+              <i data-lucide="arrow-left-right" class="h-4 w-4"></i><span>إعادة إسناد</span>
+            </button></td>
+          </tr>`;
+        }).join("");
+        if (typeof lucide !== "undefined") lucide.createIcons();
+        tb.querySelectorAll(".btn-reassign").forEach(btn => {
+          btn.addEventListener("click", () => {
+            projectSelect.value = btn.dataset.id;
+            projectSelect.focus();
+          });
+        });
+      }
+
+      saveBtn.addEventListener("click", async () => {
+        const pid = projectSelect.value;
+        const sid = supervisorSelect.value;
+        if (!pid || !sid) {
+          alertEl.textContent = "يرجى اختيار المشروع والمشرف";
+          alertEl.className = "rounded-xl px-4 py-3 text-sm font-bold bg-amber-50 text-amber-700 border border-amber-200";
+          return;
+        }
+        alertEl.classList.add("hidden");
+        saveBtn.disabled = true;
+        saveBtn.textContent = "جاري الحفظ...";
+        try {
+          const r = await fetch(`${API}/projects/${pid}`, {
+            method: "PATCH", headers: authHeaders,
+            body: JSON.stringify({ supervisor_id: sid })
+          });
+          if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail || r.status);
+          toast("تم حفظ التوزيع بنجاح");
+          await loadProjects();
+        } catch (e) {
+          toast("فشل حفظ التوزيع: " + e.message, false);
+        } finally {
+          saveBtn.disabled = false;
+          saveBtn.textContent = "حفظ";
+        }
+      });
+
+      const MAJOR_LABEL = { CS: "علوم الحاسب", SW: "هندسة البرمجيات", CY: "الأمن السيبراني", DS: "علوم البيانات" };
+
+      async function loadTeamsOverview() {
+        const wrap = document.getElementById("teamsOverviewWrap");
+        if (!wrap) return;
+        try {
+          const r = await fetch(`${API}/groups/teams-overview`, { headers: authHeaders });
+          if (!r.ok) throw new Error(r.status);
+          const teams = await r.json();
+          if (!teams.length) {
+            wrap.innerHTML = '<div class="text-sm text-slate-500">لا توجد فرق مسجّلة بعد.</div>';
+            return;
+          }
+          wrap.innerHTML = teams.map((t) => {
+            const members = (t.members || [])
+              .map((m) => `${esc(m.full_name)}${m.is_leader ? " (قائد)" : ""}`)
+              .join("، ") || "—";
+            const pending = (t.member_requests || [])
+              .filter((r) => r.status === "Pending")
+              .map((r) => `${esc(r.full_name)} (معلّق)`)
+              .join("، ");
+            const membersLine = pending ? `${members}${members !== "—" ? "، " : ""}${pending}` : members;
+            const proj = t.project?.title ? esc(t.project.title) : "—";
+            const major = t.major ? `${MAJOR_LABEL[t.major] || t.major} (${esc(t.major)})` : "—";
+            return `<article class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div class="flex flex-wrap items-start justify-between gap-2">
+                <div>
+                  <div class="text-sm font-extrabold text-slate-900">${esc(t.name)}</div>
+                  <div class="mt-1 text-xs text-slate-500">التخصص: ${major} — المشروع: ${proj}</div>
+                </div>
+                <span class="rounded-full bg-gpms-maroon/10 px-3 py-1 text-xs font-bold text-gpms-maroon">${(t.member_count || 0)} / 5</span>
+              </div>
+              <p class="mt-3 text-sm text-slate-700"><span class="font-bold">الأعضاء:</span> ${membersLine}</p>
+            </article>`;
+          }).join("");
+        } catch (e) {
+          console.error("teams overview:", e);
+          wrap.innerHTML = '<div class="text-sm text-red-600">تعذر تحميل قائمة الفرق.</div>';
+        }
+      }
+
+      async function loadMemberRequests() {
+        const wrap = document.getElementById("memberRequestsWrap");
+        if (!wrap) return;
+        try {
+          const r = await fetch(`${API}/admin/member-requests?status=Pending`, { headers: authHeaders });
+          if (!r.ok) throw new Error(r.status);
+          const list = await r.json();
+          if (!list.length) {
+            wrap.innerHTML = '<div class="text-sm text-slate-500">لا توجد طلبات معلّقة.</div>';
+            return;
+          }
+          wrap.innerHTML = list.map((req) => `
+            <article class="rounded-xl border border-amber-200 bg-amber-50/50 p-4" data-req-id="${esc(req.id)}">
+              <div class="flex flex-wrap justify-between gap-2">
+                <div>
+                  <div class="text-sm font-extrabold text-slate-900">${esc(req.full_name)}</div>
+                  <div class="text-xs text-slate-600" dir="ltr">${esc(req.email)}</div>
+                  <div class="mt-1 text-xs text-slate-500">فريق: ${esc(req.group_name)} — قائد: ${esc(req.requested_by_name)} (${esc(req.leader_display_id || "")}) — تخصص: ${esc(req.team_major || "")}</div>
+                </div>
+              </div>
+              <div class="mt-3 flex flex-wrap items-end gap-2">
+                <div>
+                  <label class="mb-1 block text-xs font-bold text-slate-600">معرّف العضو (4 أرقام)</label>
+                  <input type="text" dir="ltr" class="gpms-input w-28 font-mono text-sm req-display-id" placeholder="2585" maxlength="4" />
+                </div>
+                <button type="button" class="gpms-button px-4 py-2 text-sm btn-approve-req">موافقة وإنشاء حساب</button>
+                <button type="button" class="gpms-pill text-sm btn-reject-req">رفض</button>
+              </div>
+            </article>
+          `).join("");
+          wrap.querySelectorAll(".btn-approve-req").forEach((btn) => {
+            btn.addEventListener("click", async () => {
+              const card = btn.closest("[data-req-id]");
+              const id = card?.getAttribute("data-req-id");
+              const did = card?.querySelector(".req-display-id")?.value?.trim();
+              if (!did || !/^\d{4}$/.test(did)) {
+                toast("أدخل معرّفاً من 4 أرقام", false);
+                return;
+              }
+              btn.disabled = true;
+              try {
+                const ar = await fetch(`${API}/admin/member-requests/${id}/approve`, {
+                  method: "POST",
+                  headers: authHeaders,
+                  body: JSON.stringify({ display_id: did }),
+                });
+                const body = await ar.json().catch(() => ({}));
+                if (!ar.ok) throw new Error(body.detail || ar.status);
+                toast(`تمت الموافقة — الحساب: ${did}`);
+                loadMemberRequests();
+                loadTeamsOverview();
+              } catch (e) {
+                toast(String(e.message || e), false);
+              } finally {
+                btn.disabled = false;
+              }
+            });
+          });
+          wrap.querySelectorAll(".btn-reject-req").forEach((btn) => {
+            btn.addEventListener("click", async () => {
+              const id = btn.closest("[data-req-id]")?.getAttribute("data-req-id");
+              if (!confirm("رفض هذا الطلب؟")) return;
+              try {
+                const rr = await fetch(`${API}/admin/member-requests/${id}/reject`, {
+                  method: "POST",
+                  headers: authHeaders,
+                  body: JSON.stringify({ note: "مرفوض من المنسق" }),
+                });
+                if (!rr.ok) throw new Error((await rr.json().catch(() => ({}))).detail);
+                toast("تم رفض الطلب");
+                loadMemberRequests();
+              } catch (e) {
+                toast(String(e.message || e), false);
+              }
+            });
+          });
+        } catch (e) {
+          wrap.innerHTML = '<div class="text-sm text-red-600">تعذر تحميل الطلبات.</div>';
+        }
+      }
+
+      loadProjects();
+      loadSupervisors();
+      loadTeamsOverview();
+      loadMemberRequests();
+    });
+    </script>
+  </body>
+</html>
+

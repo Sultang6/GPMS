@@ -1,0 +1,11 @@
+# Python / API
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.db
+backend/.env
+
+# لا ترفع البيئة الافتراضية أو قاعدة التطوير المحلية
+*.pyc
+.DS_Store
+Thumbs.db

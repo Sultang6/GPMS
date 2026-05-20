@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      (function () {
+        function gpmsPublicBase() {
+          if (location.protocol === "file:") {
+            var u = location.href.split("#")[0].split("?")[0];
+            var i = u.toLowerCase().indexOf("/pages/");
+            if (i >= 0) return u.slice(0, i + 1);
+            return u.slice(0, u.lastIndexOf("/") + 1);
+          }
+          var p = location.pathname.replace(/\\/g, "/");
+          var idx = p.indexOf("/pages/");
+          if (idx >= 0) return p.slice(0, idx + 1);
+          var slash = p.lastIndexOf("/");
+          return slash >= 0 ? p.slice(0, slash + 1) : "/";
+        }
+        window.gpmsPublicBase = gpmsPublicBase;
+        var base = document.createElement("base");
+        base.href = gpmsPublicBase();
+        document.head.appendChild(base);
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPMS | تسجيل الدخول</title>
+
+    <!-- Fonts (Arabic) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              tajawal: ["Tajawal", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+            },
+            colors: {
+              gpms: {
+                maroon: "#7A2E2E",
+                maroonDark: "#622424",
+                charcoal: "#2F343C",
+                charcoal2: "#3B414B",
+                bg: "#F4F5F7",
+              },
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, .08)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="css/GPMS.css" />
+  </head>
+
+  <body class="min-h-dvh bg-gpms-bg font-tajawal text-slate-800">
+    <main class="min-h-dvh px-4 py-10 sm:py-14">
+      <div class="mx-auto flex min-h-[calc(100dvh-5rem)] max-w-5xl items-center justify-center">
+        <section class="w-full max-w-md">
+          <div class="relative overflow-hidden rounded-2xl bg-white shadow-soft">
+            <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-l from-gpms-maroon via-gpms-maroon to-gpms-maroonDark"></div>
+
+            <div class="px-6 pb-6 pt-7 sm:px-8 sm:pb-8 sm:pt-8">
+              <header class="text-center">
+                <div class="gpms-login-logo-wrap mx-auto mb-4">
+                  <img
+                    id="gpmsUhbLogo"
+                    src="assets/images/uhb-logo.png"
+                    alt="جامعة حفر الباطن — University of Hafr Al Batin"
+                    class="gpms-login-logo"
+                    width="176"
+                    height="220"
+                    decoding="async"
+                  />
+                </div>
+                <h1 class="text-xl font-extrabold text-gpms-maroon sm:text-2xl" data-i18n="appTitle">نظام إدارة مشاريع التخرج</h1>
+                <p class="mt-1 text-sm text-slate-500" data-i18n="appSubtitle">Graduation Project Management System</p>
+              </header>
+
+              <div class="mt-5">
+                <p class="mb-2 text-center text-sm font-bold text-slate-700" data-i18n="language">اللغة</p>
+                <div class="gpms-lang-toggle mx-auto" role="group" aria-label="Language">
+                  <button type="button" class="gpms-lang-btn is-active" data-lang="ar" id="gpmsLangBtnAr">العربية</button>
+                  <button type="button" class="gpms-lang-btn" data-lang="en" id="gpmsLangBtnEn">English</button>
+                </div>
+                <select id="gpmsLangSelect" class="sr-only" aria-hidden="true" tabindex="-1">
+                  <option value="ar">ar</option>
+                  <option value="en">en</option>
+                </select>
+              </div>
+
+              <form id="loginForm" class="mt-6 space-y-4" novalidate>
+                <div>
+                  <label for="userId" class="mb-2 block text-sm font-bold text-slate-700" data-i18n="loginUserId">المعرّف أو رقم الحساب</label>
+                  <div class="relative">
+                    <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400 gpms-icon-end">
+                      <i data-lucide="user" class="h-5 w-5"></i>
+                    </span>
+                    <input
+                      id="userId"
+                      name="userId"
+                      inputmode="text"
+                      autocomplete="username"
+                      data-i18n="loginUserIdPh"
+                      data-i18n-placeholder
+                      placeholder="مثال: CO-0001 للمنسق، STD-2026-0001 للطالب، أو البريد"
+                      class="gpms-input pr-11"
+                      required
+                    />
+                  </div>
+                  <p class="mt-1 hidden text-xs text-red-600" data-error-for="userId" data-i18n="loginUserIdRequired">الرجاء إدخال المعرّف أو رقم الحساب.</p>
+                </div>
+
+                <div>
+                  <label for="password" class="mb-2 block text-sm font-bold text-slate-700" data-i18n="loginPassword">كلمة المرور</label>
+                  <div class="relative">
+                    <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400 gpms-icon-end">
+                      <i data-lucide="lock" class="h-5 w-5"></i>
+                    </span>
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      autocomplete="current-password"
+                      data-i18n="loginPasswordPh"
+                      data-i18n-placeholder
+                      placeholder="ادخل كلمة المرور"
+                      class="gpms-input pr-11 pl-12"
+                      required
+                    />
+                    <button
+                      type="button"
+                      id="togglePassword"
+                      class="absolute inset-y-0 left-3 inline-flex items-center text-slate-400 hover:text-slate-600 gpms-icon-start"
+                      aria-label="إظهار كلمة المرور"
+                      title="إظهار كلمة المرور"
+                      data-i18n-title="togglePasswordVisibility"
+                    >
+                      <i data-lucide="eye" class="h-5 w-5"></i>
+                    </button>
+                  </div>
+                  <p class="mt-1 hidden text-xs text-red-600" data-error-for="password" data-i18n="loginPasswordRequired">الرجاء إدخال كلمة المرور.</p>
+                </div>
+
+                <div>
+                  <label for="role" class="mb-2 block text-sm font-bold text-slate-700" data-i18n="loginRole">تسجيل الدخول كـ</label>
+                  <div class="relative">
+                    <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400 gpms-icon-end">
+                      <i data-lucide="users" class="h-5 w-5"></i>
+                    </span>
+                    <select id="role" name="role" class="gpms-input pr-11" required>
+                      <option value="student" selected data-i18n="roleStudent">طالب</option>
+                      <option value="supervisor" data-i18n="roleSupervisor">مشرف</option>
+                      <option value="coordinator" data-i18n="roleCoordinator">منسق / إدارة القسم</option>
+                    </select>
+                  </div>
+                </div>
+
+                <button type="submit" class="gpms-button mt-2 w-full">
+                  <span class="inline-flex items-center gap-2">
+                    <span data-i18n="loginSubmit">تسجيل الدخول</span>
+                    <i data-lucide="arrow-left" class="h-5 w-5 gpms-login-arrow"></i>
+                  </span>
+                </button>
+
+                <div class="pt-1 text-center text-sm">
+                  <a href="#" class="text-slate-500 hover:text-gpms-maroon" data-i18n="forgotPassword">نسيت كلمة المرور؟</a>
+                </div>
+
+                <div
+                  id="loginToast"
+                  class="mt-3 hidden rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700"
+                  role="status"
+                  aria-live="polite"
+                ></div>
+              </form>
+            </div>
+          </div>
+
+          <p class="mt-4 text-center text-xs text-slate-400" data-i18n="footerUni">
+            جامعة حفر الباطن — GPMS
+          </p>
+        </section>
+      </div>
+    </main>
+
+    <!-- Lucide icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/gpms-config.js"></script>
+    <script src="js/gpms-i18n-extra.js"></script>
+    <script src="js/gpms-i18n.js"></script>
+
+    <!-- ترجمة صفحة الدخول (عربي / إنجليزي) — مدمجة في HTML -->
+    <script>
+      (function () {
+        var LANG_KEY = "gpms_lang_v1";
+        var LOGIN_I18N = {
+          ar: {
+            appTitle: "نظام إدارة مشاريع التخرج",
+            appSubtitle: "نظام إدارة مشاريع التخرج — GPMS",
+            language: "اللغة",
+            loginUserId: "المعرّف أو رقم الحساب",
+            loginUserIdPh: "مثال: CO-0001 للمنسق، STD-2026-0001 للطالب، أو البريد",
+            loginUserIdRequired: "الرجاء إدخال المعرّف أو رقم الحساب.",
+            loginPassword: "كلمة المرور",
+            loginPasswordPh: "ادخل كلمة المرور",
+            loginPasswordRequired: "الرجاء إدخال كلمة المرور.",
+            loginRole: "تسجيل الدخول كـ",
+            roleStudent: "طالب",
+            roleSupervisor: "مشرف",
+            roleCoordinator: "منسق / إدارة القسم",
+            loginSubmit: "تسجيل الدخول",
+            forgotPassword: "نسيت كلمة المرور؟",
+            footerUni: "جامعة حفر الباطن — GPMS",
+            togglePasswordVisibility: "إظهار كلمة المرور",
+            logoAlt: "جامعة حفر الباطن — University of Hafr Al Batin",
+            pageTitle: "تسجيل الدخول — GPMS",
+          },
+          en: {
+            appTitle: "Graduation Project Management System",
+            appSubtitle: "GPMS — University of Hafr Al Batin",
+            language: "Language",
+            loginUserId: "ID or account number",
+            loginUserIdPh: "e.g. CO-0001 (coordinator), STD-2026-0001 (student), or email",
+            loginUserIdRequired: "Please enter your ID or account number.",
+            loginPassword: "Password",
+            loginPasswordPh: "Enter your password",
+            loginPasswordRequired: "Please enter your password.",
+            loginRole: "Sign in as",
+            roleStudent: "Student",
+            roleSupervisor: "Supervisor",
+            roleCoordinator: "Coordinator / Department",
+            loginSubmit: "Sign in",
+            forgotPassword: "Forgot password?",
+            footerUni: "University of Hafr Al Batin — GPMS",
+            togglePasswordVisibility: "Show password",
+            logoAlt: "University of Hafr Al Batin — جامعة حفر الباطن",
+            pageTitle: "Sign in — GPMS",
+          },
+        };
+
+        function getLang() {
+          var v = localStorage.getItem(LANG_KEY);
+          return v === "en" ? "en" : "ar";
+        }
+
+        function setLang(lang) {
+          localStorage.setItem(LANG_KEY, lang === "en" ? "en" : "ar");
+        }
+
+        function t(key) {
+          var lang = getLang();
+          return (LOGIN_I18N[lang] && LOGIN_I18N[lang][key]) || LOGIN_I18N.ar[key] || key;
+        }
+
+        function applyLoginLang() {
+          var lang = getLang();
+          var html = document.documentElement;
+          html.lang = lang === "en" ? "en" : "ar";
+          html.dir = lang === "en" ? "ltr" : "rtl";
+          document.body.classList.toggle("gpms-ltr", lang === "en");
+
+          document.querySelectorAll("[data-i18n]").forEach(function (el) {
+            var key = el.getAttribute("data-i18n");
+            if (!key) return;
+            var val = t(key);
+            if (el.hasAttribute("data-i18n-placeholder")) {
+              el.placeholder = val;
+            } else if (el.hasAttribute("data-i18n-title")) {
+              el.title = val;
+              el.setAttribute("aria-label", val);
+            } else if (el.tagName === "OPTION") {
+              el.textContent = val;
+            } else {
+              el.textContent = val;
+            }
+          });
+
+          var logo = document.getElementById("gpmsUhbLogo");
+          if (logo) logo.alt = t("logoAlt");
+          document.title = t("pageTitle");
+
+          var sel = document.getElementById("gpmsLangSelect");
+          if (sel) sel.value = lang;
+          document.querySelectorAll(".gpms-lang-btn").forEach(function (btn) {
+            btn.classList.toggle("is-active", btn.getAttribute("data-lang") === lang);
+          });
+
+          if (window.GPMS_I18N && window.GPMS_I18N.setLang) {
+            window.GPMS_I18N.setLang(lang);
+            if (window.GPMS_I18N.applyAllTranslations) {
+              window.GPMS_I18N.applyAllTranslations();
+            }
+          }
+        }
+
+        window.gpmsApplyLoginLang = applyLoginLang;
+
+        document.getElementById("gpmsLangBtnAr")?.addEventListener("click", function () {
+          setLang("ar");
+          applyLoginLang();
+        });
+        document.getElementById("gpmsLangBtnEn")?.addEventListener("click", function () {
+          setLang("en");
+          applyLoginLang();
+        });
+        document.getElementById("gpmsLangSelect")?.addEventListener("change", function (e) {
+          setLang(e.target.value);
+          applyLoginLang();
+        });
+
+        applyLoginLang();
+      })();
+    </script>
+    <script src="js/GPMS.js"></script>
+  </body>
+</html>

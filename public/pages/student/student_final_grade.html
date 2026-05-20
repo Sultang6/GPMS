@@ -1,0 +1,313 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script>
+      (function () {
+        function gpmsPublicBase() {
+          if (location.protocol === "file:") {
+            var u = location.href.split("#")[0].split("?")[0];
+            var i = u.toLowerCase().indexOf("/pages/");
+            if (i >= 0) return u.slice(0, i + 1);
+            return u.slice(0, u.lastIndexOf("/") + 1);
+          }
+          var p = location.pathname.replace(/\\/g, "/");
+          var idx = p.indexOf("/pages/");
+          if (idx >= 0) return p.slice(0, idx + 1);
+          var slash = p.lastIndexOf("/");
+          return slash >= 0 ? p.slice(0, slash + 1) : "/";
+        }
+        window.gpmsPublicBase = gpmsPublicBase;
+        var base = document.createElement("base");
+        base.href = gpmsPublicBase();
+        document.head.appendChild(base);
+      })();
+    </script>
+        <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPMS | الدرجة النهائية</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              tajawal: ["Tajawal", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+            },
+            colors: {
+              gpms: {
+                maroon: "#7A2E2E",
+                maroonDark: "#622424",
+                charcoal: "#2F343C",
+                bg: "#F4F5F7",
+              },
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, .08)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="css/GPMS.css" />
+  </head>
+
+  <body class="min-h-dvh bg-gpms-bg font-tajawal text-slate-800" data-page="student-grade">
+    <div class="min-h-dvh lg:flex">
+      <aside
+        id="sidebar"
+        class="gpms-sidebar translate-x-full bg-gpms-charcoal text-slate-100 shadow-2xl lg:static lg:translate-x-0"
+      >
+        <div class="flex h-full flex-col">
+          <div class="px-5 pb-4 pt-5">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                <i data-lucide="graduation-cap" class="h-6 w-6 text-white"></i>
+              </div>
+              <div class="leading-tight">
+                <div class="text-sm font-bold text-white">GPMS</div>
+                <div class="text-xs text-slate-300" data-i18n="sidebarStudent">لوحة تحكم الطالب</div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="px-3 pb-5">
+            <a class="gpms-nav-item" href="pages/student/student_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span data-i18n="navDashboard">لوحة التحكم</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_project_registration.html">
+              <i data-lucide="file-plus-2" class="h-5 w-5"></i>
+              <span>تسجيل مشروع تخرج</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_submit_reports.html">
+              <i data-lucide="upload" class="h-5 w-5"></i>
+              <span>تسليم التقارير</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_notifications.html">
+              <i data-lucide="bell" class="h-5 w-5"></i>
+              <span>الإشعارات</span>
+            </a>
+            <a class="gpms-nav-item is-active" href="pages/student/student_final_grade.html">
+              <i data-lucide="badge-check" class="h-5 w-5"></i>
+              <span>الدرجة النهائية</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_contact_supervisor.html">
+              <i data-lucide="messages-square" class="h-5 w-5"></i>
+              <span>التواصل مع المشرف</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/community.html">
+              <i data-lucide="users" class="h-5 w-5"></i>
+              <span data-i18n="navCommunity">المجتمع والمحادثات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/chatbot.html">
+              <i data-lucide="bot" class="h-5 w-5"></i>
+              <span data-i18n="navChatbot">المساعد الذكي</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/reference_library.html">
+              <i data-lucide="library" class="h-5 w-5"></i>
+              <span data-i18n="navReferenceLibrary">مكتبة المراجع</span>
+            </a>
+          </nav>
+
+          <div class="mt-auto border-t border-white/10 px-4 py-4">
+            <a href="GPMS.html#logout" class="gpms-nav-item">
+              <i data-lucide="log-out" class="h-5 w-5"></i>
+              <span data-i18n="navLogout">تسجيل الخروج</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-slate-950/40 lg:hidden"></div>
+
+      <div class="flex-1">
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-gpms-bg/90 backdrop-blur">
+          <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+                id="sidebarToggle"
+                aria-label="فتح القائمة"
+              >
+                <i data-lucide="menu" class="h-5 w-5"></i>
+              </button>
+              <div>
+                <h1 class="text-lg font-extrabold text-slate-900 sm:text-xl">الدرجة النهائية</h1>
+                <p class="text-sm text-slate-500">تظهر بعد اعتمادها من اللجنة/المنسق.</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          <section class="gpms-section p-5 sm:p-6">
+            <div class="grid gap-4 lg:grid-cols-3">
+              <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 lg:col-span-2">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <h2 id="gradeProjectTitle" class="text-base font-extrabold text-slate-900 sm:text-lg">جارٍ التحميل...</h2>
+                    <p id="gradeProjectStatus" class="mt-1 text-sm text-slate-600">الحالة: جارٍ التحميل...</p>
+                  </div>
+                  <span id="gradeStatusBadge" class="gpms-badge gpms-badge--pending">
+                    <i data-lucide="clock" class="h-4 w-4"></i>
+                    بانتظار
+                  </span>
+                </div>
+              </div>
+
+              <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft">
+                <div class="text-sm font-extrabold text-slate-700">الدرجة</div>
+                <div id="gradeTotalValue" class="mt-2 text-4xl font-black text-gpms-maroon">—</div>
+                <div id="gradeTotalSub" class="mt-1 text-sm text-slate-500">ستظهر هنا عند الاعتماد</div>
+              </div>
+            </div>
+
+            <div class="mt-5 overflow-x-auto rounded-xl border border-slate-200">
+              <table class="gpms-table min-w-[760px]">
+                <thead>
+                  <tr>
+                    <th>البند</th>
+                    <th>الدرجة</th>
+                    <th>ملاحظة</th>
+                  </tr>
+                </thead>
+                <tbody id="gradesTable">
+                  <tr>
+                    <td colspan="3" class="text-center text-slate-500 py-6">جارٍ تحميل الدرجات...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/gpms-i18n-extra.js"></script>
+    <script src="js/gpms-i18n.js"></script>
+    <script src="js/gpms-config.js"></script>
+    <script src="js/GPMS.js"></script>
+    <script src="js/gpms-lang-toggle.js"></script>
+    <script src="js/gpms-page-i18n.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const API = window.GPMS_CONFIG?.apiBaseUrl || "http://localhost:8000/api/v1";
+      const session = (() => { try { return JSON.parse(localStorage.getItem("gpms_session_v1")); } catch { return null; } })();
+      const token = session?.accessToken || "";
+      const authHeaders = { Authorization: `Bearer ${token}` };
+      function esc(v) { return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+      if (!token) return;
+
+      const tbody = document.getElementById("gradesTable");
+      const totalEl = document.getElementById("gradeTotalValue");
+      const totalSub = document.getElementById("gradeTotalSub");
+      const projTitle = document.getElementById("gradeProjectTitle");
+      const projStatus = document.getElementById("gradeProjectStatus");
+      const badge = document.getElementById("gradeStatusBadge");
+
+      const uid = session?.userId;
+
+      const catLabels = {
+        group_report: "التقرير (جماعي)",
+        individual_contribution: "الأداء الفردي",
+        report_quality: "جودة التقرير",
+        implementation: "التنفيذ",
+        documentation: "التوثيق",
+        discussion: "المناقشة",
+      };
+
+      async function loadGrades() {
+        try {
+          let projectId = null;
+          const projResp = await fetch(`${API}/projects/my`, { headers: authHeaders }).catch(() => null);
+          if (projResp && projResp.ok) {
+            const proj = await projResp.json();
+            const p = Array.isArray(proj) ? proj[0] : proj;
+            if (p && p.title) {
+              projectId = p.project_id;
+              projTitle.textContent = esc(p.title);
+              const st = (p.status || "").toLowerCase();
+              projStatus.textContent = `الحالة: ${p.status || "—"}`;
+              if (st === "approved" || st === "completed") {
+                badge.className = "gpms-badge gpms-badge--approved";
+                badge.innerHTML = '<i data-lucide="check-circle-2" class="h-4 w-4"></i> معتمد';
+              } else if (st === "rejected") {
+                badge.className = "gpms-badge gpms-badge--delayed";
+                badge.innerHTML = '<i data-lucide="x-circle" class="h-4 w-4"></i> مرفوض';
+              }
+            }
+          }
+
+          if (!uid || !projectId) {
+            tbody.innerHTML =
+              '<tr><td colspan="3" class="text-center text-slate-500 py-6">لا يوجد مشروع مرتبط لعرض الدرجة النهائية.</td></tr>';
+            totalEl.textContent = "—";
+            totalSub.textContent = "سجّل مشروعاً أولاً";
+            if (window.lucide) lucide.createIcons();
+            return;
+          }
+
+          const resp = await fetch(`${API}/grades/student/${uid}/project/${projectId}`, {
+            headers: authHeaders,
+          });
+          if (!resp.ok) throw new Error();
+
+          const gdata = await resp.json();
+          const cats = gdata.categories || [];
+
+          if (cats.length === 0) {
+            tbody.innerHTML =
+              '<tr><td colspan="3" class="text-center text-slate-500 py-6">لا توجد درجات مسجّلة بعد.</td></tr>';
+          } else {
+            tbody.innerHTML = cats
+              .map(
+                (c) => `
+            <tr>
+              <td class="font-extrabold text-slate-900">${esc(catLabels[c.category] || c.category)}</td>
+              <td>${esc(String(c.score))} / ${esc(String(c.max_score))}</td>
+              <td class="text-slate-600">${esc(c.feedback || "—")}</td>
+            </tr>`
+              )
+              .join("");
+          }
+
+          const maxT = Number(gdata.max_total) || 0;
+          const tot = Number(gdata.total_score) || 0;
+          if (maxT > 0) {
+            totalEl.textContent = `${tot.toFixed(1)} / ${maxT.toFixed(1)}`;
+            totalSub.textContent =
+              gdata.approved === true
+                ? "معتمدة"
+                : gdata.approved === false
+                  ? "مرفوضة جزئياً — راجع المنسق"
+                  : "مجموع البنود (قد تكون بانتظار اعتماد المنسق)";
+          } else {
+            totalEl.textContent = "—";
+            totalSub.textContent = "لم تُسجَّل درجات بعد";
+          }
+
+          if (window.lucide) lucide.createIcons();
+        } catch {
+          tbody.innerHTML =
+            '<tr><td colspan="3" class="text-center text-red-500 py-6">تعذر تحميل الدرجات</td></tr>';
+        }
+      }
+
+      loadGrades();
+    });
+    </script>
+  </body>
+</html>
+

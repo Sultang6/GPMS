@@ -1,0 +1,81 @@
+# -*- coding: utf-8 -*-
+from pathlib import Path
+
+PUBLIC = Path(__file__).resolve().parents[1] / "public" / "pages"
+
+TEXT_KEYS = {
+    "لوحة التحكم": "navDashboard",
+    "إدارة المستخدمين": "navUsers",
+    "توزيع المشاريع والإشراف": "navAssignments",
+    "أوزان التقييم ودرجات المشاريع": "navProjectGrades",
+    "اعتماد الدرجات النهائية": "navApproveFinalGrades",
+    "تقارير النظام": "navSystemReports",
+    "تقييم التقارير": "navReviewReports",
+    "إدخال الدرجات": "navEnterGrades",
+    "إشعارات الطلاب": "navStudentNotifications",
+    "المشاريع المقترحة": "navProposedProjects",
+    "تسجيل مشروع تخرج": "navRegisterProject",
+    "تسليم التقارير": "navSubmitReports",
+    "الإشعارات": "navNotifications",
+    "الدرجة النهائية": "navFinalGrade",
+    "التواصل مع المشرف": "navContactSupervisor",
+    "المجتمع والمحادثات": "navCommunity",
+    "المساعد الذكي": "navChatbot",
+    "مكتبة المراجع": "navReferenceLibrary",
+    "إضافة توزيع": "addAssignment",
+    "تصدير": "export",
+    "تصفية": "filter",
+    "متابعة": "followUp",
+    "مراجعة": "review",
+    "فتح المحادثات": "openChats",
+    "الانتقال للمنسق (عرض)": "goToCoordinatorView",
+    "إدارة القسم (المنسق)": "sidebarCoordinator",
+    "لوحة تحكم المشرف": "sidebarSupervisor",
+    "لوحة تحكم الطالب": "sidebarStudent",
+    "إجمالي المشاريع المعتمدة": "statApprovedProjects",
+    "هذا الفصل": "statThisSemester",
+    "عدد المشرفين النشطين": "statActiveSupervisors",
+    "متاحون للإسناد": "statAvailableForAssignment",
+    "مقترحات بانتظار الاعتماد": "statPendingProposals",
+    "تحتاج متابعة": "statNeedsFollowUp",
+    "إجمالي الطلاب المشاركين": "statEnrolledStudents",
+    "مسجلين في مشاريع": "statRegisteredInProjects",
+    "طلاب تحت الإشراف": "statStudentsSupervised",
+    "تقارير بانتظار المراجعة": "statPendingReports",
+    "تحتاج قرار + ملاحظات": "statNeedsDecision",
+    "مشاريع جاهزة لرصد الدرجة": "statReadyForGrading",
+    "بانتظار الإدخال": "statAwaitingEntry",
+    "طلبات حجز موعد جديدة": "newAppointmentRequests",
+    "عدد المشاريع": "projectCountSub",
+    "المهام المعلقة (تتطلب منك مراجعة)": "pendingTasksSection",
+    "اختصارات": "shortcuts",
+    "فرقي تحت الإشراف": "mySupervisedTeams",
+    "أسماء الفرق وأعضاء كل فريق بعد تسجيلهم من قائد الفريق.": "mySupervisedTeamsHint",
+    "جدول إداري لإدارة الإسناد (واجهة فقط).": "sectionAssignmentsHint",
+    "عنوان المشروع": "thProjectTitle",
+    "الحالة": "thStatus",
+    "المشرف": "thSupervisor",
+    "عدد الطلاب": "thStudentCount",
+    "إجراء": "thAction",
+    "إجراءات": "thAction",
+    "جاري التحميل...": "loading",
+    "نظرة عامة على المشاريع والتوزيع والإشراف.": "subCoordinator",
+    "ملخص لمهام الإشراف والمراجعات المعلقة.": "subSupervisor",
+    "ملخص حالة مشروعك والمهام التالية المطلوبة.": "subStudent",
+}
+
+REPLACEMENTS = []
+for ar, key in TEXT_KEYS.items():
+    REPLACEMENTS.extend([
+        (f"<span>{ar}</span>", f'<span data-i18n="{key}">{ar}</span>'),
+        (f'<div class="text-xs text-slate-300">{ar}</motion>', f'<div class="text-xs text-slate-300" data-i18n="{key}">{ar}</div>'),
+        (f'class="gpms-stat-title">{ar}</div>', f'class="gpms-stat-title" data-i18n="{key}">{ar}</div>'),
+        (f'class="gpms-stat-sub">{ar}</div>', f'class="gpms-stat-sub" data-i18n="{key}">{ar}</div>'),
+        (f'<h2 class="text-base font-extrabold text-slate-900 sm:text-lg">{ar}</h2>', f'<h2 class="text-base font-extrabold text-slate-900 sm:text-lg" data-i18n="{key}">{ar}</h2>'),
+        (f'<p class="mt-1 text-sm text-slate-500">{ar}</p>', f'<p class="mt-1 text-sm text-slate-500" data-i18n="{key}">{ar}</p>'),
+        (f"<th>{ar}</th>", f'<th data-i18n="{key}">{ar}</th>'),
+        (f'<p class="text-sm text-slate-500" id="welcomeSub">{ar}</p>', f'<p class="text-sm text-slate-500" id="welcomeSub" data-i18n="{key}">{ar}</p>'),
+    ])
+
+# fix typo in list above - remove motion
+REPLACEMENTS = [(a.replace("</motion>", "</motion>").replace('<div class="text-xs text-slate-300">{ar}</motion>', '<motion class="text-xs text-slate-300">{ar}</motion>'), b) for a,b in REPLACEMENTS]

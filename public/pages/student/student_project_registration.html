@@ -1,0 +1,736 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script>
+      (function () {
+        function gpmsPublicBase() {
+          if (location.protocol === "file:") {
+            var u = location.href.split("#")[0].split("?")[0];
+            var i = u.toLowerCase().indexOf("/pages/");
+            if (i >= 0) return u.slice(0, i + 1);
+            return u.slice(0, u.lastIndexOf("/") + 1);
+          }
+          var p = location.pathname.replace(/\\/g, "/");
+          var idx = p.indexOf("/pages/");
+          if (idx >= 0) return p.slice(0, idx + 1);
+          var slash = p.lastIndexOf("/");
+          return slash >= 0 ? p.slice(0, slash + 1) : "/";
+        }
+        window.gpmsPublicBase = gpmsPublicBase;
+        var base = document.createElement("base");
+        base.href = gpmsPublicBase();
+        document.head.appendChild(base);
+      })();
+    </script>
+        <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPMS | تسجيل مشروع تخرج</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              tajawal: ["Tajawal", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+            },
+            colors: {
+              gpms: {
+                maroon: "#7A2E2E",
+                maroonDark: "#622424",
+                charcoal: "#2F343C",
+                bg: "#F4F5F7",
+              },
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, .08)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="css/GPMS.css" />
+  </head>
+
+  <body class="min-h-dvh bg-gpms-bg font-tajawal text-slate-800" data-page="student-register">
+    <div class="min-h-dvh lg:flex">
+      <aside
+        id="sidebar"
+        class="gpms-sidebar translate-x-full bg-gpms-charcoal text-slate-100 shadow-2xl lg:static lg:translate-x-0"
+      >
+        <div class="flex h-full flex-col">
+          <div class="px-5 pb-4 pt-5">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                <i data-lucide="graduation-cap" class="h-6 w-6 text-white"></i>
+              </div>
+              <div class="leading-tight">
+                <div class="text-sm font-bold text-white">GPMS</div>
+                <div class="text-xs text-slate-300" data-i18n="sidebarStudent">لوحة تحكم الطالب</div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="px-3 pb-5">
+            <a class="gpms-nav-item" href="pages/student/student_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span data-i18n="navDashboard">لوحة التحكم</span>
+            </a>
+            <a class="gpms-nav-item is-active" href="pages/student/student_project_registration.html">
+              <i data-lucide="file-plus-2" class="h-5 w-5"></i>
+              <span>تسجيل مشروع تخرج</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_submit_reports.html">
+              <i data-lucide="upload" class="h-5 w-5"></i>
+              <span>تسليم التقارير</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_notifications.html">
+              <i data-lucide="bell" class="h-5 w-5"></i>
+              <span>الإشعارات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_final_grade.html">
+              <i data-lucide="badge-check" class="h-5 w-5"></i>
+              <span>الدرجة النهائية</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_contact_supervisor.html">
+              <i data-lucide="messages-square" class="h-5 w-5"></i>
+              <span>التواصل مع المشرف</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/community.html">
+              <i data-lucide="users" class="h-5 w-5"></i>
+              <span data-i18n="navCommunity">المجتمع والمحادثات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/chatbot.html">
+              <i data-lucide="bot" class="h-5 w-5"></i>
+              <span data-i18n="navChatbot">المساعد الذكي</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/reference_library.html">
+              <i data-lucide="library" class="h-5 w-5"></i>
+              <span data-i18n="navReferenceLibrary">مكتبة المراجع</span>
+            </a>
+          </nav>
+
+          <div class="mt-auto border-t border-white/10 px-4 py-4">
+            <a href="GPMS.html#logout" class="gpms-nav-item">
+              <i data-lucide="log-out" class="h-5 w-5"></i>
+              <span data-i18n="navLogout">تسجيل الخروج</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-slate-950/40 lg:hidden"></div>
+
+      <div class="flex-1">
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-gpms-bg/90 backdrop-blur">
+          <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+                id="sidebarToggle"
+                aria-label="فتح القائمة"
+              >
+                <i data-lucide="menu" class="h-5 w-5"></i>
+              </button>
+              <div>
+                <h1 class="text-lg font-extrabold text-slate-900 sm:text-xl">تسجيل مشروع تخرج</h1>
+                <p class="text-sm text-slate-500">كوّن الفريق، أرسل طلبات الأعضاء للمنسق، ثم سجّل المشروع (المشرف يُعيَّن من المنسق).</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          <section class="gpms-section p-5 sm:p-6">
+            <form id="registerForm" class="grid gap-4 lg:grid-cols-2">
+              <div id="notLeaderBanner" class="lg:col-span-2 hidden rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-800">
+                هذا الحساب ليس مُعرَّفاً كـ <strong>قائد فريق</strong> في النظام. اطلب من المنسق تفعيل خيار «قائد فريق» عند تسجيل حسابك، ثم أعد تسجيل الدخول.
+              </div>
+
+              <div class="lg:col-span-2">
+                <label class="mb-2 block text-sm font-extrabold text-slate-700">عنوان المشروع</label>
+                <input id="projTitle" class="gpms-input" placeholder="مثال: نظام إدارة مشاريع التخرج (GPMS)" required />
+              </div>
+
+              <div class="lg:col-span-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-bold text-amber-900 hidden" id="lockedFullBanner">
+                أنت مسجّل ضمن مجموعة ومشروع بالفعل. لا يمكن إعادة التسجيل من هذه الصفحة.
+              </div>
+
+              <div class="lg:col-span-2 rounded-2xl border border-sky-200 bg-sky-50 p-4 text-sm text-sky-900 hidden" id="groupOnlyBanner">
+                <span class="font-extrabold">تم تكوين الفريق.</span>
+                يمكنك إرسال طلبات أعضاء جديدة أو إدارة المقبولين، ثم أكمل تسجيل المشروع أدناه.
+              </div>
+
+              <div id="teamPanel" class="lg:col-span-2 hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <div class="text-base font-extrabold text-slate-900">أعضاء الفريق</div>
+                  <div class="rounded-full bg-gpms-maroon/10 px-3 py-1 text-xs font-bold text-gpms-maroon" id="teamCountBadge">1 / 5</div>
+                </div>
+                <p class="mb-4 text-sm leading-relaxed text-slate-600">
+                  أنت <strong>قائد الفريق</strong>. أرسل طلب إضافة كل عضو (الاسم والبريد). يصل الطلب للمنسق؛ عند الموافقة يُنشئ حساباً للعضو ويُضافه للفريق. الحد الأقصى <strong>خمسة طلاب</strong> بما فيك أنت.
+                </p>
+
+                <div class="mb-4 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
+                  <div class="text-xs font-bold text-slate-500">قائد الفريق (أنت)</div>
+                  <div class="mt-1 flex flex-wrap items-center gap-2 text-sm font-extrabold text-slate-900">
+                    <span id="leaderName">—</span>
+                    <span dir="ltr" class="rounded-lg bg-white px-2 py-0.5 font-mono text-xs text-gpms-maroon" id="leaderDisplayId">—</span>
+                  </div>
+                </div>
+
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <input type="text" id="memberRequestName" class="gpms-input" placeholder="اسم العضو الكامل" />
+                  <input type="email" id="memberRequestEmail" class="gpms-input" placeholder="البريد الجامعي" dir="ltr" />
+                </div>
+                <button type="button" id="createTeamBtn" class="gpms-button mt-3 whitespace-nowrap px-5 py-3">تكوين الفريق (خطوة أولى)</button>
+                <button type="button" id="submitMemberRequestBtn" class="gpms-button mt-2 hidden whitespace-nowrap border border-gpms-maroon bg-white px-5 py-3 text-gpms-maroon">إرسال طلب عضو للمنسق</button>
+                <p id="needTeamHint" class="mt-2 text-xs text-slate-500">بعد تكوين الفريق يمكنك إرسال طلبات إضافة الأعضاء للمنسق.</p>
+                <ul id="memberRequestsList" class="mt-4 space-y-2 text-sm"></ul>
+
+                <div class="mt-3 hidden rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-700" id="teamInlineError"></div>
+              </div>
+
+              <div id="teamManagePanel" class="lg:col-span-2 hidden rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5 shadow-sm">
+                <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <div class="text-base font-extrabold text-slate-900">إدارة أعضاء الفريق</div>
+                  <div class="rounded-full bg-gpms-maroon/10 px-3 py-1 text-xs font-bold text-gpms-maroon" id="teamManageCountBadge">—</div>
+                </div>
+                <p class="mb-4 text-sm text-slate-600">الأعضاء المقبولون والطلبات المعلّقة. لإضافة عضو أرسل طلباً بالاسم والبريد.</p>
+                <ul id="teamManageList" class="mb-4 space-y-2 text-sm"></ul>
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <input type="text" id="teamManageMemberName" class="gpms-input" placeholder="اسم العضو" />
+                  <input type="email" id="teamManageMemberEmail" class="gpms-input" placeholder="البريد" dir="ltr" />
+                </div>
+                <button type="button" id="teamManageRequestBtn" class="gpms-button mt-3 whitespace-nowrap px-5 py-3">إرسال طلب إضافة عضو</button>
+                <div class="mt-3 hidden rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-700" id="teamManageError"></div>
+              </div>
+
+              <div class="lg:col-span-2" id="teamNameRow">
+                <label class="mb-2 block text-sm font-extrabold text-slate-700">اسم الفريق (اختياري)</label>
+                <input id="teamName" class="gpms-input" placeholder="مثال: فريق GPMS — إن تركت الحقل فارغاً سيُستخدم عنوان المشروع" />
+              </div>
+
+              <div class="lg:col-span-2">
+                <label class="mb-2 block text-sm font-extrabold text-slate-700">التخصص (من حسابك في النظام)</label>
+                <div id="majorReadOnly" class="gpms-input bg-slate-50 text-slate-700">جارٍ التحميل...</div>
+                <p class="mt-1 text-xs text-slate-500">جميع أعضاء الفريق يجب أن يكون لهم نفس رمز التخصص في قاعدة البيانات (CS / SW / CY / DS).</p>
+              </div>
+
+              <div class="lg:col-span-2 rounded-xl border border-sky-200 bg-sky-50 p-4 text-sm text-sky-900">
+                <span class="font-extrabold">تعيين المشرف:</span>
+                يقوم <strong>منسق القسم</strong> بإسناد المشرف للمشروع بعد التسجيل من صفحة «توزيع المشاريع والإشراف» — لا يمكن للطالب اختيار المشرف.
+              </div>
+
+              <div class="lg:col-span-2">
+                <label class="mb-2 block text-sm font-extrabold text-slate-700">وصف مختصر</label>
+                <textarea id="projDescription" class="gpms-input min-h-[120px]" placeholder="اكتب وصفاً موجزاً للمشكلة والحل المقترح..." required></textarea>
+              </div>
+
+              <div class="lg:col-span-2">
+                <label class="mb-2 block text-sm font-extrabold text-slate-700">رفع المقترح (PDF)</label>
+                <input type="file" id="projFile" accept=".pdf" class="hidden" />
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                  <div class="flex flex-col items-center justify-between gap-3 sm:flex-row">
+                    <div class="flex items-center gap-3">
+                      <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gpms-maroon/10 text-gpms-maroon">
+                        <i data-lucide="upload" class="h-5 w-5"></i>
+                      </div>
+                      <div>
+                        <div class="text-sm font-extrabold text-slate-900" id="projFileName">اسحب الملف هنا أو اختره</div>
+                        <div class="mt-0.5 text-xs text-slate-500">الحد الأقصى: 20MB — PDF فقط</div>
+                      </div>
+                    </div>
+                    <button type="button" id="projFileBtn" class="gpms-button px-5 py-3">اختيار ملف</button>
+                  </div>
+                </div>
+              </div>
+
+              <div id="registerAlert" class="lg:col-span-2 hidden rounded-xl p-4 text-sm font-bold"></div>
+
+              <div class="lg:col-span-2 flex flex-wrap gap-2 pt-2">
+                <button type="submit" id="registerSubmitBtn" class="gpms-button px-6 py-3">إرسال</button>
+                <a href="pages/student/student_dashboard.html" class="gpms-pill">
+                  <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                  <span>عودة للوحة التحكم</span>
+                </a>
+              </div>
+            </form>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/gpms-i18n-extra.js"></script>
+    <script src="js/gpms-i18n.js"></script>
+    <script src="js/gpms-config.js"></script>
+    <script src="js/GPMS.js"></script>
+    <script src="js/gpms-lang-toggle.js"></script>
+    <script src="js/gpms-page-i18n.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const API = window.GPMS_CONFIG?.apiBaseUrl || "http://localhost:8000/api/v1";
+      const session = (() => { try { return JSON.parse(localStorage.getItem("gpms_session_v1")); } catch { return null; } })();
+      const token = session?.accessToken || "";
+      const authHeaders = { Authorization: `Bearer ${token}` };
+
+      const MAJOR_LABEL = { CS: "علوم الحاسب", SW: "هندسة البرمجيات", CY: "الأمن السيبراني", DS: "علوم البيانات" };
+
+      const form = document.getElementById("registerForm");
+      const fileInput = document.getElementById("projFile");
+      const fileBtn = document.getElementById("projFileBtn");
+      const fileLabel = document.getElementById("projFileName");
+      const alertBox = document.getElementById("registerAlert");
+      const majorReadOnly = document.getElementById("majorReadOnly");
+      const teamPanel = document.getElementById("teamPanel");
+      const teamNameRow = document.getElementById("teamNameRow");
+      const groupOnlyBanner = document.getElementById("groupOnlyBanner");
+      const lockedFullBanner = document.getElementById("lockedFullBanner");
+      const memberRequestName = document.getElementById("memberRequestName");
+      const memberRequestEmail = document.getElementById("memberRequestEmail");
+      const createTeamBtn = document.getElementById("createTeamBtn");
+      const submitMemberRequestBtn = document.getElementById("submitMemberRequestBtn");
+      const needTeamHint = document.getElementById("needTeamHint");
+      const memberRequestsList = document.getElementById("memberRequestsList");
+      const teamInlineError = document.getElementById("teamInlineError");
+      const teamCountBadge = document.getElementById("teamCountBadge");
+      const leaderName = document.getElementById("leaderName");
+      const leaderDisplayId = document.getElementById("leaderDisplayId");
+      const teamManagePanel = document.getElementById("teamManagePanel");
+      const teamManageList = document.getElementById("teamManageList");
+      const teamManageCountBadge = document.getElementById("teamManageCountBadge");
+      const teamManageMemberName = document.getElementById("teamManageMemberName");
+      const teamManageMemberEmail = document.getElementById("teamManageMemberEmail");
+      const teamManageRequestBtn = document.getElementById("teamManageRequestBtn");
+      const teamManageError = document.getElementById("teamManageError");
+      const notLeaderBanner = document.getElementById("notLeaderBanner");
+
+      let pendingRequests = [];
+      let me = null;
+      let uiLocked = false;
+      let skipCreateGroup = false;
+      let myGroupId = null;
+
+      function showAlert(msg, ok) {
+        if (!alertBox) return;
+        alertBox.textContent = msg;
+        alertBox.className = `lg:col-span-2 rounded-xl p-4 text-sm font-bold ${ok ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-red-50 text-red-700 border border-red-200"}`;
+        alertBox.classList.remove("hidden");
+      }
+
+      function apiDetail(errBody) {
+        const d = errBody?.detail;
+        if (!d) return "حدث خطأ";
+        if (typeof d === "string") return d;
+        if (Array.isArray(d)) return d.map((x) => x.msg || JSON.stringify(x)).join(" — ");
+        return String(d);
+      }
+
+      function hideTeamErr() {
+        if (!teamInlineError) return;
+        teamInlineError.classList.add("hidden");
+        teamInlineError.textContent = "";
+      }
+
+      function showTeamErr(msg) {
+        if (!teamInlineError) return;
+        teamInlineError.textContent = msg;
+        teamInlineError.classList.remove("hidden");
+      }
+
+      function hideManageErr() {
+        if (!teamManageError) return;
+        teamManageError.classList.add("hidden");
+        teamManageError.textContent = "";
+      }
+
+      function showManageErr(msg) {
+        if (!teamManageError) return;
+        teamManageError.textContent = msg;
+        teamManageError.classList.remove("hidden");
+      }
+
+      const STATUS_LABEL = {
+        Pending: { text: "بانتظار المنسق", cls: "bg-amber-100 text-amber-800" },
+        Approved: { text: "مقبول", cls: "bg-emerald-100 text-emerald-800" },
+        Rejected: { text: "مرفوض", cls: "bg-red-100 text-red-800" },
+      };
+
+      function renderRequestItem(req, onCancel) {
+        const li = document.createElement("li");
+        li.className = "flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3";
+        const st = STATUS_LABEL[req.status] || STATUS_LABEL.Pending;
+        li.innerHTML = `
+          <div>
+            <span class="font-extrabold text-slate-900">${req.full_name}</span>
+            <span class="mr-2 text-xs text-slate-500" dir="ltr">${req.email}</span>
+            ${req.approved_display_id ? `<span class="mr-2 font-mono text-xs text-gpms-maroon" dir="ltr">${req.approved_display_id}</span>` : ""}
+          </div>
+          <span class="rounded-full px-2 py-0.5 text-xs font-bold ${st.cls}">${st.text}</span>
+        `;
+        if (req.status === "Pending" && onCancel) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "text-xs font-bold text-red-600 hover:underline";
+          btn.textContent = "إلغاء";
+          btn.addEventListener("click", () => onCancel(req.id));
+          li.appendChild(btn);
+        }
+        return li;
+      }
+
+      function renderTeamRoster(groupData) {
+        const members = groupData?.members || [];
+        const requests = groupData?.member_requests || [];
+        const pendingN = requests.filter((r) => r.status === "Pending").length;
+        if (teamCountBadge) teamCountBadge.textContent = `${members.length} + ${pendingN} معلّق / 5`;
+        if (teamManageCountBadge) teamManageCountBadge.textContent = `${members.length} / 5`;
+        if (memberRequestsList) {
+          memberRequestsList.innerHTML = "";
+          requests.forEach((r) => memberRequestsList.appendChild(renderRequestItem(r, cancelMemberRequest)));
+        }
+        if (!teamManageList) return;
+        teamManageList.innerHTML = "";
+        members.forEach((m) => {
+          const li = document.createElement("li");
+          li.className = "flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3";
+          li.innerHTML = `
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="font-extrabold text-slate-900">${m.full_name || "—"}</span>
+              <span dir="ltr" class="font-mono text-xs text-gpms-maroon">${m.display_id || "—"}</span>
+              ${m.is_leader ? '<span class="rounded-full bg-gpms-maroon/10 px-2 py-0.5 text-xs font-bold text-gpms-maroon">قائد</span>' : ""}
+            </div>
+          `;
+          if (!m.is_leader && profileIsTeamLeader()) {
+            const rm = document.createElement("button");
+            rm.type = "button";
+            rm.className = "text-xs font-bold text-red-600 hover:underline";
+            rm.textContent = "إزالة";
+            rm.addEventListener("click", () => removeTeamMember(m.user_id));
+            li.appendChild(rm);
+          }
+          teamManageList.appendChild(li);
+        });
+        requests.forEach((r) => teamManageList.appendChild(renderRequestItem(r, cancelMemberRequest)));
+      }
+
+      function profileIsTeamLeader() {
+        return Boolean(me?.is_team_leader);
+      }
+
+      async function loadMyGroup() {
+        if (!myGroupId) return;
+        try {
+          const r = await fetch(`${API}/groups/mine`, { headers: authHeaders });
+          if (!r.ok) return;
+          const g = await r.json();
+          myGroupId = g.id;
+          renderTeamRoster(g);
+        } catch {
+          /* ignore */
+        }
+      }
+
+      async function removeTeamMember(userId) {
+        hideManageErr();
+        if (!myGroupId) return;
+        try {
+          const r = await fetch(`${API}/groups/${myGroupId}/members/${userId}`, {
+            method: "DELETE",
+            headers: authHeaders,
+          });
+          const body = await r.json().catch(() => ({}));
+          if (!r.ok) {
+            showManageErr(apiDetail(body));
+            return;
+          }
+          await loadMyGroup();
+          const meResp = await fetch(`${API}/auth/me`, { headers: authHeaders });
+          if (meResp.ok) {
+            const fresh = await meResp.json();
+            me = fresh;
+          }
+        } catch {
+          showManageErr("تعذر الاتصال بالخادم.");
+        }
+      }
+
+      async function submitMemberRequest(nameEl, emailEl, errFn) {
+        const full_name = (nameEl?.value || "").trim();
+        const email = (emailEl?.value || "").trim();
+        if (!full_name || !email) {
+          errFn("أدخل اسم العضو وبريده.");
+          return;
+        }
+        try {
+          const r = await fetch(`${API}/groups/mine/member-requests`, {
+            method: "POST",
+            headers: { ...authHeaders, "Content-Type": "application/json" },
+            body: JSON.stringify({ full_name, email }),
+          });
+          const body = await r.json().catch(() => ({}));
+          if (!r.ok) {
+            errFn(apiDetail(body));
+            return;
+          }
+          nameEl.value = "";
+          emailEl.value = "";
+          if (myGroupId) await loadMyGroup();
+          else if (memberRequestsList) {
+            memberRequestsList.appendChild(renderRequestItem(body, null));
+          }
+          hideTeamErr();
+          hideManageErr();
+          showAlert("تم إرسال الطلب للمنسق.", true);
+        } catch {
+          errFn("تعذر الاتصال بالخادم.");
+        }
+      }
+
+      async function cancelMemberRequest(requestId) {
+        try {
+          const r = await fetch(`${API}/groups/mine/member-requests/${requestId}`, {
+            method: "DELETE",
+            headers: authHeaders,
+          });
+          if (!r.ok) {
+            const body = await r.json().catch(() => ({}));
+            showManageErr(apiDetail(body));
+            return;
+          }
+          await loadMyGroup();
+        } catch {
+          showManageErr("تعذر الاتصال بالخادم.");
+        }
+      }
+
+      async function applyRegistrationState(profile) {
+        me = profile;
+        const majorCode = profile.major;
+        if (majorReadOnly) {
+          majorReadOnly.textContent = majorCode
+            ? `${MAJOR_LABEL[majorCode] || majorCode} (${majorCode})`
+            : "غير محدد — تواصل مع المنسق لتعيين التخصص قبل تكوين الفريق.";
+        }
+
+        if (leaderName) leaderName.textContent = profile.full_name || "—";
+        if (leaderDisplayId) leaderDisplayId.textContent = profile.display_id || "—";
+
+        const hasGroup = Boolean(profile.group_id);
+        const hasProject = Boolean(profile.project_id);
+
+        lockedFullBanner?.classList.toggle("hidden", !(hasGroup && hasProject));
+        groupOnlyBanner?.classList.toggle("hidden", !(hasGroup && !hasProject));
+
+        skipCreateGroup = hasGroup;
+        myGroupId = profile.group_id || myGroupId;
+
+        const isLeaderAcct = !!profile.is_group_leader_account;
+        const isTeamLeader = Boolean(profile.is_team_leader);
+        const canUsePage = isLeaderAcct || isTeamLeader;
+
+        notLeaderBanner?.classList.toggle("hidden", canUsePage);
+
+        try {
+          if (session?.accessToken) {
+            localStorage.setItem(
+              "gpms_session_v1",
+              JSON.stringify({
+                ...session,
+                fullName: profile.full_name || session.fullName,
+                isGroupLeaderAccount: isLeaderAcct,
+                isTeamLeader: !!profile.is_team_leader,
+                isTeamMember: !!profile.is_team_member,
+              })
+            );
+          }
+        } catch {
+          /* ignore */
+        }
+
+        teamPanel?.classList.toggle("hidden", hasGroup || !canUsePage);
+        teamManagePanel?.classList.toggle("hidden", !hasGroup || !isTeamLeader);
+        teamNameRow?.classList.toggle("hidden", hasGroup);
+        createTeamBtn?.classList.toggle("hidden", hasGroup);
+        submitMemberRequestBtn?.classList.toggle("hidden", !hasGroup);
+        needTeamHint?.classList.toggle("hidden", hasGroup);
+        memberRequestName?.toggleAttribute("disabled", !hasGroup);
+        memberRequestEmail?.toggleAttribute("disabled", !hasGroup);
+
+        uiLocked = hasGroup && hasProject;
+
+        const submitBtnEl = document.getElementById("registerSubmitBtn");
+        const idsAlwaysOn = ["sidebarToggle"];
+        const manageIds = ["teamManageMemberName", "teamManageMemberEmail", "teamManageRequestBtn", "memberRequestName", "memberRequestEmail", "submitMemberRequestBtn"];
+        if (form) {
+          form.querySelectorAll("input, textarea, select, button").forEach((el) => {
+            if (!el.closest("#registerForm")) return;
+            if (idsAlwaysOn.includes(el.id)) return;
+            if (manageIds.includes(el.id)) return;
+            if (teamManagePanel?.contains(el)) return;
+            el.disabled = uiLocked || !canUsePage;
+          });
+        }
+        if (submitBtnEl) submitBtnEl.disabled = uiLocked || !canUsePage;
+
+        if (hasGroup && isTeamLeader) loadMyGroup();
+        else if (teamCountBadge) teamCountBadge.textContent = "1 / 5";
+      }
+
+      if (!token) return;
+
+      fetch(`${API}/auth/me`, { headers: authHeaders })
+        .then((r) => (r.ok ? r.json() : Promise.reject()))
+        .then(applyRegistrationState)
+        .catch(() => {
+          if (majorReadOnly) majorReadOnly.textContent = "تعذر تحميل بيانات الحساب.";
+        });
+
+      createTeamBtn?.addEventListener("click", async () => {
+        hideTeamErr();
+        const teamName = document.getElementById("teamName")?.value.trim();
+        const title = document.getElementById("projTitle")?.value.trim();
+        const name = teamName || title || "فريقي";
+        if (!me?.major) {
+          showTeamErr("تخصصك غير محدد. تواصل مع المنسق.");
+          return;
+        }
+        createTeamBtn.disabled = true;
+        try {
+          const r = await fetch(`${API}/groups`, {
+            method: "POST",
+            headers: { ...authHeaders, "Content-Type": "application/json" },
+            body: JSON.stringify({ name: name.substring(0, 180) }),
+          });
+          const body = await r.json().catch(() => ({}));
+          if (!r.ok) {
+            showTeamErr(apiDetail(body));
+            return;
+          }
+          myGroupId = body.id;
+          const meResp = await fetch(`${API}/auth/me`, { headers: authHeaders });
+          if (meResp.ok) await applyRegistrationState(await meResp.json());
+          showAlert("تم تكوين الفريق. يمكنك الآن إرسال طلبات الأعضاء.", true);
+        } catch {
+          showTeamErr("تعذر الاتصال بالخادم.");
+        } finally {
+          createTeamBtn.disabled = false;
+        }
+      });
+
+      submitMemberRequestBtn?.addEventListener("click", () => {
+        submitMemberRequest(memberRequestName, memberRequestEmail, showTeamErr);
+      });
+
+      teamManageRequestBtn?.addEventListener("click", () => {
+        submitMemberRequest(teamManageMemberName, teamManageMemberEmail, showManageErr);
+      });
+
+      if (fileBtn && fileInput) {
+        fileBtn.addEventListener("click", () => fileInput.click());
+        fileInput.addEventListener("change", () => {
+          if (fileInput.files.length > 0 && fileLabel) fileLabel.textContent = fileInput.files[0].name;
+        });
+      }
+
+      if (!form) return;
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        hideTeamErr();
+
+        if (uiLocked) return;
+
+        const title = document.getElementById("projTitle").value.trim();
+        const description = document.getElementById("projDescription").value.trim();
+        const teamName = document.getElementById("teamName").value.trim();
+
+        if (!title || !description) {
+          showAlert("يرجى تعبئة عنوان المشروع والوصف", false);
+          return;
+        }
+
+        if (!skipCreateGroup && (!me?.major || String(me.major).trim() === "")) {
+          showAlert("تخصصك غير محدد في النظام. تواصل مع المنسق قبل تكوين الفريق.", false);
+          return;
+        }
+
+        const submitBtn = document.getElementById("registerSubmitBtn");
+        submitBtn.disabled = true;
+        submitBtn.textContent = "جارٍ الإرسال...";
+
+        try {
+          if (!skipCreateGroup) {
+            const groupPayload = { name: teamName || title.substring(0, 180) };
+
+            const gResp = await fetch(`${API}/groups`, {
+              method: "POST",
+              headers: { ...authHeaders, "Content-Type": "application/json" },
+              body: JSON.stringify(groupPayload),
+            });
+
+            if (!gResp.ok) {
+              const err = await gResp.json().catch(() => ({}));
+              showAlert(apiDetail(err), false);
+              return;
+            }
+            const gData = await gResp.json();
+            myGroupId = gData.id || myGroupId;
+          }
+
+          const resp = await fetch(`${API}/projects/register`, {
+            method: "POST",
+            headers: { ...authHeaders, "Content-Type": "application/json" },
+            body: JSON.stringify({ title, description }),
+          });
+
+          if (!resp.ok) {
+            const err = await resp.json().catch(() => ({}));
+            showAlert(`فشل تسجيل المشروع: ${apiDetail(err)}`, false);
+            return;
+          }
+
+          const project = await resp.json();
+
+          if (fileInput.files.length > 0 && project.project_id) {
+            const fd = new FormData();
+            fd.append("file", fileInput.files[0]);
+            fd.append("report_type", "Proposal");
+            fd.append("notes", "");
+            await fetch(`${API}/submissions/upload`, {
+              method: "POST",
+              headers: authHeaders,
+              body: fd,
+            }).catch(() => {});
+          }
+
+          showAlert("تم تسجيل الفريق والمشروع. سيعيّن المنسق المشرف لاحقاً.", true);
+          form.reset();
+          if (fileLabel) fileLabel.textContent = "اسحب الملف هنا أو اختره";
+
+          const meResp = await fetch(`${API}/auth/me`, { headers: authHeaders });
+          if (meResp.ok) {
+            const fresh = await meResp.json();
+            await applyRegistrationState(fresh);
+          }
+        } catch {
+          showAlert("تعذر الاتصال بالخادم. تأكد من تشغيل الباك اند.", false);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "إرسال";
+        }
+      });
+    });
+    </script>
+  </body>
+</html>
+

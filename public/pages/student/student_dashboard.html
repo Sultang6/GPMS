@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script>
+      (function () {
+        function gpmsPublicBase() {
+          if (location.protocol === "file:") {
+            var u = location.href.split("#")[0].split("?")[0];
+            var i = u.toLowerCase().indexOf("/pages/");
+            if (i >= 0) return u.slice(0, i + 1);
+            return u.slice(0, u.lastIndexOf("/") + 1);
+          }
+          var p = location.pathname.replace(/\\/g, "/");
+          var idx = p.indexOf("/pages/");
+          if (idx >= 0) return p.slice(0, idx + 1);
+          var slash = p.lastIndexOf("/");
+          return slash >= 0 ? p.slice(0, slash + 1) : "/";
+        }
+        window.gpmsPublicBase = gpmsPublicBase;
+        var base = document.createElement("base");
+        base.href = gpmsPublicBase();
+        document.head.appendChild(base);
+      })();
+    </script>
+        <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPMS | لوحة الطالب</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              tajawal: ["Tajawal", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+            },
+            colors: {
+              gpms: {
+                maroon: "#7A2E2E",
+                maroonDark: "#622424",
+                charcoal: "#2F343C",
+                charcoal2: "#3B414B",
+                bg: "#F4F5F7",
+                card: "#ffffff",
+              },
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, .08)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="css/GPMS.css" />
+  </head>
+
+  <body class="min-h-dvh bg-gpms-bg font-tajawal text-slate-800" data-page="student">
+    <div class="min-h-dvh lg:flex">
+      <!-- Sidebar (RTL: on the right) -->
+      <aside
+        id="sidebar"
+        class="gpms-sidebar translate-x-full bg-gpms-charcoal text-slate-100 shadow-2xl lg:static lg:translate-x-0"
+      >
+        <div class="flex h-full flex-col">
+          <div class="px-5 pb-4 pt-5">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                <i data-lucide="graduation-cap" class="h-6 w-6 text-white"></i>
+              </div>
+              <div class="leading-tight">
+                <div class="text-sm font-bold text-white">GPMS</div>
+                <div class="text-xs text-slate-300" data-sidebar-student-label>لوحة تحكم الطالب</div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="px-3 pb-5">
+            <a class="gpms-nav-item is-active" href="pages/student/student_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span data-i18n="navDashboard">لوحة التحكم</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_project_registration.html">
+              <i data-lucide="file-plus-2" class="h-5 w-5"></i>
+              <span>تسجيل مشروع تخرج</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_submit_reports.html">
+              <i data-lucide="upload" class="h-5 w-5"></i>
+              <span>تسليم التقارير</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_notifications.html">
+              <i data-lucide="bell" class="h-5 w-5"></i>
+              <span>الإشعارات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_final_grade.html">
+              <i data-lucide="badge-check" class="h-5 w-5"></i>
+              <span>الدرجة النهائية</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_contact_supervisor.html">
+              <i data-lucide="messages-square" class="h-5 w-5"></i>
+              <span>التواصل مع المشرف</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/community.html">
+              <i data-lucide="users" class="h-5 w-5"></i>
+              <span data-i18n="navCommunity">المجتمع والمحادثات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/chatbot.html">
+              <i data-lucide="bot" class="h-5 w-5"></i>
+              <span data-i18n="navChatbot">المساعد الذكي</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/reference_library.html">
+              <i data-lucide="library" class="h-5 w-5"></i>
+              <span data-i18n="navReferenceLibrary">مكتبة المراجع</span>
+            </a>
+          </nav>
+
+          <div class="mt-auto border-t border-white/10 px-4 py-4">
+            <a href="GPMS.html#logout" class="gpms-nav-item">
+              <i data-lucide="log-out" class="h-5 w-5"></i>
+              <span data-i18n="navLogout">تسجيل الخروج</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Overlay for mobile -->
+      <div
+        id="sidebarOverlay"
+        class="fixed inset-0 z-30 hidden bg-slate-950/40 lg:hidden"
+        aria-hidden="true"
+      ></div>
+
+      <!-- Main -->
+      <div class="flex-1">
+        <!-- Top bar -->
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-gpms-bg/90 backdrop-blur">
+          <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+                id="sidebarToggle"
+                aria-label="فتح القائمة"
+              >
+                <i data-lucide="menu" class="h-5 w-5"></i>
+              </button>
+              <div>
+                <h1 class="text-lg font-extrabold text-slate-900 sm:text-xl" id="welcomeTitle">أهلاً بك!</h1>
+                <p class="text-sm text-slate-500" id="welcomeSub" data-i18n="subStudent">ملخص حالة مشروعك والمهام التالية المطلوبة.</p>
+              </div>
+            </div>
+
+            <div class="hidden items-center gap-2 sm:flex">
+              <span class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700">
+                <i data-lucide="shield" class="h-4 w-4 text-gpms-maroon"></i>
+                <span data-student-role-label>طالب</span>
+              </span>
+            </div>
+          </div>
+        </header>
+
+        <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          <!-- Summary cards -->
+          <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <article class="gpms-stat-card">
+              <div class="gpms-stat-meta">
+                <div class="gpms-stat-title">حالة المشروع</div>
+                <div class="gpms-stat-icon bg-emerald-500/10 text-emerald-600">
+                  <i data-lucide="check-circle-2" class="h-5 w-5"></i>
+                </div>
+              </div>
+              <div class="gpms-stat-value text-emerald-600" id="statProjectStatus">مقبول وقيد التنفيذ</div>
+              <div class="gpms-stat-sub" id="statProjectStatusSub">آخر تحديث: اليوم</div>
+            </article>
+
+            <article class="gpms-stat-card">
+              <div class="gpms-stat-meta">
+                <div class="gpms-stat-title">الموعد النهائي</div>
+                <div class="gpms-stat-icon bg-gpms-maroon/10 text-gpms-maroon">
+                  <i data-lucide="calendar" class="h-5 w-5"></i>
+                </div>
+              </div>
+              <div class="gpms-stat-value" id="statDeadline">—</div>
+              <div class="gpms-stat-sub" id="statDeadlineSub">جارٍ التحميل...</div>
+            </article>
+
+            <article class="gpms-stat-card">
+              <div class="gpms-stat-meta">
+                <div class="gpms-stat-title">المهمة القادمة</div>
+                <div class="gpms-stat-icon bg-amber-500/10 text-amber-700">
+                  <i data-lucide="clipboard-list" class="h-5 w-5"></i>
+                </div>
+              </div>
+              <div class="gpms-stat-value text-gpms-maroon" id="statNextTask">—</div>
+              <div class="gpms-stat-sub" id="statNextTaskSub">جارٍ التحميل...</div>
+            </article>
+
+            <article class="gpms-stat-card">
+              <div class="gpms-stat-meta">
+                <div class="gpms-stat-title">تقارير بانتظار المراجعة</div>
+                <div class="gpms-stat-icon bg-slate-500/10 text-slate-700">
+                  <i data-lucide="file-search" class="h-5 w-5"></i>
+                </div>
+              </div>
+              <div class="gpms-stat-value" id="statPending">0</div>
+              <div class="gpms-stat-sub" id="statPendingSub">لا يوجد تقارير معلّقة</div>
+            </article>
+          </section>
+
+          <!-- Project card -->
+          <section class="mt-6 sm:mt-8">
+            <div class="rounded-2xl bg-white p-5 shadow-soft sm:p-6">
+              <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 class="text-base font-extrabold text-slate-900 sm:text-lg" id="projectTitle">
+                    مشروعك الحالي: جارٍ التحميل...
+                  </h2>
+                  <p class="mt-1 text-sm text-slate-500" id="projectSub">
+                    المشرف الأكاديمي: —
+                  </p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="inline-flex items-center gap-2 rounded-xl bg-emerald-50 px-3 py-2 text-sm font-bold text-emerald-700">
+                    <i data-lucide="badge-check" class="h-4 w-4"></i>
+                    مقبول
+                  </span>
+                  <span class="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-3 py-2 text-sm font-bold text-slate-700">
+                    <i data-lucide="git-branch" class="h-4 w-4"></i>
+                    v1.1 (مثال)
+                  </span>
+                </div>
+              </div>
+
+              <div class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 hidden lg:col-span-1" id="teamMembersCard">
+                  <div class="text-sm font-bold text-slate-700">أعضاء الفريق</div>
+                  <p class="mt-1 text-xs text-slate-500" id="teamNameLabel">—</p>
+                  <ul id="teamMembersList" class="mt-3 space-y-2 text-sm text-slate-700"></ul>
+                </div>
+                <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  <div class="text-sm font-bold text-slate-700">آخر ملاحظة من المشرف</div>
+                  <p class="mt-2 text-sm text-slate-600" id="supervisorNote">جارٍ التحميل...</p>
+                </div>
+                <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  <div class="text-sm font-bold text-slate-700">الخطوة التالية</div>
+                  <p class="mt-2 text-sm text-slate-600" id="nextStepText">جارٍ التحميل...</p>
+                </div>
+                <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  <div class="text-sm font-bold text-slate-700">روابط سريعة</div>
+                  <div class="mt-3 flex flex-wrap gap-2" data-student-leader-only>
+                    <a href="pages/student/student_submit_reports.html" class="gpms-pill">
+                      <i data-lucide="upload" class="h-4 w-4"></i>
+                      <span>رفع تقرير</span>
+                    </a>
+                    <a href="pages/student/student_contact_supervisor.html" class="gpms-pill">
+                      <i data-lucide="messages-square" class="h-4 w-4"></i>
+                      <span>مراسلة المشرف</span>
+                    </a>
+                  </div>
+                  <div class="mt-3 flex flex-wrap gap-2 hidden" data-student-member-only>
+                    <a href="pages/student/student_final_grade.html" class="gpms-pill">
+                      <i data-lucide="badge-check" class="h-4 w-4"></i>
+                      <span>الدرجة النهائية</span>
+                    </a>
+                    <a href="pages/student/student_contact_supervisor.html" class="gpms-pill">
+                      <i data-lucide="messages-square" class="h-4 w-4"></i>
+                      <span>مراسلة المشرف</span>
+                    </a>
+                    <a href="pages/shared/reference_library.html" class="gpms-pill">
+                      <i data-lucide="library" class="h-4 w-4"></i>
+                      <span data-i18n="navReferenceLibrary">مكتبة المراجع</span>
+                    </a>
+                    <a href="pages/shared/community.html" class="gpms-pill">
+                      <i data-lucide="users" class="h-4 w-4"></i>
+                      <span>المجتمع والدردشة</span>
+                    </a>
+                    <a href="pages/shared/chatbot.html" class="gpms-pill">
+                      <i data-lucide="bot" class="h-4 w-4"></i>
+                      <span data-i18n="navChatbot">المساعد الذكي</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/gpms-i18n-extra.js"></script>
+    <script src="js/gpms-i18n.js"></script>
+    <script src="js/gpms-config.js"></script>
+    <script src="js/GPMS.js"></script>
+    <script src="js/gpms-lang-toggle.js"></script>
+    <script src="js/gpms-page-i18n.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const API = window.GPMS_CONFIG?.apiBaseUrl || "http://localhost:8000/api/v1";
+      const session = typeof getSession === "function" ? getSession() : null;
+      const token = session?.accessToken || "";
+      const authHeaders = { Authorization: `Bearer ${token}` };
+      function esc(v) { return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+      if (!token) return;
+
+      try {
+        const flash = sessionStorage.getItem("gpms_flash");
+        if (flash) {
+          sessionStorage.removeItem("gpms_flash");
+          const box = document.createElement("div");
+          box.className =
+            "mx-auto max-w-6xl px-4 pt-4 sm:px-6";
+          box.innerHTML = `<div class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-bold text-amber-900">${flash.replace(/</g, "&lt;")}</div>`;
+          const main = document.querySelector("main");
+          if (main) main.prepend(box.firstElementChild);
+        }
+      } catch {
+        /* ignore */
+      }
+
+      let me = session;
+      if (typeof refreshStudentTeamAccess === "function") {
+        me = await refreshStudentTeamAccess();
+      }
+      if (typeof wireStudentTeamNav === "function") wireStudentTeamNav();
+
+      const teamCard = document.getElementById("teamMembersCard");
+      const teamList = document.getElementById("teamMembersList");
+      const teamNameLabel = document.getElementById("teamNameLabel");
+      const members = me?.teamMembers || session?.teamMembers || [];
+      if (members.length > 0 && teamCard && teamList) {
+        teamCard.classList.remove("hidden");
+        if (teamNameLabel) teamNameLabel.textContent = me?.teamName ? `فريق: ${me.teamName}` : "فريق المشروع";
+        teamList.innerHTML = members.map((m) => {
+          const leader = m.is_leader ? ' <span class="text-xs font-bold text-gpms-maroon">(قائد)</span>' : "";
+          return `<li class="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-white px-3 py-2 border border-slate-100">
+            <span class="font-bold">${esc(m.full_name)}</span>
+            <span dir="ltr" class="font-mono text-xs text-slate-500">${esc(m.display_id)}</span>${leader}
+          </li>`;
+        }).join("");
+      }
+
+      const isMember = me?.isTeamMember === true;
+
+      async function loadDashboard() {
+        try {
+          const fetches = [
+            fetch(`${API}/projects/my`, { headers: authHeaders }),
+          ];
+          if (!isMember) {
+            fetches.push(
+              fetch(`${API}/submissions/my`, { headers: authHeaders }),
+              fetch(`${API}/notifications`, { headers: authHeaders }),
+            );
+          }
+          const results = await Promise.allSettled(fetches);
+          const projRes = results[0];
+          const subRes = !isMember ? results[1] : null;
+          const notifRes = !isMember ? results[2] : null;
+
+          let submissions = [];
+          if (!isMember && subRes && subRes.status === "fulfilled" && subRes.value.ok) {
+            submissions = await subRes.value.json();
+            if (!Array.isArray(submissions)) submissions = [];
+          }
+          const pending = submissions.filter(s => !s.grade && s.status !== "graded").length;
+          const el = document.getElementById("statPending");
+          const elSub = document.getElementById("statPendingSub");
+          if (isMember) {
+            if (el) el.textContent = "—";
+            if (elSub) elSub.textContent = "رفع التقارير من قائد الفريق فقط";
+          } else {
+            if (el) el.textContent = pending;
+            if (elSub) elSub.textContent = pending === 0 ? "لا يوجد تقارير معلّقة" : `${pending} تقرير بانتظار المراجعة`;
+          }
+
+          if (!isMember && notifRes && notifRes.status === "fulfilled" && notifRes.value.ok) {
+            const notifs = await notifRes.value.json();
+            const arr = Array.isArray(notifs) ? notifs : (notifs.items || []);
+            const unread = arr.filter(n => !n.is_read).length;
+            const taskEl = document.getElementById("statNextTask");
+            const taskSub = document.getElementById("statNextTaskSub");
+            if (unread > 0) {
+              if (taskEl) taskEl.textContent = `${unread} إشعار جديد`;
+              if (taskSub) taskSub.textContent = "لديك إشعارات غير مقروءة";
+            } else {
+              if (taskEl) taskEl.textContent = "لا يوجد مهام";
+              if (taskSub) taskSub.textContent = "جميع الإشعارات مقروءة";
+            }
+          } else if (isMember) {
+            const taskEl = document.getElementById("statNextTask");
+            const taskSub = document.getElementById("statNextTaskSub");
+            if (taskEl) taskEl.textContent = "الدرجة النهائية";
+            if (taskSub) taskSub.textContent = "يمكنك متابعة درجتك من القائمة";
+          }
+
+          // Project info
+          if (projRes.status === "fulfilled" && projRes.value.ok) {
+            const proj = await projRes.value.json();
+            const p = Array.isArray(proj) ? proj[0] : proj;
+            if (p && p.title) {
+              const titleEl = document.getElementById("projectTitle");
+              const subEl = document.getElementById("projectSub");
+              const statusEl = document.getElementById("statProjectStatus");
+              const statusSub = document.getElementById("statProjectStatusSub");
+              const deadlineEl = document.getElementById("statDeadline");
+              const deadlineSub = document.getElementById("statDeadlineSub");
+              const noteEl = document.getElementById("supervisorNote");
+              const nextEl = document.getElementById("nextStepText");
+
+              if (titleEl) titleEl.textContent = `مشروعك الحالي: ${esc(p.title)}`;
+              if (subEl) subEl.textContent = `المشرف الأكاديمي: ${p.supervisor_name || "—"} — الحالة: ${p.status || "—"}`;
+
+              const statusMap = { approved: "مقبول وقيد التنفيذ", pending: "بانتظار الموافقة", rejected: "مرفوض", completed: "مكتمل" };
+              const st = (p.status || "").toLowerCase();
+              if (statusEl) statusEl.textContent = statusMap[st] || p.status || "—";
+              if (statusSub) statusSub.textContent = `آخر تحديث: ${p.updated_at ? new Date(p.updated_at).toLocaleDateString("ar-SA") : "—"}`;
+
+              if (p.deadline) {
+                if (deadlineEl) deadlineEl.textContent = p.deadline;
+                const diff = Math.ceil((new Date(p.deadline) - new Date()) / 86400000);
+                if (deadlineSub) deadlineSub.textContent = diff > 0 ? `باقي ${diff} يوم` : "انتهى الموعد";
+              } else {
+                if (deadlineEl) deadlineEl.textContent = "غير محدد";
+                if (deadlineSub) deadlineSub.textContent = "لم يُحدد موعد نهائي";
+              }
+
+              if (noteEl) noteEl.textContent = p.last_feedback || "لا توجد ملاحظات حالياً";
+              if (nextEl) {
+                nextEl.textContent = isMember
+                  ? "راجع الدرجة النهائية أو تواصل عبر المجتمع"
+                  : submissions.length > 0
+                    ? "متابعة تسليم التقارير"
+                    : "رفع أول تقرير للمشروع";
+              }
+            }
+          } else {
+            const titleEl = document.getElementById("projectTitle");
+            const statusEl = document.getElementById("statProjectStatus");
+            if (titleEl) titleEl.textContent = "لم يتم تسجيل مشروع بعد";
+            if (statusEl) statusEl.textContent = "لا يوجد مشروع";
+          }
+        } catch (err) {
+          console.error("Dashboard load error:", err);
+        }
+      }
+
+      loadDashboard();
+    });
+    </script>
+  </body>
+</html>
+

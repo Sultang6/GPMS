@@ -1,0 +1,275 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script>
+      (function () {
+        function gpmsPublicBase() {
+          if (location.protocol === "file:") {
+            var u = location.href.split("#")[0].split("?")[0];
+            var i = u.toLowerCase().indexOf("/pages/");
+            if (i >= 0) return u.slice(0, i + 1);
+            return u.slice(0, u.lastIndexOf("/") + 1);
+          }
+          var p = location.pathname.replace(/\\/g, "/");
+          var idx = p.indexOf("/pages/");
+          if (idx >= 0) return p.slice(0, idx + 1);
+          var slash = p.lastIndexOf("/");
+          return slash >= 0 ? p.slice(0, slash + 1) : "/";
+        }
+        window.gpmsPublicBase = gpmsPublicBase;
+        var base = document.createElement("base");
+        base.href = gpmsPublicBase();
+        document.head.appendChild(base);
+      })();
+    </script>
+        <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPMS | اعتماد الدرجات النهائية</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              tajawal: ["Tajawal", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+            },
+            colors: {
+              gpms: {
+                maroon: "#7A2E2E",
+                maroonDark: "#622424",
+                charcoal: "#2F343C",
+                bg: "#F4F5F7",
+              },
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, .08)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="css/GPMS.css" />
+  </head>
+
+  <body class="min-h-dvh bg-gpms-bg font-tajawal text-slate-800" data-page="admin-grades">
+    <div class="min-h-dvh lg:flex">
+      <aside
+        id="sidebar"
+        class="gpms-sidebar translate-x-full bg-gpms-charcoal text-slate-100 shadow-2xl lg:static lg:translate-x-0"
+      >
+        <div class="flex h-full flex-col">
+          <div class="px-5 pb-4 pt-5">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                <i data-lucide="graduation-cap" class="h-6 w-6 text-white"></i>
+              </div>
+              <div class="leading-tight">
+                <div class="text-sm font-bold text-white">GPMS</div>
+                <div class="text-xs text-slate-300">إدارة القسم (المنسق)</div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="px-3 pb-5">
+            <a class="gpms-nav-item" href="pages/admin/admin_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span data-i18n="navDashboard">لوحة التحكم</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_users_management.html">
+              <i data-lucide="users-round" class="h-5 w-5"></i>
+              <span>إدارة المستخدمين</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_assignments.html">
+              <i data-lucide="arrow-left-right" class="h-5 w-5"></i>
+              <span>توزيع المشاريع والإشراف</span>
+            </a>
+            <a class="gpms-nav-item is-active" href="pages/admin/admin_approve_grades.html">
+              <i data-lucide="badge-check" class="h-5 w-5"></i>
+              <span>اعتماد الدرجات النهائية</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_system_reports.html">
+              <i data-lucide="file-bar-chart-2" class="h-5 w-5"></i>
+              <span>تقارير النظام</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/community.html">
+              <i data-lucide="users" class="h-5 w-5"></i>
+              <span data-i18n="navCommunity">المجتمع والمحادثات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/chatbot.html">
+              <i data-lucide="bot" class="h-5 w-5"></i>
+              <span data-i18n="navChatbot">المساعد الذكي</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/reference_library.html">
+              <i data-lucide="library" class="h-5 w-5"></i>
+              <span data-i18n="navReferenceLibrary">مكتبة المراجع</span>
+            </a>
+          </nav>
+
+          <div class="mt-auto border-t border-white/10 px-4 py-4">
+            <a href="GPMS.html#logout" class="gpms-nav-item">
+              <i data-lucide="log-out" class="h-5 w-5"></i>
+              <span data-i18n="navLogout">تسجيل الخروج</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-slate-950/40 lg:hidden"></div>
+
+      <div class="flex-1">
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-gpms-bg/90 backdrop-blur">
+          <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+                id="sidebarToggle"
+                aria-label="فتح القائمة"
+              >
+                <i data-lucide="menu" class="h-5 w-5"></i>
+              </button>
+              <div>
+                <h1 class="text-lg font-extrabold text-slate-900 sm:text-xl">اعتماد الدرجات النهائية</h1>
+                <p class="text-sm text-slate-500">اعتماد درجات واردة من المشرف/اللجنة (واجهة).</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          <section class="gpms-section p-5 sm:p-6">
+            <div class="flex items-center justify-between gap-2">
+              <h2 class="text-base font-extrabold text-slate-900 sm:text-lg">طلبات اعتماد</h2>
+              <button class="gpms-pill">
+                <i data-lucide="filter" class="h-4 w-4"></i>
+                <span>تصفية</span>
+              </button>
+            </div>
+
+            <div class="mt-4 overflow-x-auto rounded-xl border border-slate-200">
+              <table class="gpms-table min-w-[980px]">
+                <thead>
+                  <tr>
+                    <th>المشروع</th>
+                    <th>المشرف</th>
+                    <th>الإجمالي</th>
+                    <th>الحالة</th>
+                    <th>إجراء</th>
+                  </tr>
+                </thead>
+                <tbody id="gradesTableBody">
+                  <tr><td colspan="5" class="text-center text-slate-400 py-6">جاري التحميل...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div id="toastContainer" class="fixed bottom-6 left-6 z-[60] flex flex-col gap-2"></div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/gpms-i18n-extra.js"></script>
+    <script src="js/gpms-i18n.js"></script>
+    <script src="js/gpms-config.js"></script>
+    <script src="js/GPMS.js"></script>
+    <script src="js/gpms-lang-toggle.js"></script>
+    <script src="js/gpms-page-i18n.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const API = window.GPMS_CONFIG?.apiBaseUrl || "http://localhost:8000/api/v1";
+      const session = (() => { try { return JSON.parse(localStorage.getItem("gpms_session_v1")); } catch { return null; } })();
+      const token = session?.accessToken || "";
+      const authHeaders = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
+      function esc(v) { return String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+      const tb = document.getElementById("gradesTableBody");
+
+      function toast(msg, ok = true) {
+        const el = document.createElement("div");
+        el.className = `rounded-xl px-5 py-3 text-sm font-bold shadow-lg text-white transition-all ${ok ? "bg-emerald-600" : "bg-red-600"}`;
+        el.textContent = msg;
+        document.getElementById("toastContainer").appendChild(el);
+        setTimeout(() => { el.style.opacity = "0"; setTimeout(() => el.remove(), 300); }, 3500);
+      }
+
+      async function loadGrades() {
+        tb.innerHTML = `<tr><td colspan="5" class="text-center text-slate-400 py-6">جاري التحميل...</td></tr>`;
+        try {
+          const r = await fetch(`${API}/submissions?graded=true`, { headers: authHeaders });
+          if (!r.ok) throw new Error(r.status);
+          const data = await r.json();
+          const list = Array.isArray(data) ? data : (data.items || data.data || []);
+          if (!list.length) {
+            tb.innerHTML = `<tr><td colspan="5" class="text-center text-slate-400 py-6">لا توجد درجات بانتظار الاعتماد</td></tr>`;
+            return;
+          }
+          tb.innerHTML = list.map(s => {
+            const approved = s.grade_approved;
+            let statusHtml;
+            if (approved === true) {
+              statusHtml = `<span class="gpms-badge gpms-badge--approved"><i data-lucide="badge-check" class="h-4 w-4"></i> معتمدة</span>`;
+            } else if (approved === false) {
+              statusHtml = `<span class="gpms-badge gpms-badge--delayed"><i data-lucide="x" class="h-4 w-4"></i> مرفوضة</span>`;
+            } else {
+              statusHtml = `<span class="gpms-badge gpms-badge--pending"><i data-lucide="clock" class="h-4 w-4"></i> بانتظار اعتماد</span>`;
+            }
+            return `<tr>
+              <td class="font-extrabold text-slate-900">${esc(s.project_title || s.project_id)}</td>
+              <td>${esc(s.student_name || s.student_id)}</td>
+              <td>${esc(s.grade ?? "—")}</td>
+              <td>${statusHtml}</td>
+              <td>
+                <div class="flex flex-wrap gap-2">
+                  ${approved !== true ? `<button class="gpms-pill btn-approve" data-id="${esc(s.submission_id)}"><i data-lucide="check" class="h-4 w-4"></i><span>اعتماد</span></button>` : ""}
+                  ${approved !== false ? `<button class="gpms-pill btn-reject" data-id="${esc(s.submission_id)}"><i data-lucide="x" class="h-4 w-4"></i><span>رفض</span></button>` : ""}
+                </div>
+              </td>
+            </tr>`;
+          }).join("");
+          if (typeof lucide !== "undefined") lucide.createIcons();
+          bindActions();
+        } catch (e) {
+          console.error("load grades:", e);
+          tb.innerHTML = `<tr><td colspan="5" class="text-center text-red-500 py-6">خطأ في تحميل الدرجات</td></tr>`;
+        }
+      }
+
+      function bindActions() {
+        tb.querySelectorAll(".btn-approve").forEach(btn => {
+          btn.addEventListener("click", () => approveGrade(btn.dataset.id, true));
+        });
+        tb.querySelectorAll(".btn-reject").forEach(btn => {
+          btn.addEventListener("click", () => approveGrade(btn.dataset.id, false));
+        });
+      }
+
+      async function approveGrade(id, approved) {
+        try {
+          const r = await fetch(`${API}/submissions/${id}/approve-grade?approved=${approved}`, {
+            method: "PATCH", headers: authHeaders
+          });
+          if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail || r.status);
+          toast(approved ? "تم اعتماد الدرجة بنجاح" : "تم رفض الدرجة");
+          loadGrades();
+        } catch (e) {
+          toast("حدث خطأ: " + e.message, false);
+        }
+      }
+
+      loadGrades();
+    });
+    </script>
+  </body>
+</html>
+

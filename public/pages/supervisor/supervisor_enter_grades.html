@@ -1,0 +1,600 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script>
+      (function () {
+        function gpmsPublicBase() {
+          if (location.protocol === "file:") {
+            var u = location.href.split("#")[0].split("?")[0];
+            var i = u.toLowerCase().indexOf("/pages/");
+            if (i >= 0) return u.slice(0, i + 1);
+            return u.slice(0, u.lastIndexOf("/") + 1);
+          }
+          var p = location.pathname.replace(/\\/g, "/");
+          var idx = p.indexOf("/pages/");
+          if (idx >= 0) return p.slice(0, idx + 1);
+          var slash = p.lastIndexOf("/");
+          return slash >= 0 ? p.slice(0, slash + 1) : "/";
+        }
+        window.gpmsPublicBase = gpmsPublicBase;
+        var base = document.createElement("base");
+        base.href = gpmsPublicBase();
+        document.head.appendChild(base);
+      })();
+    </script>
+        <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPMS | إدخال الدرجات</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              tajawal: ["Tajawal", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+            },
+            colors: {
+              gpms: {
+                maroon: "#7A2E2E",
+                maroonDark: "#622424",
+                charcoal: "#2F343C",
+                bg: "#F4F5F7",
+              },
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, .08)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="css/GPMS.css" />
+  </head>
+
+  <body class="min-h-dvh bg-gpms-bg font-tajawal text-slate-800" data-page="supervisor-grades">
+    <div class="min-h-dvh lg:flex">
+      <aside
+        id="sidebar"
+        class="gpms-sidebar translate-x-full bg-gpms-charcoal text-slate-100 shadow-2xl lg:static lg:translate-x-0"
+      >
+        <div class="flex h-full flex-col">
+          <div class="px-5 pb-4 pt-5">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                <i data-lucide="graduation-cap" class="h-6 w-6 text-white"></i>
+              </div>
+              <div class="leading-tight">
+                <div class="text-sm font-bold text-white">GPMS</div>
+                <div class="text-xs text-slate-300" data-i18n="sidebarSupervisor">لوحة تحكم المشرف</div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="px-3 pb-5">
+            <a class="gpms-nav-item" href="pages/supervisor/supervisor_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span data-i18n="navDashboard">لوحة التحكم</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/supervisor/supervisor_review_reports.html">
+              <i data-lucide="file-check-2" class="h-5 w-5"></i>
+              <span data-i18n="navReviewReports">تقييم التقارير</span>
+            </a>
+            <a class="gpms-nav-item is-active" href="pages/supervisor/supervisor_enter_grades.html">
+              <i data-lucide="square-pen" class="h-5 w-5"></i>
+              <span data-i18n="navEnterGrades">إدخال الدرجات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/supervisor/supervisor_student_notifications.html">
+              <i data-lucide="bell" class="h-5 w-5"></i>
+              <span data-i18n="navStudentNotifications">إشعارات الطلاب</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/supervisor/supervisor_proposed_projects.html">
+              <i data-lucide="folder-open" class="h-5 w-5"></i>
+              <span data-i18n="navProposedProjects">المشاريع المقترحة</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/community.html">
+              <i data-lucide="users" class="h-5 w-5"></i>
+              <span data-i18n="navCommunity">المجتمع والمحادثات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/chatbot.html">
+              <i data-lucide="bot" class="h-5 w-5"></i>
+              <span data-i18n="navChatbot">المساعد الذكي</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/reference_library.html">
+              <i data-lucide="library" class="h-5 w-5"></i>
+              <span data-i18n="navReferenceLibrary">مكتبة المراجع</span>
+            </a>
+          </nav>
+
+          <div class="mt-auto border-t border-white/10 px-4 py-4">
+            <a href="GPMS.html#logout" class="gpms-nav-item">
+              <i data-lucide="log-out" class="h-5 w-5"></i>
+              <span data-i18n="navLogout">تسجيل الخروج</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-slate-950/40 lg:hidden"></div>
+
+      <div class="flex-1">
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-gpms-bg/90 backdrop-blur">
+          <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+                id="sidebarToggle"
+                aria-label="فتح القائمة"
+              >
+                <i data-lucide="menu" class="h-5 w-5"></i>
+              </button>
+              <div>
+                <h1 class="text-lg font-extrabold text-slate-900 sm:text-xl">إدخال الدرجات</h1>
+                <p class="text-sm text-slate-500">
+                  يحدّد المشرف أو المنسق <strong class="font-extrabold text-slate-700">أي نسبة تريدانها</strong> بين جزء التقرير
+                  (جماعي) وجزء الأداء الفردي، طالما مجموعهما <strong class="font-extrabold text-slate-700">100</strong>.
+                  القيمة الافتراضية قد تكون مثل 60/40 للتوضيح فقط وليست إجبارية — غيّر الحقلين ثم احفظ التوزيع.
+                </p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          <section class="grid gap-4 lg:grid-cols-3">
+            <div class="gpms-section p-5 sm:p-6 lg:col-span-2">
+              <div class="flex items-center justify-between gap-2">
+                <h2 class="text-base font-extrabold text-slate-900 sm:text-lg">نموذج التقييم</h2>
+                <span class="gpms-badge gpms-badge--pending">
+                  <i data-lucide="clock" class="h-4 w-4"></i>
+                  مسودة
+                </span>
+              </div>
+
+              <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                <div class="sm:col-span-2">
+                  <label class="mb-2 block text-sm font-extrabold text-slate-700">المشروع</label>
+                  <select id="gradeProject" class="gpms-input">
+                    <option value="">— اختر المشروع —</option>
+                  </select>
+                </div>
+
+                <div class="sm:col-span-2 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                  <h3 class="text-sm font-extrabold text-slate-900">توزيع الدرجة الكلية (100)</h3>
+                  <p class="mt-1 text-xs text-slate-600">
+                    غيّر الرقمين كما تشاء (مثل 70/30 أو 50/50 أو 55/45). الشرط الوحيد: المجموع = 100. استخدم «حفظ التوزيع فقط»
+                    أو «حفظ التقييم» لتحديث المشروع في الخادم.
+                  </p>
+                  <div class="mt-3 grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <label class="mb-1 block text-xs font-bold text-slate-700">وزن التقرير الجماعي</label>
+                      <input id="weightReport" type="number" min="0" max="100" step="0.01" class="gpms-input" />
+                    </div>
+                    <div>
+                      <label class="mb-1 block text-xs font-bold text-slate-700">وزن الفردي (لكل طالب)</label>
+                      <input id="weightIndividual" type="number" min="0" max="100" step="0.01" class="gpms-input" />
+                    </div>
+                  </div>
+                  <p class="mt-2 text-xs font-bold text-slate-600">
+                    المجموع: <span id="weightSumVal">—</span> / 100
+                  </p>
+                  <button type="button" id="btnSaveWeights" class="gpms-pill mt-3">
+                    <i data-lucide="save" class="h-4 w-4"></i>
+                    <span>حفظ التوزيع فقط</span>
+                  </button>
+                </div>
+
+                <div class="sm:col-span-2" id="submissionsList">
+                  <p class="text-sm text-slate-500">اختر مشروعاً لعرض التقارير المتاحة للتقييم.</p>
+                </div>
+
+                <div class="sm:col-span-2 rounded-2xl border border-emerald-100 bg-emerald-50/80 p-4">
+                  <h3 class="text-sm font-extrabold text-emerald-950">درجة التقرير (للمجموعة)</h3>
+                  <p class="mt-1 text-xs text-emerald-900">
+                    تُطبَّق على <strong>جميع</strong> طلاب المشروع ضمن وزن التقرير الحالي.
+                  </p>
+                  <label class="mt-3 mb-1 block text-xs font-bold text-slate-800">
+                    درجة التقرير (0 — <span id="reportMaxLabel">—</span>)
+                  </label>
+                  <input id="reportGradeInput" class="gpms-input" type="number" min="0" step="0.5" placeholder="أدخل الدرجة" />
+                </div>
+
+                <div class="sm:col-span-2 rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4">
+                  <h3 class="text-sm font-extrabold text-indigo-950">الدرجات الفردية</h3>
+                  <p class="mt-1 text-xs text-indigo-950">
+                    لكل طالب حقل مستقل (0 — <span id="individualMaxLabel">—</span>) وفق وزن الفردي الذي ضبطته أعلاه.
+                  </p>
+                  <div id="individualGradesWrap" class="mt-3 space-y-2">
+                    <p class="text-sm text-slate-500">اختر مشروعاً لعرض الطلاب.</p>
+                  </div>
+                </div>
+
+                <div class="sm:col-span-2">
+                  <label class="mb-2 block text-sm font-extrabold text-slate-700">ملاحظات مع درجة التقرير</label>
+                  <textarea id="gradeFeedback" class="gpms-input min-h-[120px]" placeholder="ملاحظات للطلاب أو اللجنة..."></textarea>
+                </div>
+              </div>
+
+              <div class="mt-4 flex flex-wrap gap-2">
+                <button type="button" id="btnSubmitGrades" class="gpms-button px-6 py-3">حفظ التقييم</button>
+              </div>
+              <div id="gradeStatus" class="mt-3 hidden rounded-xl p-3 text-sm"></div>
+            </div>
+
+            <aside class="gpms-section p-5 sm:p-6">
+              <h2 class="text-base font-extrabold text-slate-900">شرح سريع</h2>
+              <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                <div id="weightHintReport" class="text-lg font-black text-gpms-maroon">التقرير: —</div>
+                <div id="weightHintIndiv" class="mt-2 text-lg font-bold text-slate-800">الفردي: —</div>
+                <div class="mt-3 border-t border-slate-200 pt-3 text-xs text-slate-600 leading-relaxed">
+                  النسب ليست ثابتة: عدّل وزني التقرير والفردي في أي وقت (المشرف أو المنسق). آخر درجة تقرير تُحدّث سجل
+                  التقرير الجماعي للجميع؛ الفردي يختلف لكل طالب.
+                </div>
+              </div>
+            </aside>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/gpms-i18n-extra.js"></script>
+    <script src="js/gpms-i18n.js"></script>
+    <script src="js/gpms-config.js"></script>
+    <script src="js/GPMS.js"></script>
+    <script src="js/gpms-lang-toggle.js"></script>
+    <script src="js/gpms-page-i18n.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const API = window.GPMS_CONFIG?.apiBaseUrl || "http://localhost:8000/api/v1";
+        const session = (() => {
+          try {
+            return JSON.parse(localStorage.getItem("gpms_session_v1"));
+          } catch {
+            return null;
+          }
+        })();
+        const token = session?.accessToken || "";
+        const userId = session?.userId;
+        const role = session?.role || "";
+        const authHeaders = { Authorization: `Bearer ${token}` };
+
+        function esc(v) {
+          return String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        const projectSelect = document.getElementById("gradeProject");
+        const submissionsList = document.getElementById("submissionsList");
+        const reportGradeInput = document.getElementById("reportGradeInput");
+        const feedbackInput = document.getElementById("gradeFeedback");
+        const btnSubmit = document.getElementById("btnSubmitGrades");
+        const btnSaveWeights = document.getElementById("btnSaveWeights");
+        const gradeStatus = document.getElementById("gradeStatus");
+        const weightReport = document.getElementById("weightReport");
+        const weightIndividual = document.getElementById("weightIndividual");
+        const weightSumVal = document.getElementById("weightSumVal");
+        const reportMaxLabel = document.getElementById("reportMaxLabel");
+        const individualMaxLabel = document.getElementById("individualMaxLabel");
+        const individualGradesWrap = document.getElementById("individualGradesWrap");
+        const weightHintReport = document.getElementById("weightHintReport");
+        const weightHintIndiv = document.getElementById("weightHintIndiv");
+
+        let currentSubmissions = [];
+        let currentSheet = null;
+
+        function updateWeightUi() {
+          const wr = parseFloat(weightReport.value);
+          const wi = parseFloat(weightIndividual.value);
+          const sum = (isNaN(wr) ? 0 : wr) + (isNaN(wi) ? 0 : wi);
+          weightSumVal.textContent = isNaN(wr) && isNaN(wi) ? "—" : String(sum);
+          reportMaxLabel.textContent = isNaN(wr) ? "—" : String(wr);
+          individualMaxLabel.textContent = isNaN(wi) ? "—" : String(wi);
+          if (!isNaN(wr)) {
+            weightHintReport.textContent = `التقرير (جماعي): حتى ${wr}`;
+            reportGradeInput.max = wr;
+          } else {
+            weightHintReport.textContent = "التقرير: —";
+          }
+          if (!isNaN(wi)) {
+            weightHintIndiv.textContent = `الفردي لكل طالب: حتى ${wi}`;
+            document.querySelectorAll(".ind-grade-input").forEach((inp) => {
+              inp.max = wi;
+            });
+          } else {
+            weightHintIndiv.textContent = "الفردي: —";
+          }
+        }
+
+        weightReport.addEventListener("input", updateWeightUi);
+        weightIndividual.addEventListener("input", updateWeightUi);
+
+        async function loadProjects() {
+          try {
+            const url =
+              role === "coordinator"
+                ? `${API}/projects/my`
+                : `${API}/projects?supervisor_id=${encodeURIComponent(userId)}`;
+            const res = await fetch(url, { headers: authHeaders });
+            if (!res.ok) return;
+            const projects = await res.json();
+            const list = Array.isArray(projects) ? projects : [];
+            list.forEach((p) => {
+              const opt = document.createElement("option");
+              opt.value = p.project_id;
+              opt.textContent = p.title || `مشروع #${p.project_id}`;
+              projectSelect.appendChild(opt);
+            });
+          } catch (err) {
+            console.error(err);
+          }
+        }
+
+        async function saveWeights(pid) {
+          const wr = parseFloat(weightReport.value);
+          const wi = parseFloat(weightIndividual.value);
+          if (isNaN(wr) || isNaN(wi) || Math.abs(wr + wi - 100) > 0.001) {
+            alert("مجموع وزن التقرير والفردي يجب أن يساوي 100 بالضبط.");
+            return false;
+          }
+          const res = await fetch(`${API}/projects/${pid}/grading-weights`, {
+            method: "PATCH",
+            headers: { ...authHeaders, "Content-Type": "application/json" },
+            body: JSON.stringify({
+              grading_report_weight: wr,
+              grading_individual_weight: wi,
+            }),
+          });
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            alert("فشل حفظ التوزيع: " + (err.detail || res.statusText));
+            return false;
+          }
+          return true;
+        }
+
+        btnSaveWeights.addEventListener("click", async () => {
+          const pid = projectSelect.value;
+          if (!pid) {
+            alert("اختر مشروعاً أولاً");
+            return;
+          }
+          btnSaveWeights.disabled = true;
+          await saveWeights(pid);
+          btnSaveWeights.disabled = false;
+        });
+
+        projectSelect.addEventListener("change", async () => {
+          const pid = projectSelect.value;
+          if (!pid) {
+            submissionsList.innerHTML =
+              '<p class="text-sm text-slate-500">اختر مشروعاً لعرض التقارير المتاحة للتقييم.</p>';
+            individualGradesWrap.innerHTML =
+              '<p class="text-sm text-slate-500">اختر مشروعاً لعرض الطلاب.</p>';
+            currentSubmissions = [];
+            currentSheet = null;
+            return;
+          }
+
+          submissionsList.innerHTML = '<p class="text-sm text-slate-500">جاري التحميل...</p>';
+          individualGradesWrap.innerHTML = '<p class="text-sm text-slate-500">جاري التحميل...</p>';
+
+          try {
+            const [sheetRes, subsRes] = await Promise.all([
+              fetch(`${API}/projects/${pid}/grading-sheet`, { headers: authHeaders }),
+              fetch(`${API}/submissions/for-grade-project/${pid}`, { headers: authHeaders }),
+            ]);
+
+            const sheet = sheetRes.ok ? await sheetRes.json() : null;
+            const projSubs = subsRes.ok ? await subsRes.json() : [];
+            currentSheet = sheet;
+            currentSubmissions = Array.isArray(projSubs) ? projSubs : [];
+
+            if (sheet) {
+              weightReport.value = sheet.grading_report_weight;
+              weightIndividual.value = sheet.grading_individual_weight;
+              updateWeightUi();
+
+              const studs = sheet.students || [];
+              if (studs.length === 0) {
+                individualGradesWrap.innerHTML =
+                  '<p class="text-sm text-slate-500">لا يوجد طلاب مسجّلون في مجموعة المشروع.</p>';
+              } else {
+                individualGradesWrap.innerHTML = studs
+                  .map(
+                    (st) => `
+                  <div class="flex flex-wrap items-center gap-3 rounded-xl border border-white bg-white p-3 shadow-sm">
+                    <span class="min-w-[140px] flex-1 text-sm font-bold text-slate-900">${esc(st.full_name)}</span>
+                    <input type="number" min="0" step="0.5"
+                      class="gpms-input w-28 ind-grade-input"
+                      data-user-id="${st.user_id}"
+                      value="${st.individual_score != null ? esc(String(st.individual_score)) : ""}"
+                      placeholder="0–${esc(String(st.individual_max))}" />
+                  </div>`
+                  )
+                  .join("");
+              }
+            }
+
+            if (currentSubmissions.length === 0 && !(sheet?.students || []).length) {
+              submissionsList.innerHTML =
+                '<p class="text-sm text-slate-500">لا توجد تقارير أو طلاب في هذا المشروع.</p>';
+              return;
+            }
+
+            let html = "";
+            const students = sheet?.students || [];
+            if (students.length > 0) {
+              html += '<div class="mb-3"><span class="text-sm font-extrabold text-slate-700">الطلاب:</span> ';
+              html += students
+                .map(
+                  (st) =>
+                    `<span class="gpms-badge gpms-badge--approved mr-1">${esc(st.full_name || "#" + st.user_id)}</span>`
+                )
+                .join("");
+              html += "</div>";
+            }
+
+            if (currentSubmissions.length > 0) {
+              const rwNow = parseFloat(weightReport.value);
+              html += '<div class="space-y-2">';
+              currentSubmissions.forEach((s) => {
+                const hasGrade = s.grade != null && s.review_status === "graded";
+                const denom = !isNaN(rwNow) ? rwNow : "—";
+                html += `<div class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <div class="flex flex-wrap items-center gap-2">
+                  <input type="checkbox" class="sub-check mr-2" data-id="${s.submission_id}" ${hasGrade ? "disabled" : ""} />
+                  <span class="text-sm font-bold">${esc(s.report_type || "تقرير")} — طالب #${esc(s.student_id)}</span>
+                  ${hasGrade ? `<span class="gpms-badge gpms-badge--approved mr-2">تم (${esc(String(s.grade))}/${esc(String(denom))})</span>` : `<span class="gpms-badge gpms-badge--pending mr-2">بانتظار</span>`}
+                </div>
+                <span class="text-xs text-slate-500">${s.submitted_at ? new Date(s.submitted_at).toLocaleDateString("ar-SA") : ""}</span>
+              </div>`;
+              });
+              html += "</div>";
+            }
+
+            submissionsList.innerHTML = html || '<p class="text-sm text-slate-500">لا توجد تقارير بعد.</p>';
+            updateWeightUi();
+            if (typeof lucide !== "undefined") lucide.createIcons();
+          } catch (err) {
+            console.error(err);
+            submissionsList.innerHTML = '<p class="text-sm text-red-500">حدث خطأ في التحميل</p>';
+          }
+        });
+
+        btnSubmit.addEventListener("click", async () => {
+          const pid = projectSelect.value;
+          if (!pid) {
+            alert("اختر مشروعاً");
+            return;
+          }
+
+          const wr = parseFloat(weightReport.value);
+          const wi = parseFloat(weightIndividual.value);
+          if (isNaN(wr) || isNaN(wi) || Math.abs(wr + wi - 100) > 0.001) {
+            alert("مجموع وزن التقرير والفردي يجب أن يساوي 100.");
+            return;
+          }
+
+          btnSubmit.disabled = true;
+          btnSubmit.textContent = "جاري الحفظ...";
+          gradeStatus.classList.add("hidden");
+
+          try {
+            if (!(await saveWeights(pid))) {
+              btnSubmit.disabled = false;
+              btnSubmit.textContent = "حفظ التقييم";
+              return;
+            }
+
+            const wiMax = wi;
+            const indInputs = document.querySelectorAll(".ind-grade-input");
+            for (const inp of indInputs) {
+              const sid = inp.dataset.userId;
+              const raw = (inp.value || "").trim();
+              if (raw === "") continue;
+              const sc = parseFloat(raw);
+              if (isNaN(sc) || sc < 0 || sc > wiMax) {
+                alert(`درجة فردية غير صالحة للطالب ${sid} (يجب بين 0 و ${wiMax})`);
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = "حفظ التقييم";
+                return;
+              }
+              const res = await fetch(`${API}/grades/individual`, {
+                method: "POST",
+                headers: { ...authHeaders, "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  student_id: Number(sid),
+                  project_id: Number(pid),
+                  category: "individual_contribution",
+                  score: sc,
+                  feedback: null,
+                }),
+              });
+              if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                alert("فشل حفظ درجة فردية: " + (err.detail || res.statusText));
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = "حفظ التقييم";
+                return;
+              }
+            }
+
+            const rgRaw = (reportGradeInput.value || "").trim();
+            if (rgRaw !== "") {
+              const rg = parseFloat(rgRaw);
+              if (isNaN(rg) || rg < 0 || rg > wr) {
+                alert(`درجة التقرير يجب أن تكون بين 0 و ${wr}`);
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = "حفظ التقييم";
+                return;
+              }
+
+              let ids = Array.from(document.querySelectorAll(".sub-check:checked")).map((c) => c.dataset.id);
+              if (ids.length === 0) {
+                const pending = currentSubmissions.filter((s) => s.review_status === "pending");
+                pending.forEach((s) => ids.push(String(s.submission_id)));
+              }
+              ids = [...new Set(ids)];
+              if (ids.length === 0) {
+                alert("لا يوجد تسليم بانتظار التقييم لتطبيق درجة التقرير عليه.");
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = "حفظ التقييم";
+                return;
+              }
+
+              const feedback = feedbackInput.value.trim();
+              let ok = 0;
+              let fail = 0;
+              for (const id of ids) {
+                try {
+                  const res = await fetch(`${API}/submissions/${id}/grade`, {
+                    method: "PATCH",
+                    headers: { ...authHeaders, "Content-Type": "application/json" },
+                    body: JSON.stringify({ grade: rg, feedback: feedback || null }),
+                  });
+                  if (res.ok) ok++;
+                  else fail++;
+                } catch {
+                  fail++;
+                }
+              }
+
+              gradeStatus.classList.remove("hidden", "bg-green-50", "text-green-700", "bg-red-50", "text-red-700");
+              if (fail === 0) {
+                gradeStatus.classList.add("bg-green-50", "text-green-700");
+                gradeStatus.textContent = `تم حفظ التقييم: أوزان المشروع، الدرجات الفردية، ودرجة التقرير (${ok} تسليم).`;
+              } else {
+                gradeStatus.classList.add("bg-red-50", "text-red-700");
+                gradeStatus.textContent = `درجة التقرير: نجح ${ok} — فشل ${fail}`;
+              }
+            } else {
+              gradeStatus.classList.remove("hidden");
+              gradeStatus.classList.add("bg-green-50", "text-green-700");
+              gradeStatus.textContent = "تم حفظ التوزيع والدرجات الفردية (لم تُدخل درجة تقرير).";
+            }
+
+            projectSelect.dispatchEvent(new Event("change"));
+          } catch {
+            gradeStatus.classList.remove("hidden");
+            gradeStatus.classList.add("bg-red-50", "text-red-700");
+            gradeStatus.textContent = "خطأ في الاتصال بالخادم.";
+          }
+
+          btnSubmit.disabled = false;
+          btnSubmit.textContent = "حفظ التقييم";
+        });
+
+        loadProjects();
+      });
+    </script>
+  </body>
+</html>

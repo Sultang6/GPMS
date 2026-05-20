@@ -1,0 +1,570 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script>
+      (function () {
+        function gpmsPublicBase() {
+          if (location.protocol === "file:") {
+            var u = location.href.split("#")[0].split("?")[0];
+            var i = u.toLowerCase().indexOf("/pages/");
+            if (i >= 0) return u.slice(0, i + 1);
+            return u.slice(0, u.lastIndexOf("/") + 1);
+          }
+          var p = location.pathname.replace(/\\/g, "/");
+          var idx = p.indexOf("/pages/");
+          if (idx >= 0) return p.slice(0, idx + 1);
+          var slash = p.lastIndexOf("/");
+          return slash >= 0 ? p.slice(0, slash + 1) : "/";
+        }
+        window.gpmsPublicBase = gpmsPublicBase;
+        var base = document.createElement("base");
+        base.href = gpmsPublicBase();
+        document.head.appendChild(base);
+      })();
+    </script>
+        <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPMS | إدارة المستخدمين</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              tajawal: ["Tajawal", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+            },
+            colors: {
+              gpms: {
+                maroon: "#7A2E2E",
+                maroonDark: "#622424",
+                charcoal: "#2F343C",
+                bg: "#F4F5F7",
+              },
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, .08)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="css/GPMS.css" />
+  </head>
+
+  <body class="min-h-dvh bg-gpms-bg font-tajawal text-slate-800" data-page="admin-users">
+    <div class="min-h-dvh lg:flex">
+      <aside
+        id="sidebar"
+        class="gpms-sidebar translate-x-full bg-gpms-charcoal text-slate-100 shadow-2xl lg:static lg:translate-x-0"
+      >
+        <div class="flex h-full flex-col">
+          <div class="px-5 pb-4 pt-5">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                <i data-lucide="graduation-cap" class="h-6 w-6 text-white"></i>
+              </div>
+              <div class="leading-tight">
+                <div class="text-sm font-bold text-white">GPMS</div>
+                <div class="text-xs text-slate-300">إدارة القسم (المنسق)</div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="px-3 pb-5">
+            <a class="gpms-nav-item" href="pages/admin/admin_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span data-i18n="navDashboard">لوحة التحكم</span>
+            </a>
+            <a class="gpms-nav-item is-active" href="pages/admin/admin_users_management.html">
+              <i data-lucide="users-round" class="h-5 w-5"></i>
+              <span>إدارة المستخدمين</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_assignments.html">
+              <i data-lucide="arrow-left-right" class="h-5 w-5"></i>
+              <span>توزيع المشاريع والإشراف</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_approve_grades.html">
+              <i data-lucide="badge-check" class="h-5 w-5"></i>
+              <span>اعتماد الدرجات النهائية</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_system_reports.html">
+              <i data-lucide="file-bar-chart-2" class="h-5 w-5"></i>
+              <span>تقارير النظام</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/community.html">
+              <i data-lucide="users" class="h-5 w-5"></i>
+              <span data-i18n="navCommunity">المجتمع والمحادثات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/chatbot.html">
+              <i data-lucide="bot" class="h-5 w-5"></i>
+              <span data-i18n="navChatbot">المساعد الذكي</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/reference_library.html">
+              <i data-lucide="library" class="h-5 w-5"></i>
+              <span data-i18n="navReferenceLibrary">مكتبة المراجع</span>
+            </a>
+          </nav>
+
+          <div class="mt-auto border-t border-white/10 px-4 py-4">
+            <a href="GPMS.html#logout" class="gpms-nav-item">
+              <i data-lucide="log-out" class="h-5 w-5"></i>
+              <span data-i18n="navLogout">تسجيل الخروج</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-slate-950/40 lg:hidden"></div>
+
+      <div class="flex-1">
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-gpms-bg/90 backdrop-blur">
+          <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+                id="sidebarToggle"
+                aria-label="فتح القائمة"
+              >
+                <i data-lucide="menu" class="h-5 w-5"></i>
+              </button>
+              <div>
+                <h1 class="text-lg font-extrabold text-slate-900 sm:text-xl">إدارة المستخدمين</h1>
+                <p class="text-sm text-slate-500">إضافة/تعديل صلاحيات حسب الدور (واجهة).</p>
+              </div>
+            </div>
+            <button id="addUserBtn" class="hidden sm:inline-flex gpms-pill">
+              <i data-lucide="plus" class="h-4 w-4"></i>
+              <span>إضافة مستخدم</span>
+            </button>
+          </div>
+        </header>
+
+        <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          <section class="gpms-section p-5 sm:p-6">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div class="flex gap-2 flex-1 flex-wrap">
+                <input
+                  id="userSearch"
+                  class="gpms-input min-w-0 flex-1 basis-0 sm:min-w-[12rem]"
+                  placeholder="بحث بالاسم أو البريد أو المعرف..."
+                />
+                <select id="roleFilter" class="gpms-input max-w-[10rem] shrink-0 sm:w-auto">
+                  <option value="">جميع الأدوار</option>
+                  <option value="Student">طالب</option>
+                  <option value="Supervisor">مشرف</option>
+                  <option value="Coordinator">منسق</option>
+                </select>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button id="addUserBtnMobile" class="gpms-pill sm:hidden">
+                  <i data-lucide="plus" class="h-4 w-4"></i>
+                  <span>إضافة مستخدم</span>
+                </button>
+                <button class="gpms-pill">
+                  <i data-lucide="download" class="h-4 w-4"></i>
+                  <span>تصدير</span>
+                </button>
+              </div>
+            </div>
+
+            <div id="majorFilterBar" class="mt-4 flex flex-wrap items-center gap-2">
+              <span class="text-sm font-bold text-slate-600">التخصص:</span>
+              <button type="button" class="major-pill gpms-pill ring-2 ring-gpms-maroon bg-white" data-major="">
+                الكل
+              </button>
+              <button type="button" class="major-pill gpms-pill bg-white" data-major="CS">CS</button>
+              <button type="button" class="major-pill gpms-pill bg-white" data-major="SW">SW</button>
+              <button type="button" class="major-pill gpms-pill bg-white" data-major="CY">CY</button>
+              <button type="button" class="major-pill gpms-pill bg-white" data-major="DS">DS</button>
+            </div>
+
+            <div class="mt-4 overflow-x-auto rounded-xl border border-slate-200">
+              <table class="gpms-table min-w-[1100px]">
+                <thead>
+                  <tr>
+                    <th>المعرف المميز</th>
+                    <th>الاسم</th>
+                    <th>التخصص</th>
+                    <th>الدور</th>
+                    <th>البريد</th>
+                    <th>الحالة</th>
+                    <th>إجراء</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                  <tr><td colspan="7" class="text-center text-slate-400 py-6">جاري التحميل...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <!-- Add / Edit User Modal: تمرّر عمودياً على الشاشات القصيرة ولا تقصّ أزرار الحفظ -->
+    <div
+      id="userModal"
+      class="fixed inset-0 z-50 hidden overflow-x-hidden overflow-y-auto bg-slate-950/50 backdrop-blur-sm py-8 sm:py-10"
+      style="display:none;"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="flex min-h-full items-start justify-center px-4 sm:items-center sm:px-6">
+        <div
+          id="userModalPanel"
+          class="relative flex w-full max-w-md flex-col overflow-hidden rounded-2xl bg-white shadow-2xl max-h-[min(92dvh,calc(100dvh-3rem))]"
+        >
+          <button
+            id="closeModal"
+            type="button"
+            class="absolute start-4 top-4 z-10 rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            aria-label="إغلاق"
+          >
+            <i data-lucide="x" class="h-5 w-5"></i>
+          </button>
+          <div class="min-h-0 flex-1 overflow-y-auto overscroll-y-contain px-5 pb-6 pt-5">
+            <h3 id="modalTitle" class="mb-5 text-lg font-extrabold leading-snug text-slate-900 pe-14">إضافة مستخدم جديد</h3>
+            <div id="modalAlert" class="hidden mb-4 rounded-xl px-4 py-3 text-sm font-bold"></div>
+            <form id="userForm" class="space-y-4" autocomplete="off">
+          <input type="hidden" id="editUserId" value="" />
+          <div>
+            <label class="mb-1.5 block text-sm font-extrabold text-slate-700">المعرف المميز</label>
+            <input
+              id="newDisplayId"
+              class="gpms-input w-full"
+              inputmode="numeric"
+              placeholder="مثال: 2584 أو 91001"
+              required
+            />
+            <p class="mt-1 text-xs font-bold text-slate-500">طالب: 4 أرقام · مشرف أو منسق: 5 أرقام · الافتراضي كلمة المرور 123456</p>
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-extrabold text-slate-700">الاسم الكامل</label>
+            <input id="newUserName" class="gpms-input w-full" placeholder="أدخل الاسم الكامل" required />
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-extrabold text-slate-700">البريد الإلكتروني</label>
+            <input id="newUserEmail" type="email" class="gpms-input w-full" placeholder="example@uhb.edu.sa" required />
+          </div>
+          <div id="passwordField">
+            <label class="mb-1.5 block text-sm font-extrabold text-slate-700">كلمة المرور (اختياري)</label>
+            <input
+              id="newUserPassword"
+              type="password"
+              class="gpms-input w-full"
+              placeholder="اتركها فارغة لاستخدام 123456"
+            />
+            <p class="mt-1 text-xs text-slate-500">في أول دخول سيُطلب من المستخدم تغيير كلمة المرور.</p>
+          </div>
+          <div id="majorFieldWrap">
+            <label class="mb-1.5 block text-sm font-extrabold text-slate-700">التخصص</label>
+            <select id="newUserMajor" class="gpms-input w-full">
+              <option value="">— لم يحدد —</option>
+              <option value="CS">CS — علوم الحاسب</option>
+              <option value="SW">SW — هندسة البرمجيات</option>
+              <option value="CY">CY — الأمن السيبراني</option>
+              <option value="DS">DS — علوم البيانات</option>
+            </select>
+          </div>
+          <div id="leaderFieldWrap" class="hidden rounded-xl border border-gpms-maroon/20 bg-gpms-maroon/5 p-4">
+            <label class="flex cursor-pointer items-start gap-3">
+              <input id="newUserIsLeader" type="checkbox" class="mt-1 h-4 w-4 rounded border-slate-300 text-gpms-maroon" />
+              <span>
+                <span class="block text-sm font-extrabold text-slate-800">قائد فريق</span>
+                <span class="mt-1 block text-xs text-slate-600">فعّل هذا الخيار لقائد الفريق فقط. الأعضاء لا يُسجَّلون مسبقاً — يرسل القائد طلباً بالاسم والبريد وتُنشئ حساباتهم بعد موافقتك.</span>
+              </span>
+            </label>
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-extrabold text-slate-700">الدور</label>
+            <select id="newUserRole" class="gpms-input w-full" required>
+              <option value="Student">طالب</option>
+              <option value="Supervisor">مشرف</option>
+              <option value="Coordinator">منسق</option>
+            </select>
+          </div>
+              <button id="modalSubmitBtn" type="submit" class="gpms-button w-full py-3">إضافة</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div id="toastContainer" class="fixed bottom-6 left-6 z-[60] flex flex-col gap-2"></div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/gpms-i18n-extra.js"></script>
+    <script src="js/gpms-i18n.js"></script>
+    <script src="js/gpms-config.js"></script>
+    <script src="js/GPMS.js"></script>
+    <script src="js/gpms-lang-toggle.js"></script>
+    <script src="js/gpms-page-i18n.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const API = window.GPMS_CONFIG?.apiBaseUrl || "http://localhost:8000/api/v1";
+
+      function authHeaders() {
+        const session = typeof getSession === "function" ? getSession() : null;
+        const token = session?.accessToken || "";
+        return { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
+      }
+
+      function esc(v) {
+        return String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+      }
+
+      const roleLabels = { Student: "طالب", Supervisor: "مشرف", Coordinator: "منسق" };
+      const majorLabels = { CS: "CS", SW: "SW", CY: "CY", DS: "DS" };
+
+      let lastUsers = [];
+      let selectedMajorFilter = "";
+
+      const tb = document.getElementById("usersTableBody");
+      const modal = document.getElementById("userModal");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalAlert = document.getElementById("modalAlert");
+      const modalSubmitBtn = document.getElementById("modalSubmitBtn");
+      const form = document.getElementById("userForm");
+      const passwordField = document.getElementById("passwordField");
+      const searchInput = document.getElementById("userSearch");
+      const roleFilter = document.getElementById("roleFilter");
+      const newUserRole = document.getElementById("newUserRole");
+      const majorFieldWrap = document.getElementById("majorFieldWrap");
+      const leaderFieldWrap = document.getElementById("leaderFieldWrap");
+      const newUserMajor = document.getElementById("newUserMajor");
+      const newUserIsLeader = document.getElementById("newUserIsLeader");
+
+      function toast(msg, ok = true) {
+        const el = document.createElement("div");
+        el.className = `rounded-xl px-5 py-3 text-sm font-bold shadow-lg text-white transition-all ${ok ? "bg-emerald-600" : "bg-red-600"}`;
+        el.textContent = msg;
+        document.getElementById("toastContainer").appendChild(el);
+        setTimeout(() => { el.style.opacity = "0"; setTimeout(() => el.remove(), 300); }, 3500);
+      }
+
+      function syncMajorUi() {
+        const r = newUserRole.value;
+        const isStudent = r === "Student";
+        majorFieldWrap.style.display = isStudent ? "" : "none";
+        leaderFieldWrap.classList.toggle("hidden", !isStudent);
+        newUserMajor.disabled = !isStudent;
+        if (isStudent) {
+          newUserMajor.setAttribute("required", "");
+        } else {
+          newUserMajor.removeAttribute("required");
+          if (newUserIsLeader) newUserIsLeader.checked = false;
+        }
+      }
+
+      newUserRole.addEventListener("change", syncMajorUi);
+
+      function openModal(editUser = null) {
+        form.reset();
+        document.getElementById("editUserId").value = "";
+        document.getElementById("newDisplayId").disabled = false;
+        modalAlert.classList.add("hidden");
+        syncMajorUi();
+        if (editUser) {
+          modalTitle.textContent = "تعديل المستخدم";
+          modalSubmitBtn.textContent = "حفظ التعديلات";
+          document.getElementById("editUserId").value = editUser.user_id;
+          document.getElementById("newDisplayId").value = editUser.display_id || "";
+          document.getElementById("newUserName").value = editUser.full_name || "";
+          document.getElementById("newUserEmail").value = editUser.email || "";
+          document.getElementById("newUserRole").value =
+            editUser.role === "Admin" ? "Coordinator" : (editUser.role || "Student");
+          newUserMajor.value = editUser.major || "";
+          if (newUserIsLeader) newUserIsLeader.checked = !!editUser.is_group_leader;
+          passwordField.style.display = "none";
+          document.getElementById("newUserPassword").value = "";
+          syncMajorUi();
+        } else {
+          modalTitle.textContent = "إضافة مستخدم جديد";
+          modalSubmitBtn.textContent = "إضافة";
+          passwordField.style.display = "";
+          document.getElementById("newUserPassword").value = "";
+          newUserMajor.value = "";
+          document.getElementById("newUserRole").value = "Student";
+          if (newUserIsLeader) newUserIsLeader.checked = false;
+          syncMajorUi();
+        }
+        modal.style.display = "block";
+        modal.classList.remove("hidden");
+      }
+
+      function closeModalFn() {
+        modal.style.display = "none";
+        modal.classList.add("hidden");
+      }
+
+      document.getElementById("addUserBtn")?.addEventListener("click", () => openModal());
+      document.getElementById("addUserBtnMobile")?.addEventListener("click", () => openModal());
+      document.getElementById("closeModal").addEventListener("click", closeModalFn);
+      modal.addEventListener("click", (e) => {
+        const panel = document.getElementById("userModalPanel");
+        if (panel && !panel.contains(e.target)) closeModalFn();
+      });
+
+      document.querySelectorAll(".major-pill").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          selectedMajorFilter = btn.getAttribute("data-major") || "";
+          document.querySelectorAll(".major-pill").forEach((b) => {
+            b.classList.remove("ring-2", "ring-gpms-maroon");
+          });
+          btn.classList.add("ring-2", "ring-gpms-maroon");
+          loadUsers();
+        });
+      });
+
+      async function loadUsers() {
+        const search = searchInput.value.trim();
+        const role = roleFilter.value;
+        let url = `${API}/admin/users?`;
+        if (role) url += `role=${encodeURIComponent(role)}&`;
+        if (selectedMajorFilter) url += `major=${encodeURIComponent(selectedMajorFilter)}&`;
+        if (search) url += `search=${encodeURIComponent(search)}&`;
+        tb.innerHTML = `<tr><td colspan="7" class="text-center text-slate-400 py-6">جاري التحميل...</td></tr>`;
+        try {
+          const r = await fetch(url, { headers: authHeaders() });
+          if (!r.ok) throw new Error(r.status);
+          const users = await r.json();
+          const list = Array.isArray(users) ? users : (users.items || users.data || []);
+          lastUsers = list;
+          if (!list.length) {
+            tb.innerHTML = `<tr><td colspan="7" class="text-center text-slate-400 py-6">لا يوجد مستخدمون</td></tr>`;
+            return;
+          }
+          tb.innerHTML = list.map((u) => {
+            const pwdPending = !!u.must_change_password;
+            const majorCell = u.major ? esc(majorLabels[u.major] || u.major) : "—";
+            const leaderBadge =
+              u.role === "Student" && u.is_group_leader
+                ? '<span class="mr-1 inline-flex rounded-full bg-gpms-maroon/10 px-2 py-0.5 text-xs font-bold text-gpms-maroon">قائد فريق</span>'
+                : "";
+            return `<tr data-uid="${esc(u.user_id)}">
+              <td class="font-extrabold text-slate-900 tabular-nums">${esc(u.display_id)}</td>
+              <td>${esc(u.full_name)}${leaderBadge}</td>
+              <td>${majorCell}</td>
+              <td>${esc(roleLabels[u.role] || u.role)}</td>
+              <td class="text-slate-600">${esc(u.email)}</td>
+              <td>
+                <span class="gpms-badge gpms-badge--approved">
+                  <i data-lucide="check" class="h-4 w-4"></i> نشط
+                </span>
+                ${pwdPending ? '<span class="mr-2 inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-800">تغيير كلمة المرور مطلوب</span>' : ""}
+              </td>
+              <td>
+                <div class="flex flex-wrap gap-1">
+                  <button type="button" class="gpms-pill btn-edit" data-edit-id="${esc(u.user_id)}">
+                    <i data-lucide="square-pen" class="h-4 w-4"></i><span>تعديل</span>
+                  </button>
+                  <button type="button" class="gpms-pill btn-delete" data-id="${esc(u.user_id)}">
+                    <i data-lucide="trash-2" class="h-4 w-4"></i><span>حذف</span>
+                  </button>
+                </div>
+              </td>
+            </tr>`;
+          }).join("");
+          if (typeof lucide !== "undefined") lucide.createIcons();
+          bindRowActions();
+        } catch (e) {
+          console.error("load users error:", e);
+          tb.innerHTML = `<tr><td colspan="7" class="text-center text-red-500 py-6">خطأ في تحميل المستخدمين</td></tr>`;
+        }
+      }
+
+      function bindRowActions() {
+        tb.querySelectorAll(".btn-edit").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = Number(btn.dataset.editId);
+            const u = lastUsers.find((x) => x.user_id === id);
+            if (u) openModal(u);
+          });
+        });
+        tb.querySelectorAll(".btn-delete").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            if (!confirm("هل أنت متأكد من حذف هذا المستخدم؟")) return;
+            try {
+              const r = await fetch(`${API}/admin/users/${btn.dataset.id}`, {
+                method: "DELETE",
+                headers: authHeaders(),
+              });
+              if (!r.ok) throw new Error(r.status);
+              toast("تم حذف المستخدم بنجاح");
+              loadUsers();
+            } catch (e) {
+              toast("فشل حذف المستخدم", false);
+            }
+          });
+        });
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const editId = document.getElementById("editUserId").value.trim();
+        const roleVal = document.getElementById("newUserRole").value;
+        const majorVal = document.getElementById("newUserMajor").value;
+
+        const body = {
+          display_id: document.getElementById("newDisplayId").value.trim(),
+          full_name: document.getElementById("newUserName").value.trim(),
+          email: document.getElementById("newUserEmail").value.trim(),
+          role: roleVal,
+          major: roleVal === "Student" ? majorVal || null : (majorVal || null),
+          is_group_leader: roleVal === "Student" && newUserIsLeader?.checked === true,
+        };
+
+        if (!editId) {
+          const pw = document.getElementById("newUserPassword").value.trim();
+          if (pw) body.password = pw;
+        }
+
+        modalSubmitBtn.disabled = true;
+        modalSubmitBtn.textContent = "جاري الحفظ...";
+        try {
+          const url = editId ? `${API}/admin/users/${editId}` : `${API}/admin/users`;
+          const method = editId ? "PUT" : "POST";
+          const r = await fetch(url, { method, headers: authHeaders(), body: JSON.stringify(body) });
+          if (!r.ok) {
+            const err = await r.json().catch(() => ({}));
+            let msg = "";
+            if (typeof err.detail === "string") msg = err.detail;
+            else if (Array.isArray(err.detail))
+              msg = err.detail.map((x) => (x && typeof x.msg === "string" ? x.msg : JSON.stringify(x))).join("؛ ");
+            else msg = String(err.detail || r.status);
+            throw new Error(msg);
+          }
+          toast(editId ? "تم تعديل المستخدم بنجاح" : "تم إضافة المستخدم بنجاح");
+          closeModalFn();
+          loadUsers();
+        } catch (e) {
+          modalAlert.textContent = `خطأ: ${e.message}`;
+          modalAlert.className = "mb-4 rounded-xl px-4 py-3 text-sm font-bold bg-red-50 text-red-700 border border-red-200";
+          modalAlert.classList.remove("hidden");
+        } finally {
+          modalSubmitBtn.disabled = false;
+          modalSubmitBtn.textContent = document.getElementById("editUserId").value ? "حفظ التعديلات" : "إضافة";
+        }
+      });
+
+      let searchTimer;
+      searchInput.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(loadUsers, 400); });
+      roleFilter.addEventListener("change", loadUsers);
+
+      loadUsers();
+    });
+    </script>
+  </body>
+</html>
+

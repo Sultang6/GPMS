@@ -1,0 +1,429 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script>
+      (function () {
+        function gpmsPublicBase() {
+          if (location.protocol === "file:") {
+            var u = location.href.split("#")[0].split("?")[0];
+            var i = u.toLowerCase().indexOf("/pages/");
+            if (i >= 0) return u.slice(0, i + 1);
+            return u.slice(0, u.lastIndexOf("/") + 1);
+          }
+          var p = location.pathname.replace(/\\/g, "/");
+          var idx = p.indexOf("/pages/");
+          if (idx >= 0) return p.slice(0, idx + 1);
+          var slash = p.lastIndexOf("/");
+          return slash >= 0 ? p.slice(0, slash + 1) : "/";
+        }
+        window.gpmsPublicBase = gpmsPublicBase;
+        var base = document.createElement("base");
+        base.href = gpmsPublicBase();
+        document.head.appendChild(base);
+      })();
+    </script>
+        <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPMS | تسليم التقارير</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              tajawal: ["Tajawal", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+            },
+            colors: {
+              gpms: {
+                maroon: "#7A2E2E",
+                maroonDark: "#622424",
+                charcoal: "#2F343C",
+                bg: "#F4F5F7",
+              },
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, .08)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="css/GPMS.css" />
+  </head>
+
+  <body class="min-h-dvh bg-gpms-bg font-tajawal text-slate-800" data-page="student-reports">
+    <div class="min-h-dvh lg:flex">
+      <aside
+        id="sidebar"
+        class="gpms-sidebar translate-x-full bg-gpms-charcoal text-slate-100 shadow-2xl lg:static lg:translate-x-0"
+      >
+        <div class="flex h-full flex-col">
+          <div class="px-5 pb-4 pt-5">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                <i data-lucide="graduation-cap" class="h-6 w-6 text-white"></i>
+              </div>
+              <div class="leading-tight">
+                <div class="text-sm font-bold text-white">GPMS</div>
+                <div class="text-xs text-slate-300" data-i18n="sidebarStudent">لوحة تحكم الطالب</div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="px-3 pb-5">
+            <a class="gpms-nav-item" href="pages/student/student_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span data-i18n="navDashboard">لوحة التحكم</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_project_registration.html">
+              <i data-lucide="file-plus-2" class="h-5 w-5"></i>
+              <span>تسجيل مشروع تخرج</span>
+            </a>
+            <a class="gpms-nav-item is-active" href="pages/student/student_submit_reports.html">
+              <i data-lucide="upload" class="h-5 w-5"></i>
+              <span>تسليم التقارير</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_notifications.html">
+              <i data-lucide="bell" class="h-5 w-5"></i>
+              <span>الإشعارات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_final_grade.html">
+              <i data-lucide="badge-check" class="h-5 w-5"></i>
+              <span>الدرجة النهائية</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/student/student_contact_supervisor.html">
+              <i data-lucide="messages-square" class="h-5 w-5"></i>
+              <span>التواصل مع المشرف</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/community.html">
+              <i data-lucide="users" class="h-5 w-5"></i>
+              <span data-i18n="navCommunity">المجتمع والمحادثات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/chatbot.html">
+              <i data-lucide="bot" class="h-5 w-5"></i>
+              <span data-i18n="navChatbot">المساعد الذكي</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/reference_library.html">
+              <i data-lucide="library" class="h-5 w-5"></i>
+              <span data-i18n="navReferenceLibrary">مكتبة المراجع</span>
+            </a>
+          </nav>
+
+          <div class="mt-auto border-t border-white/10 px-4 py-4">
+            <a href="GPMS.html#logout" class="gpms-nav-item">
+              <i data-lucide="log-out" class="h-5 w-5"></i>
+              <span data-i18n="navLogout">تسجيل الخروج</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-slate-950/40 lg:hidden"></div>
+
+      <div class="flex-1">
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-gpms-bg/90 backdrop-blur">
+          <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+                id="sidebarToggle"
+                aria-label="فتح القائمة"
+              >
+                <i data-lucide="menu" class="h-5 w-5"></i>
+              </button>
+              <div>
+                <h1 class="text-lg font-extrabold text-slate-900 sm:text-xl">تسليم التقارير</h1>
+                <p class="text-sm text-slate-500">ارفع تقاريرك بصيغة PDF وتابع حالتها.</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          <div id="uploadAlert" class="mb-4 hidden rounded-xl border px-4 py-3 text-sm font-bold"></div>
+
+          <section class="grid gap-4 lg:grid-cols-3">
+            <form id="uploadForm" class="gpms-section p-5 sm:p-6 lg:col-span-1">
+              <h2 class="text-base font-extrabold text-slate-900">رفع تقرير جديد</h2>
+              <p class="mt-1 text-sm text-slate-500">حدد المرحلة وارفع ملف PDF.</p>
+
+              <div class="mt-4 space-y-3">
+                <div>
+                  <label class="mb-2 block text-sm font-extrabold text-slate-700">نوع التقرير</label>
+                  <select id="reportType" class="gpms-input" required>
+                    <option value="Proposal">المقترح (Proposal)</option>
+                    <option value="Midterm">تقرير منتصف الفصل (Midterm)</option>
+                    <option value="Final" selected>التقرير النهائي (Final)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="mb-2 block text-sm font-extrabold text-slate-700">ملاحظات للـمشرف</label>
+                  <textarea id="reportNotes" class="gpms-input min-h-[110px]" placeholder="اكتب ملخص التغييرات أو نقاط تحتاج مراجعة..."></textarea>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                  <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gpms-maroon/10 text-gpms-maroon">
+                      <i data-lucide="file-up" class="h-5 w-5"></i>
+                    </div>
+                    <div>
+                      <div id="fileLabel" class="text-sm font-extrabold text-slate-900">PDF فقط — حد أقصى 20 MB</div>
+                      <div id="fileName" class="mt-0.5 text-xs text-slate-500">لم يتم اختيار ملف بعد.</div>
+                    </div>
+                  </div>
+                  <input type="file" id="pdfFile" accept="application/pdf,.pdf" class="hidden" />
+                  <button type="button" id="chooseFileBtn" class="gpms-button mt-4 w-full py-3">
+                    <span class="inline-flex items-center gap-2">
+                      <i data-lucide="paperclip" class="h-4 w-4"></i>
+                      <span>اختيار ملف PDF</span>
+                    </span>
+                  </button>
+                </div>
+
+                <button type="submit" id="submitBtn" class="gpms-button w-full py-3 disabled:opacity-50" disabled>
+                  <span class="inline-flex items-center gap-2">
+                    <i data-lucide="upload" class="h-4 w-4"></i>
+                    <span id="submitBtnText">رفع التقرير</span>
+                  </span>
+                </button>
+              </div>
+            </form>
+
+            <div class="gpms-section p-5 sm:p-6 lg:col-span-2">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 class="text-base font-extrabold text-slate-900 sm:text-lg">سجل التقارير</h2>
+                  <p class="mt-1 text-sm text-slate-500">التقارير التي رفعتها سابقاً.</p>
+                </div>
+                <button type="button" id="refreshBtn" class="gpms-pill">
+                  <i data-lucide="refresh-cw" class="h-4 w-4"></i>
+                  <span>تحديث</span>
+                </button>
+              </div>
+
+              <div id="emptyState" class="mt-8 hidden text-center">
+                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
+                  <i data-lucide="inbox" class="h-8 w-8 text-slate-400"></i>
+                </div>
+                <p class="mt-3 text-sm text-slate-500">لا توجد تقارير مرفوعة بعد.</p>
+              </div>
+
+              <div id="revisionNotice" class="revision-notice mb-4 hidden rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                <div class="flex gap-3">
+                  <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-800">
+                    <i data-lucide="refresh-ccw" class="h-5 w-5"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-extrabold text-amber-950">المشرف طلب تعديلاً على أحد تقاريرك</div>
+                    <p class="mt-1 text-sm text-amber-900/90">
+                      راجع عمود «ملاحظات المشرف» ثم ارفع نسخة محدّثة من التقرير (PDF). يبقى السجل السابق للمراجعة.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 overflow-x-auto rounded-xl border border-slate-200">
+                <table class="gpms-table min-w-[880px]">
+                  <thead>
+                    <tr>
+                      <th>نوع التقرير</th>
+                      <th>اسم الملف</th>
+                      <th>التاريخ</th>
+                      <th>حالة المراجعة</th>
+                      <th>الدرجة</th>
+                      <th>ملاحظات المشرف</th>
+                      <th>الإجراءات</th>
+                    </tr>
+                  </thead>
+                  <tbody id="submissionsTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/gpms-i18n-extra.js"></script>
+    <script src="js/gpms-i18n.js"></script>
+    <script src="js/gpms-config.js"></script>
+    <script src="js/GPMS.js"></script>
+    <script src="js/gpms-lang-toggle.js"></script>
+    <script src="js/gpms-page-i18n.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const API = window.GPMS_CONFIG?.apiBaseUrl || "http://localhost:8000/api/v1";
+        const session = (() => {
+          try { return JSON.parse(localStorage.getItem("gpms_session_v1")); } catch { return null; }
+        })();
+        const token = session?.accessToken || "";
+        const authHeaders = { Authorization: `Bearer ${token}` };
+
+        const fileInput = document.getElementById("pdfFile");
+        const chooseBtn = document.getElementById("chooseFileBtn");
+        const fileNameEl = document.getElementById("fileName");
+        const submitBtn = document.getElementById("submitBtn");
+        const submitBtnText = document.getElementById("submitBtnText");
+        const form = document.getElementById("uploadForm");
+        const alertEl = document.getElementById("uploadAlert");
+        const tableBody = document.getElementById("submissionsTable");
+        const emptyState = document.getElementById("emptyState");
+        const refreshBtn = document.getElementById("refreshBtn");
+
+        const revisionNotice = document.getElementById("revisionNotice");
+
+        chooseBtn.addEventListener("click", () => fileInput.click());
+
+        fileInput.addEventListener("change", () => {
+          const f = fileInput.files[0];
+          if (f) {
+            fileNameEl.textContent = f.name + " (" + (f.size / 1024 / 1024).toFixed(2) + " MB)";
+            submitBtn.disabled = false;
+          } else {
+            fileNameEl.textContent = "لم يتم اختيار ملف بعد.";
+            submitBtn.disabled = true;
+          }
+        });
+
+        function showAlert(msg, isError) {
+          alertEl.textContent = msg;
+          alertEl.className = "mb-4 rounded-xl border px-4 py-3 text-sm font-bold " +
+            (isError
+              ? "border-red-200 bg-red-50 text-red-700"
+              : "border-green-200 bg-green-50 text-green-700");
+          alertEl.classList.remove("hidden");
+          setTimeout(() => alertEl.classList.add("hidden"), 6000);
+        }
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const file = fileInput.files[0];
+          if (!file) return;
+
+          submitBtn.disabled = true;
+          submitBtnText.textContent = "جاري الرفع...";
+
+          const fd = new FormData();
+          fd.append("file", file);
+          fd.append("report_type", document.getElementById("reportType").value);
+          fd.append("notes", document.getElementById("reportNotes").value);
+
+          try {
+            const resp = await fetch(`${API}/submissions/upload`, {
+              method: "POST",
+              headers: authHeaders,
+              body: fd,
+            });
+
+            if (!resp.ok) {
+              const err = await resp.json().catch(() => ({}));
+              throw new Error(err.detail || "فشل الرفع");
+            }
+
+            showAlert("تم رفع التقرير بنجاح!", false);
+            form.reset();
+            fileNameEl.textContent = "لم يتم اختيار ملف بعد.";
+            loadSubmissions();
+          } catch (err) {
+            showAlert(err.message || "حدث خطأ أثناء الرفع", true);
+          } finally {
+            submitBtn.disabled = false;
+            submitBtnText.textContent = "رفع التقرير";
+          }
+        });
+
+        async function loadSubmissions() {
+          try {
+            const resp = await fetch(`${API}/submissions/my`, { headers: authHeaders });
+            if (!resp.ok) throw new Error();
+            const items = await resp.json();
+
+            tableBody.innerHTML = "";
+            if (items.length === 0) {
+              emptyState.classList.remove("hidden");
+              revisionNotice?.classList.add("hidden");
+              return;
+            }
+            emptyState.classList.add("hidden");
+
+            revisionNotice?.classList.add("hidden");
+
+            items.forEach((s) => {
+              const tr = document.createElement("tr");
+              const date = new Date(s.submitted_at).toLocaleDateString("ar-SA");
+              const originalName = s.file_path.includes("_") ? s.file_path.substring(33) : s.file_path;
+              const rs = s.review_status || "pending";
+              let statusBadge = "";
+              if (rs === "graded") {
+                statusBadge = `<span class="gpms-badge gpms-badge--approved"><i data-lucide="check-circle" class="h-4 w-4"></i><span>تم التقييم</span></span>`;
+              } else if (rs === "revision_requested") {
+                statusBadge = `<span class="gpms-badge gpms-badge--pending"><i data-lucide="refresh-ccw" class="h-4 w-4"></i><span>يُطلب التعديل</span></span>`;
+              } else {
+                statusBadge = `<span class="gpms-badge gpms-badge--pending"><i data-lucide="clock" class="h-4 w-4"></i><span>بانتظار المراجعة</span></span>`;
+              }
+              const gradeCell =
+                rs === "graded" && s.grade !== null && s.grade !== undefined
+                  ? esc(String(s.grade))
+                  : '<span class="text-slate-400">—</span>';
+              const feedbackCell = s.feedback
+                ? `<span class="text-sm text-slate-700">${esc(s.feedback)}</span>`
+                : '<span class="text-slate-400">—</span>';
+
+              tr.innerHTML = `
+                <td class="font-extrabold text-slate-900">${esc(s.report_type)}</td>
+                <td class="text-slate-600 text-xs max-w-[120px] truncate" title="${esc(originalName)}">${esc(originalName)}</td>
+                <td>${date}</td>
+                <td>${statusBadge}</td>
+                <td>${gradeCell}</td>
+                <td class="text-slate-600 max-w-[220px]">${feedbackCell}</td>
+                <td>
+                  <div class="flex flex-wrap gap-2">
+                  <button type="button"
+                     class="gpms-pill inline-flex items-center gap-1"
+                     data-gpms-auth-download="${API}/submissions/download/${encodeURIComponent(s.file_path)}"
+                     data-gpms-auth-open-tab>
+                    <i data-lucide="eye" class="h-4 w-4"></i>
+                    <span>عرض</span>
+                  </button>
+                  <button type="button"
+                     class="gpms-pill inline-flex items-center gap-1"
+                     data-gpms-auth-download="${API}/submissions/download/${encodeURIComponent(s.file_path)}">
+                    <i data-lucide="download" class="h-4 w-4"></i>
+                    <span>تحميل</span>
+                  </button>
+                  </div>
+                </td>
+              `;
+              tableBody.appendChild(tr);
+            });
+            if (items.some((x) => (x.review_status || "") === "revision_requested")) {
+              revisionNotice?.classList.remove("hidden");
+            }
+            if (window.lucide) lucide.createIcons();
+          } catch {
+            tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-slate-400 py-4">تعذر تحميل السجل</td></tr>';
+          }
+        }
+
+        function esc(v) {
+          return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+        }
+
+        refreshBtn.addEventListener("click", loadSubmissions);
+        loadSubmissions();
+      });
+    </script>
+  </body>
+</html>

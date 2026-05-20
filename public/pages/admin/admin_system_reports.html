@@ -1,0 +1,336 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script>
+      (function () {
+        function gpmsPublicBase() {
+          if (location.protocol === "file:") {
+            var u = location.href.split("#")[0].split("?")[0];
+            var i = u.toLowerCase().indexOf("/pages/");
+            if (i >= 0) return u.slice(0, i + 1);
+            return u.slice(0, u.lastIndexOf("/") + 1);
+          }
+          var p = location.pathname.replace(/\\/g, "/");
+          var idx = p.indexOf("/pages/");
+          if (idx >= 0) return p.slice(0, idx + 1);
+          var slash = p.lastIndexOf("/");
+          return slash >= 0 ? p.slice(0, slash + 1) : "/";
+        }
+        window.gpmsPublicBase = gpmsPublicBase;
+        var base = document.createElement("base");
+        base.href = gpmsPublicBase();
+        document.head.appendChild(base);
+      })();
+    </script>
+        <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPMS | تقارير النظام</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              tajawal: ["Tajawal", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+            },
+            colors: {
+              gpms: {
+                maroon: "#7A2E2E",
+                maroonDark: "#622424",
+                charcoal: "#2F343C",
+                bg: "#F4F5F7",
+              },
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, .08)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="css/GPMS.css" />
+  </head>
+
+  <body class="min-h-dvh bg-gpms-bg font-tajawal text-slate-800" data-page="admin-reports">
+    <div class="min-h-dvh lg:flex">
+      <aside
+        id="sidebar"
+        class="gpms-sidebar translate-x-full bg-gpms-charcoal text-slate-100 shadow-2xl lg:static lg:translate-x-0"
+      >
+        <div class="flex h-full flex-col">
+          <div class="px-5 pb-4 pt-5">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                <i data-lucide="graduation-cap" class="h-6 w-6 text-white"></i>
+              </div>
+              <div class="leading-tight">
+                <div class="text-sm font-bold text-white">GPMS</div>
+                <div class="text-xs text-slate-300">إدارة القسم (المنسق)</div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="px-3 pb-5">
+            <a class="gpms-nav-item" href="pages/admin/admin_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span data-i18n="navDashboard">لوحة التحكم</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_users_management.html">
+              <i data-lucide="users-round" class="h-5 w-5"></i>
+              <span>إدارة المستخدمين</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_assignments.html">
+              <i data-lucide="arrow-left-right" class="h-5 w-5"></i>
+              <span>توزيع المشاريع والإشراف</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_approve_grades.html">
+              <i data-lucide="badge-check" class="h-5 w-5"></i>
+              <span>اعتماد الدرجات النهائية</span>
+            </a>
+            <a class="gpms-nav-item is-active" href="pages/admin/admin_system_reports.html">
+              <i data-lucide="file-bar-chart-2" class="h-5 w-5"></i>
+              <span>تقارير النظام</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/community.html">
+              <i data-lucide="users" class="h-5 w-5"></i>
+              <span data-i18n="navCommunity">المجتمع والمحادثات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/chatbot.html">
+              <i data-lucide="bot" class="h-5 w-5"></i>
+              <span data-i18n="navChatbot">المساعد الذكي</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/reference_library.html">
+              <i data-lucide="library" class="h-5 w-5"></i>
+              <span data-i18n="navReferenceLibrary">مكتبة المراجع</span>
+            </a>
+          </nav>
+
+          <div class="mt-auto border-t border-white/10 px-4 py-4">
+            <a href="GPMS.html#logout" class="gpms-nav-item">
+              <i data-lucide="log-out" class="h-5 w-5"></i>
+              <span data-i18n="navLogout">تسجيل الخروج</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-slate-950/40 lg:hidden"></div>
+
+      <div class="flex-1">
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-gpms-bg/90 backdrop-blur">
+          <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+                id="sidebarToggle"
+                aria-label="فتح القائمة"
+              >
+                <i data-lucide="menu" class="h-5 w-5"></i>
+              </button>
+              <div>
+                <h1 class="text-lg font-extrabold text-slate-900 sm:text-xl">تقارير النظام</h1>
+                <p class="text-sm text-slate-500">متابعة الأداء والحالات (واجهة).</p>
+              </div>
+            </div>
+            <button class="hidden sm:inline-flex gpms-pill">
+              <i data-lucide="download" class="h-4 w-4"></i>
+              <span>تصدير</span>
+            </button>
+          </div>
+        </header>
+
+        <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <article class="gpms-stat-card">
+              <div class="gpms-stat-meta">
+                <div class="gpms-stat-title">مشاريع متأخرة</div>
+                <div class="gpms-stat-icon bg-red-500/10 text-red-700">
+                  <i data-lucide="alert-triangle" class="h-5 w-5"></i>
+                </div>
+              </div>
+              <div id="rptStatDelayed" class="gpms-stat-value text-red-700">—</div>
+              <div class="gpms-stat-sub">تحتاج تدخل</div>
+            </article>
+            <article class="gpms-stat-card">
+              <div class="gpms-stat-meta">
+                <div class="gpms-stat-title">قيد المراجعة</div>
+                <div class="gpms-stat-icon bg-amber-500/10 text-amber-700">
+                  <i data-lucide="file-search" class="h-5 w-5"></i>
+                </div>
+              </div>
+              <div id="rptStatSubmissions" class="gpms-stat-value text-amber-700">—</div>
+              <div class="gpms-stat-sub">تقارير</div>
+            </article>
+            <article class="gpms-stat-card">
+              <div class="gpms-stat-meta">
+                <div class="gpms-stat-title">اعتماد نهائي</div>
+                <div class="gpms-stat-icon bg-emerald-500/10 text-emerald-700">
+                  <i data-lucide="badge-check" class="h-5 w-5"></i>
+                </div>
+              </div>
+              <div id="rptStatCompleted" class="gpms-stat-value text-emerald-700">—</div>
+              <div class="gpms-stat-sub">جاهزة للأرشفة</div>
+            </article>
+            <article class="gpms-stat-card">
+              <div class="gpms-stat-meta">
+                <div class="gpms-stat-title">إجمالي المستخدمين</div>
+                <div class="gpms-stat-icon bg-slate-500/10 text-slate-700">
+                  <i data-lucide="users" class="h-5 w-5"></i>
+                </div>
+              </div>
+              <div id="rptStatUsers" class="gpms-stat-value">—</div>
+              <div class="gpms-stat-sub">طلاب + مشرفين</div>
+            </article>
+          </section>
+
+          <section class="mt-6 sm:mt-8 gpms-section p-5 sm:p-6">
+            <div class="flex items-center justify-between gap-2">
+              <h2 class="text-base font-extrabold text-slate-900 sm:text-lg">قائمة المشاريع (ملخص)</h2>
+              <button class="gpms-pill">
+                <i data-lucide="filter" class="h-4 w-4"></i>
+                <span>تصفية</span>
+              </button>
+            </div>
+
+            <div class="mt-4 overflow-x-auto rounded-xl border border-slate-200">
+              <table class="gpms-table min-w-[980px]">
+                <thead>
+                  <tr>
+                    <th>المشروع</th>
+                    <th>الحالة</th>
+                    <th>المشرف</th>
+                    <th>آخر نشاط</th>
+                    <th>إجراء</th>
+                  </tr>
+                </thead>
+                <tbody id="reportsTableBody">
+                  <tr><td colspan="5" class="text-center text-slate-400 py-6">جاري التحميل...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/gpms-i18n-extra.js"></script>
+    <script src="js/gpms-i18n.js"></script>
+    <script src="js/gpms-config.js"></script>
+    <script src="js/GPMS.js"></script>
+    <script src="js/gpms-lang-toggle.js"></script>
+    <script src="js/gpms-page-i18n.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const API = window.GPMS_CONFIG?.apiBaseUrl || "http://localhost:8000/api/v1";
+      const session = (() => { try { return JSON.parse(localStorage.getItem("gpms_session_v1")); } catch { return null; } })();
+      const token = session?.accessToken || "";
+      const authHeaders = { Authorization: `Bearer ${token}` };
+      function esc(v) { return String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+      const statusMap = {
+        approved: { label: "مستمر", cls: "gpms-badge--approved", icon: "badge-check" },
+        active: { label: "مستمر", cls: "gpms-badge--approved", icon: "badge-check" },
+        completed: { label: "مكتمل", cls: "gpms-badge--approved", icon: "badge-check" },
+        pending: { label: "بانتظار", cls: "gpms-badge--pending", icon: "clock" },
+        delayed: { label: "متأخر", cls: "gpms-badge--delayed", icon: "alert-triangle" },
+      };
+
+      async function loadStats() {
+        try {
+          const r = await fetch(`${API}/admin/stats`, { headers: authHeaders });
+          if (!r.ok) throw new Error(r.status);
+          const d = await r.json();
+          document.getElementById("rptStatDelayed").textContent = d.pending_projects ?? 0;
+          document.getElementById("rptStatSubmissions").textContent = d.total_submissions ?? 0;
+          document.getElementById("rptStatCompleted").textContent = d.completed_projects ?? 0;
+          document.getElementById("rptStatUsers").textContent = (d.total_students ?? 0) + (d.total_supervisors ?? 0);
+        } catch (e) { console.error("stats:", e); }
+      }
+
+      async function loadProjects() {
+        const tb = document.getElementById("reportsTableBody");
+        try {
+          const r = await fetch(`${API}/projects`, { headers: authHeaders });
+          if (!r.ok) throw new Error(r.status);
+          const data = await r.json();
+          const list = Array.isArray(data) ? data : (data.items || data.data || []);
+          if (!list.length) {
+            tb.innerHTML = `<tr><td colspan="5" class="text-center text-slate-400 py-6">لا توجد مشاريع</td></tr>`;
+            return;
+          }
+          tb.innerHTML = list.map(p => {
+            const st = statusMap[p.status] || statusMap.pending;
+            return `<tr>
+              <td class="font-extrabold text-slate-900">${esc(p.title)}</td>
+              <td><span class="gpms-badge ${st.cls}"><i data-lucide="${st.icon}" class="h-4 w-4"></i> ${st.label}</span></td>
+              <td>${esc(p.supervisor_name || p.supervisor_id || "—")}</td>
+              <td>${esc(p.updated_at ? new Date(p.updated_at).toLocaleDateString("ar-SA") : "—")}</td>
+              <td><button class="gpms-pill"><i data-lucide="eye" class="h-4 w-4"></i><span>عرض</span></button></td>
+            </tr>`;
+          }).join("");
+          if (typeof lucide !== "undefined") lucide.createIcons();
+        } catch (e) {
+          console.error("projects:", e);
+          tb.innerHTML = `<tr><td colspan="5" class="text-center text-red-500 py-6">خطأ في تحميل المشاريع</td></tr>`;
+        }
+      }
+
+      async function loadAuditLogs() {
+        const main = document.querySelector("main");
+        let section = document.getElementById("auditSection");
+        if (!section) {
+          section = document.createElement("section");
+          section.id = "auditSection";
+          section.className = "mt-6 sm:mt-8 gpms-section p-5 sm:p-6";
+          section.innerHTML = `
+            <h2 class="text-base font-extrabold text-slate-900 sm:text-lg mb-4">سجل النشاط الأخير</h2>
+            <div class="overflow-x-auto rounded-xl border border-slate-200">
+              <table class="gpms-table min-w-[700px]">
+                <thead><tr><th>الإجراء</th><th>المستخدم</th><th>التاريخ</th></tr></thead>
+                <tbody id="auditTableBody">
+                  <tr><td colspan="3" class="text-center text-slate-400 py-6">جاري التحميل...</td></tr>
+                </tbody>
+              </table>
+            </div>`;
+          main.appendChild(section);
+        }
+        const atb = document.getElementById("auditTableBody");
+        try {
+          const r = await fetch(`${API}/audit_logs`, { headers: authHeaders });
+          if (!r.ok) throw new Error(r.status);
+          const data = await r.json();
+          const list = Array.isArray(data) ? data : (data.items || data.data || []);
+          if (!list.length) {
+            atb.innerHTML = `<tr><td colspan="3" class="text-center text-slate-400 py-4">لا يوجد سجل نشاط</td></tr>`;
+            return;
+          }
+          atb.innerHTML = list.slice(0, 20).map(l => `<tr>
+            <td>${esc(l.action || l.description || l.event)}</td>
+            <td>${esc(l.user_name || l.user_id || "—")}</td>
+            <td>${esc(l.created_at ? new Date(l.created_at).toLocaleDateString("ar-SA") : "—")}</td>
+          </tr>`).join("");
+        } catch (e) {
+          console.error("audit_logs:", e);
+          atb.innerHTML = `<tr><td colspan="3" class="text-center text-red-500 py-4">خطأ في تحميل السجل</td></tr>`;
+        }
+      }
+
+      loadStats();
+      loadProjects();
+      loadAuditLogs();
+    });
+    </script>
+  </body>
+</html>
+

@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      (function () {
+        function gpmsPublicBase() {
+          if (location.protocol === "file:") {
+            var u = location.href.split("#")[0].split("?")[0];
+            var i = u.toLowerCase().indexOf("/pages/");
+            if (i >= 0) return u.slice(0, i + 1);
+            return u.slice(0, u.lastIndexOf("/") + 1);
+          }
+          var p = location.pathname.replace(/\\/g, "/");
+          var idx = p.indexOf("/pages/");
+          if (idx >= 0) return p.slice(0, idx + 1);
+          var slash = p.lastIndexOf("/");
+          return slash >= 0 ? p.slice(0, slash + 1) : "/";
+        }
+        window.gpmsPublicBase = gpmsPublicBase;
+        var base = document.createElement("base");
+        base.href = gpmsPublicBase();
+        document.head.appendChild(base);
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPMS | لوحة المنسق</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              tajawal: ["Tajawal", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+            },
+            colors: {
+              gpms: {
+                maroon: "#7A2E2E",
+                maroonDark: "#622424",
+                charcoal: "#2F343C",
+                bg: "#F4F5F7",
+              },
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, .08)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="css/GPMS.css" />
+  </head>
+
+  <body class="min-h-dvh bg-gpms-bg font-tajawal text-slate-800" data-page="admin">
+    <div class="min-h-dvh lg:flex">
+      <aside
+        id="sidebar"
+        class="gpms-sidebar translate-x-full bg-gpms-charcoal text-slate-100 shadow-2xl lg:static lg:translate-x-0"
+      >
+        <div class="flex h-full flex-col">
+          <div class="px-5 pb-4 pt-5">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                <i data-lucide="graduation-cap" class="h-6 w-6 text-white"></i>
+              </div>
+              <div class="leading-tight">
+                <div class="text-sm font-bold text-white">GPMS</div>
+                <div class="text-xs text-slate-300" data-i18n="sidebarCoordinator">إدارة القسم (المنسق)</div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="px-3 pb-5">
+            <a class="gpms-nav-item is-active" href="pages/admin/admin_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span data-i18n="navDashboard">لوحة التحكم</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_users_management.html">
+              <i data-lucide="users-round" class="h-5 w-5"></i>
+              <span data-i18n="navUsers">إدارة المستخدمين</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_assignments.html">
+              <i data-lucide="arrow-left-right" class="h-5 w-5"></i>
+              <span data-i18n="navAssignments">توزيع المشاريع والإشراف</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/supervisor/supervisor_enter_grades.html">
+              <i data-lucide="percent" class="h-5 w-5"></i>
+              <span data-i18n="navProjectGrades">أوزان التقييم ودرجات المشاريع</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_approve_grades.html">
+              <i data-lucide="badge-check" class="h-5 w-5"></i>
+              <span data-i18n="navApproveFinalGrades">اعتماد الدرجات النهائية</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_system_reports.html">
+              <i data-lucide="file-bar-chart-2" class="h-5 w-5"></i>
+              <span data-i18n="navSystemReports">تقارير النظام</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/community.html">
+              <i data-lucide="users" class="h-5 w-5"></i>
+              <span data-i18n="navCommunity">المجتمع والمحادثات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/chatbot.html">
+              <i data-lucide="bot" class="h-5 w-5"></i>
+              <span data-i18n="navChatbot">المساعد الذكي</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/reference_library.html">
+              <i data-lucide="library" class="h-5 w-5"></i>
+              <span data-i18n="navReferenceLibrary">مكتبة المراجع</span>
+            </a>
+          </nav>
+
+          <div class="mt-auto border-t border-white/10 px-4 py-4">
+            <a href="GPMS.html#logout" class="gpms-nav-item">
+              <i data-lucide="log-out" class="h-5 w-5"></i>
+              <span data-i18n="navLogout">تسجيل الخروج</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-slate-950/40 lg:hidden"></div>
+
+      <div class="flex-1">
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-gpms-bg/90 backdrop-blur">
+          <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+                id="sidebarToggle"
+                aria-label="فتح القائمة"
+              >
+                <i data-lucide="menu" class="h-5 w-5"></i>
+              </button>
+              <div>
+                <h1 class="text-lg font-extrabold text-slate-900 sm:text-xl" id="welcomeTitle">أهلاً بك!</h1>
+                <p class="text-sm text-slate-500" id="welcomeSub" data-i18n="subCoordinator">نظرة عامة على المشاريع والتوزيع والإشراف.</p>
+              </div>
+            </div>
+            <span class="hidden sm:inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700">
+              <i data-lucide="settings" class="h-4 w-4 text-gpms-maroon"></i>
+              <span data-i18n-role="coordinator">منسق</span>
+            </span>
+          </div>
+        </header>
+
+        <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <article class="gpms-stat-card">
+              <div class="gpms-stat-meta">
+                <div class="gpms-stat-title" data-i18n="statApprovedProjects">إجمالي المشاريع المعتمدة</div>
+                <div class="gpms-stat-icon bg-emerald-500/10 text-emerald-700">
+                  <i data-lucide="folder-check" class="h-5 w-5"></i>
+                </div>
+              </div>
+              <div id="statTotalProjects" class="gpms-stat-value text-emerald-700">—</div>
+              <div class="gpms-stat-sub" data-i18n="statThisSemester">هذا الفصل</div>
+            </article>
+
+            <article class="gpms-stat-card">
+              <div class="gpms-stat-meta">
+                <div class="gpms-stat-title" data-i18n="statActiveSupervisors">عدد المشرفين النشطين</div>
+                <div class="gpms-stat-icon bg-gpms-maroon/10 text-gpms-maroon">
+                  <i data-lucide="user-round" class="h-5 w-5"></i>
+                </div>
+              </div>
+              <div id="statSupervisors" class="gpms-stat-value">—</div>
+              <div class="gpms-stat-sub" data-i18n="statAvailableForAssignment">متاحون للإسناد</div>
+            </article>
+
+            <article class="gpms-stat-card">
+              <div class="gpms-stat-meta">
+                <div class="gpms-stat-title" data-i18n="statPendingProposals">مقترحات بانتظار الاعتماد</div>
+                <div class="gpms-stat-icon bg-amber-500/10 text-amber-700">
+                  <i data-lucide="file-clock" class="h-5 w-5"></i>
+                </div>
+              </div>
+              <div id="statPending" class="gpms-stat-value text-amber-700">—</div>
+              <div class="gpms-stat-sub" data-i18n="statNeedsFollowUp">تحتاج متابعة</div>
+            </article>
+
+            <article class="gpms-stat-card">
+              <div class="gpms-stat-meta">
+                <div class="gpms-stat-title" data-i18n="statEnrolledStudents">إجمالي الطلاب المشاركين</div>
+                <div class="gpms-stat-icon bg-slate-500/10 text-slate-700">
+                  <i data-lucide="users" class="h-5 w-5"></i>
+                </div>
+              </div>
+              <div id="statStudents" class="gpms-stat-value">—</div>
+              <div class="gpms-stat-sub" data-i18n="statRegisteredInProjects">مسجلين في مشاريع</div>
+            </article>
+          </section>
+
+          <section class="mt-6 sm:mt-8 gpms-section p-5 sm:p-6">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 class="text-base font-extrabold text-slate-900 sm:text-lg" data-i18n="sectionAssignments">توزيع المشاريع والإشراف</h2>
+                <p class="mt-1 text-sm text-slate-500" data-i18n="sectionAssignmentsHint">جدول إداري لإدارة الإسناد (واجهة فقط).</p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button class="gpms-pill">
+                  <i data-lucide="plus" class="h-4 w-4"></i>
+                  <span data-i18n="addAssignment">إضافة توزيع</span>
+                </button>
+                <button class="gpms-pill">
+                  <i data-lucide="download" class="h-4 w-4"></i>
+                  <span data-i18n="export">تصدير</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="mt-4 overflow-x-auto rounded-xl border border-slate-200">
+              <table class="gpms-table min-w-[820px]">
+                <thead>
+                  <tr>
+                    <th data-i18n="thProjectTitle">عنوان المشروع</th>
+                    <th data-i18n="thStatus">الحالة</th>
+                    <th data-i18n="thSupervisor">المشرف</th>
+                    <th data-i18n="thStudentCount">عدد الطلاب</th>
+                    <th data-i18n="thAction">إجراء</th>
+                  </tr>
+                </thead>
+                <tbody id="adminProjectsTable">
+                  <tr><td colspan="5" class="text-center text-slate-400 py-6">جاري التحميل...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/gpms-i18n-extra.js"></script>
+    <script src="js/gpms-i18n.js"></script>
+    <script src="js/gpms-config.js"></script>
+    <script src="js/GPMS.js"></script>
+    <script src="js/gpms-lang-toggle.js"></script>
+    <script src="js/gpms-page-i18n.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedLang = localStorage.getItem("gpms_lang_v1");
+      if (window.GPMS_I18N?.setLang) window.GPMS_I18N.setLang(savedLang === "en" ? "en" : "ar");
+      const applyStaticI18n = () => window.GPMS_I18N?.applyPageTranslations?.();
+      applyStaticI18n();
+      const API = window.GPMS_CONFIG?.apiBaseUrl || "http://localhost:8000/api/v1";
+      const session = (() => { try { return JSON.parse(localStorage.getItem("gpms_session_v1")); } catch { return null; } })();
+      const token = session?.accessToken || "";
+      const authHeaders = { Authorization: `Bearer ${token}` };
+      const tr = (k, v) => (window.GPMS_I18N?.t ? window.GPMS_I18N.t(k, v) : k);
+      const assignmentsUrl =
+        typeof gpmsHref === "function"
+          ? gpmsHref("/pages/admin/admin_assignments.html")
+          : "pages/admin/admin_assignments.html";
+      function esc(v) { return String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+      function statusMap() {
+        const m = window.GPMS_I18N?.projectStatusMap?.() || {};
+        return {
+          approved: m.approved || m.Approved || { label: tr("statusApproved"), cls: "gpms-badge--approved", icon: "badge-check" },
+          active: m.active || m.Active || { label: tr("statusActive"), cls: "gpms-badge--approved", icon: "badge-check" },
+          completed: m.completed || m.Completed || { label: tr("statusCompleted"), cls: "gpms-badge--approved", icon: "badge-check" },
+          pending: m.pending || m.Pending || { label: tr("statusPending"), cls: "gpms-badge--pending", icon: "clock" },
+          delayed: m.delayed || m.Delayed || { label: tr("statusDelayed"), cls: "gpms-badge--delayed", icon: "alert-triangle" },
+        };
+      }
+
+      async function loadStats() {
+        try {
+          const r = await fetch(`${API}/admin/stats`, { headers: authHeaders });
+          if (!r.ok) throw new Error(r.status);
+          const d = await r.json();
+          document.getElementById("statTotalProjects").textContent = d.total_projects ?? 0;
+          document.getElementById("statSupervisors").textContent = d.total_supervisors ?? 0;
+          document.getElementById("statPending").textContent = d.pending_projects ?? 0;
+          document.getElementById("statStudents").textContent = d.total_students ?? 0;
+        } catch (e) {
+          console.error("stats error:", e);
+        }
+      }
+
+      async function loadProjects() {
+        const tb = document.getElementById("adminProjectsTable");
+        try {
+          const r = await fetch(`${API}/projects`, { headers: authHeaders });
+          if (!r.ok) throw new Error(r.status);
+          const projects = await r.json();
+          const list = Array.isArray(projects) ? projects : (projects.items || projects.data || []);
+          if (!list.length) {
+            tb.innerHTML = `<tr><td colspan="5" class="text-center text-slate-400 py-6">${tr("noProjects")}</td></tr>`;
+            return;
+          }
+          const sm = statusMap();
+          tb.innerHTML = list.map(p => {
+            const statusKey = String(p.status || "").toLowerCase();
+            const st = sm[statusKey] || sm[p.status] || sm.pending;
+            const students = p.student_count ?? p.students?.length ?? 0;
+            return `<tr>
+              <td class="font-extrabold text-slate-900">${esc(p.title)}</td>
+              <td><span class="gpms-badge ${st.cls}"><i data-lucide="${st.icon}" class="h-4 w-4"></i> ${st.label}</span></td>
+              <td>${esc(p.supervisor_name || "—")}</td>
+              <td>${students || "—"}</td>
+              <td><button type="button" class="gpms-pill gpms-go-assignments"><i data-lucide="settings-2" class="h-4 w-4"></i><span>${tr("followUp")}</span></button></td>
+            </tr>`;
+          }).join("");
+          tb.querySelectorAll(".gpms-go-assignments").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              location.href = assignmentsUrl;
+            });
+          });
+          if (typeof lucide !== "undefined") lucide.createIcons();
+        } catch (e) {
+          console.error("projects error:", e);
+          tb.innerHTML = `<tr><td colspan="5" class="text-center text-red-500 py-6">${tr("loadProjectsError")}</td></tr>`;
+        }
+      }
+
+      loadStats();
+      loadProjects();
+      document.addEventListener("gpms:langchange", () => {
+        applyStaticI18n();
+        loadProjects();
+      });
+    });
+    </script>
+  </body>
+</html>
+

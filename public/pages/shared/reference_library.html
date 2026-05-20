@@ -1,0 +1,539 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script>
+      (function () {
+        function gpmsPublicBase() {
+          if (location.protocol === "file:") {
+            var u = location.href.split("#")[0].split("?")[0];
+            var i = u.toLowerCase().indexOf("/pages/");
+            if (i >= 0) return u.slice(0, i + 1);
+            return u.slice(0, u.lastIndexOf("/") + 1);
+          }
+          var p = location.pathname.replace(/\\/g, "/");
+          var idx = p.indexOf("/pages/");
+          if (idx >= 0) return p.slice(0, idx + 1);
+          var slash = p.lastIndexOf("/");
+          return slash >= 0 ? p.slice(0, slash + 1) : "/";
+        }
+        window.gpmsPublicBase = gpmsPublicBase;
+        var base = document.createElement("base");
+        base.href = gpmsPublicBase();
+        document.head.appendChild(base);
+      })();
+    </script>
+        <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPMS | مكتبة المراجع</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              tajawal: ["Tajawal", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+            },
+            colors: {
+              gpms: {
+                maroon: "#7A2E2E",
+                maroonDark: "#622424",
+                charcoal: "#2F343C",
+                bg: "#F4F5F7",
+              },
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, .08)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="css/GPMS.css" />
+  </head>
+
+  <body class="min-h-dvh bg-gpms-bg font-tajawal text-slate-800" data-page="reference" data-ref-standalone="true">
+    <div class="min-h-dvh lg:flex">
+      <aside
+        id="sidebar"
+        class="gpms-sidebar translate-x-full bg-gpms-charcoal text-slate-100 shadow-2xl lg:static lg:translate-x-0"
+      >
+        <div class="flex h-full flex-col">
+          <div class="px-5 pb-4 pt-5">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                <i data-lucide="library" class="h-6 w-6 text-white"></i>
+              </div>
+              <div class="leading-tight">
+                <div class="text-sm font-bold text-white">GPMS</div>
+                <div class="text-xs text-slate-300">مكتبة المراجع</div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="px-3 pb-5">
+            <a class="gpms-nav-item" href="pages/student/student_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span>لوحة الطالب</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/supervisor/supervisor_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span>لوحة المشرف</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/admin/admin_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span>لوحة المنسق</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/chatbot.html">
+              <i data-lucide="bot" class="h-5 w-5"></i>
+              <span data-i18n="navChatbot">المساعد الذكي</span>
+            </a>
+            <a class="gpms-nav-item is-active" href="pages/shared/reference_library.html">
+              <i data-lucide="library" class="h-5 w-5"></i>
+              <span data-i18n="navReferenceLibrary">مكتبة المراجع</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/community.html">
+              <i data-lucide="users" class="h-5 w-5"></i>
+              <span data-i18n="navCommunity">المجتمع والمحادثات</span>
+            </a>
+          </nav>
+
+          <div class="mt-auto border-t border-white/10 px-4 py-4">
+            <a href="GPMS.html#logout" class="gpms-nav-item">
+              <i data-lucide="log-out" class="h-5 w-5"></i>
+              <span data-i18n="navLogout">تسجيل الخروج</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-slate-950/40 lg:hidden"></div>
+
+      <div class="flex-1">
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-gpms-bg/90 backdrop-blur">
+          <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+                id="sidebarToggle"
+                aria-label="فتح القائمة"
+              >
+                <i data-lucide="menu" class="h-5 w-5"></i>
+              </button>
+              <div>
+                <h1 class="text-lg font-extrabold text-slate-900 sm:text-xl">مكتبة المراجع</h1>
+                <p class="text-sm text-slate-500">مشاريع مرجعية وملفات PDF المعتمدة من المشرف أو المنسق.</p>
+              </div>
+            </div>
+            <a class="hidden sm:inline-flex gpms-pill" href="pages/shared/chatbot.html">
+              <i data-lucide="bot" class="h-4 w-4"></i>
+              <span>اسأل المساعد</span>
+            </a>
+          </div>
+        </header>
+
+        <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          <section class="gpms-section p-5 sm:p-6">
+            <div class="mb-6 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-relaxed text-slate-700">
+              <p class="font-extrabold text-slate-900">آلية ملفات المراجع</p>
+              <p class="mt-2">
+                أي مستخدم مسجّل يمكنه رفع ملف PDF ليستفيد منه الجميع. يبقى الملف <strong>قيد المراجعة</strong> حتى يعتمد
+                <strong>مشرف</strong> أو <strong>منسق</strong>. بمجرد الموافقة يظهر الملف <strong>تلقائياً</strong> في جدول «ملفات مرجعية معتمدة» أدناه ليستطيع الجميع تحميله.
+              </p>
+            </div>
+
+            <div id="refNeedLogin" class="mb-6 hidden rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm font-bold text-amber-900">
+              يجب <a href="GPMS.html" class="underline">تسجيل الدخول</a> لعرض المراجع أو الرفع.
+            </div>
+
+            <div id="refAlert" class="mb-6 hidden rounded-xl p-4 text-sm font-bold"></div>
+
+            <p class="mb-6 hidden rounded-xl border border-sky-200 bg-sky-50 p-4 text-sm font-bold text-sky-900" data-student-member-only>
+              أنت عضو فريق: يمكنك عرض وتحميل المراجع المعتمدة فقط. الرفع غير متاح لك.
+            </p>
+
+            <div class="mb-8 rounded-2xl border border-gpms-maroon/20 bg-white p-5 shadow-soft" data-student-leader-only>
+              <h2 class="mb-3 flex items-center gap-2 text-base font-extrabold text-slate-900">
+                <i data-lucide="upload-cloud" class="h-5 w-5 text-gpms-maroon"></i>
+                رفع ملف للمكتبة (PDF)
+              </h2>
+              <form id="refUploadForm" class="grid gap-3 md:grid-cols-2">
+                <div class="md:col-span-2">
+                  <label class="mb-1 block text-xs font-bold text-slate-600">عنوان المرجع</label>
+                  <input id="refUploadTitle" class="gpms-input" required maxlength="255" placeholder="مثال: دليل تقني لمشروع GPMS" />
+                </div>
+                <div class="md:col-span-2">
+                  <label class="mb-1 block text-xs font-bold text-slate-600">وصف مختصر (اختياري)</label>
+                  <textarea id="refUploadDesc" class="gpms-input min-h-[72px]" placeholder="ما يخص هذا الملف..."></textarea>
+                </div>
+                <div class="md:col-span-2">
+                  <label class="mb-1 block text-xs font-bold text-slate-600">الملف</label>
+                  <input type="file" id="refUploadFile" accept=".pdf,application/pdf" class="gpms-input text-sm" required />
+                  <p class="mt-1 text-xs text-slate-500">PDF فقط، حتى 20 ميجابايت. بعد الرفع يُرسل للمراجعة.</p>
+                </div>
+                <div class="md:col-span-2">
+                  <button type="submit" id="refUploadSubmit" class="gpms-button px-6 py-3">إرسال للمراجعة</button>
+                </div>
+              </form>
+            </div>
+
+            <div id="refPendingSection" class="mb-8 hidden rounded-2xl border border-amber-200 bg-amber-50/60 p-5">
+              <h2 class="mb-3 text-base font-extrabold text-slate-900">طلبات بانتظار اعتمادك (مشرف / منسق)</h2>
+              <div class="overflow-x-auto rounded-xl border border-amber-100 bg-white">
+                <table class="gpms-table min-w-[720px]">
+                  <thead>
+                    <tr>
+                      <th>العنوان</th>
+                      <th>الرافع</th>
+                      <th>التاريخ</th>
+                      <th>إجراءات</th>
+                    </tr>
+                  </thead>
+                  <tbody id="refPendingBody"></tbody>
+                </table>
+              </div>
+              <p id="refPendingEmpty" class="hidden py-4 text-center text-sm text-slate-600">لا توجد طلبات معلقة.</p>
+            </div>
+
+            <div class="mb-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-soft" data-student-leader-only>
+              <h2 class="mb-3 text-base font-extrabold text-slate-900">رفعاتي وحالتها</h2>
+              <div class="overflow-x-auto rounded-xl border border-slate-100">
+                <table class="gpms-table min-w-[720px]">
+                  <thead>
+                    <tr>
+                      <th>العنوان</th>
+                      <th>الحالة</th>
+                      <th>تحميل</th>
+                    </tr>
+                  </thead>
+                  <tbody id="refMyUploadsBody"></tbody>
+                </table>
+              </div>
+              <p id="refMyUploadsEmpty" class="hidden py-4 text-center text-sm text-slate-600">لم ترفع أي ملف بعد.</p>
+            </div>
+
+            <div class="mb-8 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5">
+              <h2 class="mb-3 flex items-center gap-2 text-base font-extrabold text-slate-900">
+                <i data-lucide="badge-check" class="h-5 w-5 text-emerald-700"></i>
+                ملفات مرجعية معتمدة (للجميع)
+              </h2>
+              <p class="mb-4 text-xs text-slate-600">تظهر هنا فقط بعد موافقة مشرف أو منسق.</p>
+              <div class="overflow-x-auto rounded-xl border border-emerald-100 bg-white">
+                <table class="gpms-table min-w-[720px]">
+                  <thead>
+                    <tr>
+                      <th>العنوان</th>
+                      <th>الرافع</th>
+                      <th>اعتمد بواسطة</th>
+                      <th>تحميل</th>
+                    </tr>
+                  </thead>
+                  <tbody id="refApprovedFilesBody"></tbody>
+                </table>
+              </div>
+              <p id="refApprovedFilesEmpty" class="hidden py-4 text-center text-sm text-slate-600">لا توجد ملفات معتمدة بعد.</p>
+            </div>
+
+            <h2 class="mb-3 text-base font-extrabold text-slate-900">مشاريع مرجعية</h2>
+            <p class="mb-4 text-xs text-slate-500">مشاريع بحالة نشطة أو مكتملة من النظام.</p>
+
+            <div id="referenceCards" class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+            <div class="mt-6 overflow-x-auto rounded-xl border border-slate-200">
+              <table class="gpms-table min-w-[900px]">
+                <thead>
+                  <tr>
+                    <th>العنوان</th>
+                    <th>الحالة</th>
+                    <th>المشرف</th>
+                    <th>تاريخ الإنشاء</th>
+                  </tr>
+                </thead>
+                <tbody id="referenceTableBody"></tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/gpms-i18n-extra.js"></script>
+    <script src="js/gpms-i18n.js"></script>
+    <script src="js/gpms-config.js"></script>
+    <script src="js/GPMS.js"></script>
+    <script src="js/gpms-lang-toggle.js"></script>
+    <script src="js/gpms-page-i18n.js"></script>
+    <script>
+    (function () {
+      const API = window.GPMS_CONFIG?.apiBaseUrl || "http://localhost:8000/api/v1";
+
+      function esc(s) {
+        return String(s ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;");
+      }
+
+      function session() {
+        try {
+          const raw = localStorage.getItem("gpms_session_v1");
+          return raw ? JSON.parse(raw) : null;
+        } catch {
+          return null;
+        }
+      }
+
+      const STATUS_AR = {
+        Pending: "قيد المراجعة",
+        Approved: "معتمد — يظهر للجميع",
+        Rejected: "مرفوض",
+      };
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        const s = session();
+        const token = s?.accessToken || "";
+        const role = (s?.role || "").toLowerCase();
+        const isReviewer = role === "supervisor" || role === "coordinator";
+        const headersAuth = token ? { Authorization: `Bearer ${token}` } : {};
+
+        const refNeedLogin = document.getElementById("refNeedLogin");
+        const refAlert = document.getElementById("refAlert");
+        const refUploadForm = document.getElementById("refUploadForm");
+        const refPendingSection = document.getElementById("refPendingSection");
+
+        if (!token) {
+          refNeedLogin?.classList.remove("hidden");
+          if (refUploadForm) refUploadForm.querySelectorAll("input, textarea, button").forEach((el) => (el.disabled = true));
+        }
+
+        if (isReviewer && refPendingSection) refPendingSection.classList.remove("hidden");
+
+        function showAlert(msg, ok) {
+          if (!refAlert) return;
+          refAlert.textContent = msg;
+          refAlert.className =
+            "mb-6 rounded-xl p-4 text-sm font-bold " +
+            (ok ? "border border-emerald-200 bg-emerald-50 text-emerald-800" : "border border-red-200 bg-red-50 text-red-800");
+          refAlert.classList.remove("hidden");
+        }
+
+        function fmtDate(iso) {
+          if (!iso) return "—";
+          try {
+            const d = new Date(iso);
+            return isNaN(d.getTime()) ? "—" : d.toLocaleDateString("ar-SA");
+          } catch {
+            return "—";
+          }
+        }
+
+        async function downloadRef(id, filename) {
+          if (!token) return;
+          try {
+            const r = await fetch(`${API}/references/files/${id}/download`, { headers: headersAuth });
+            if (!r.ok) {
+              const err = await r.json().catch(() => ({}));
+              showAlert(typeof err.detail === "string" ? err.detail : "تعذر التحميل", false);
+              return;
+            }
+            const blob = await r.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = filename || "reference.pdf";
+            a.click();
+            URL.revokeObjectURL(url);
+          } catch {
+            showAlert("تعذر التحميل", false);
+          }
+        }
+
+        async function loadBundle() {
+          if (!token) return;
+
+          let data;
+          try {
+            const r = await fetch(`${API}/references/library-bundle`, { headers: headersAuth });
+            if (!r.ok) throw new Error();
+            data = await r.json();
+          } catch {
+            showAlert("تعذر تحميل المكتبة. تأكد من تشغيل الخادم.", false);
+            return;
+          }
+
+          const cards = document.getElementById("referenceCards");
+          const tbodyProj = document.getElementById("referenceTableBody");
+          const tbodyApproved = document.getElementById("refApprovedFilesBody");
+          const tbodyMy = document.getElementById("refMyUploadsBody");
+          const tbodyPending = document.getElementById("refPendingBody");
+          const approvedEmpty = document.getElementById("refApprovedFilesEmpty");
+          const myEmpty = document.getElementById("refMyUploadsEmpty");
+          const pendingEmpty = document.getElementById("refPendingEmpty");
+
+          const projects = data.projects || [];
+          if (cards) {
+            cards.innerHTML = "";
+            projects.slice(0, 9).forEach((p) => {
+              const art = document.createElement("article");
+              art.className = "rounded-2xl border border-slate-200 bg-white p-5 shadow-soft";
+              art.innerHTML = `
+                <h3 class="text-sm font-extrabold text-slate-900">${esc(p.title)}</h3>
+                <p class="mt-2 text-xs text-slate-500">${esc(p.status)} • مشروع #${p.project_id}</p>
+                <p class="mt-3 line-clamp-3 text-sm text-slate-600">${esc((p.description || "").slice(0, 140))}</p>`;
+              cards.appendChild(art);
+            });
+          }
+
+          if (tbodyProj) {
+            tbodyProj.innerHTML = "";
+            projects.forEach((p) => {
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td class="font-extrabold text-slate-900">${esc(p.title)}</td>
+                <td>${esc(p.status)}</td>
+                <td>${p.supervisor_id ?? "—"}</td>
+                <td>${fmtDate(p.created_at)}</td>`;
+              tbodyProj.appendChild(tr);
+            });
+          }
+
+          const approvedFiles = data.approved_files || [];
+          if (tbodyApproved) {
+            tbodyApproved.innerHTML = "";
+            approvedFiles.forEach((f) => {
+              const tr = document.createElement("tr");
+              const fname = esc(f.original_filename || "reference.pdf");
+              tr.innerHTML = `
+                <td class="font-extrabold">${esc(f.title)}</td>
+                <td>${esc(f.uploaded_by_name)} <span dir="ltr" class="font-mono text-xs text-slate-500">${esc(f.uploaded_by_display_id)}</span></td>
+                <td>${esc(f.reviewed_by_name || "—")}</td>
+                <td><button type="button" class="gpms-pill ref-dl" data-id="${f.id}" data-name="${fname}"><i data-lucide="download" class="h-4 w-4"></i><span>تحميل</span></button></td>`;
+              tbodyApproved.appendChild(tr);
+            });
+          }
+          approvedEmpty?.classList.toggle("hidden", approvedFiles.length > 0);
+
+          const mine = data.my_uploads || [];
+          if (tbodyMy) {
+            tbodyMy.innerHTML = "";
+            mine.forEach((f) => {
+              const canDl = f.status === "Approved" || f.status === "Pending" || f.status === "Rejected";
+              const tr = document.createElement("tr");
+              const fname = esc(f.original_filename || "reference.pdf");
+              const dlBtn =
+                canDl
+                  ? `<button type="button" class="gpms-pill ref-dl" data-id="${f.id}" data-name="${fname}"><i data-lucide="download" class="h-4 w-4"></i><span>تحميل</span></button>`
+                  : "—";
+              tr.innerHTML = `
+                <td class="font-extrabold">${esc(f.title)}</td>
+                <td><span class="gpms-badge">${esc(STATUS_AR[f.status] || f.status)}</span>${f.review_note ? `<div class="mt-1 text-xs text-slate-500">${esc(f.review_note)}</div>` : ""}</td>
+                <td>${dlBtn}</td>`;
+              tbodyMy.appendChild(tr);
+            });
+          }
+          myEmpty?.classList.toggle("hidden", mine.length > 0);
+
+          const pending = data.pending_review || [];
+          if (tbodyPending) {
+            tbodyPending.innerHTML = "";
+            pending.forEach((f) => {
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td class="font-extrabold">${esc(f.title)}<div class="mt-1 text-xs text-slate-500">${esc(f.description || "")}</div></td>
+                <td>${esc(f.uploaded_by_name)}</td>
+                <td>${fmtDate(f.created_at)}</td>
+                <td>
+                  <div class="flex flex-wrap gap-2">
+                    <button type="button" class="gpms-button px-3 py-2 text-sm ref-appr" data-id="${f.id}" data-appr="1">اعتماد</button>
+                    <button type="button" class="rounded-xl border border-red-200 bg-white px-3 py-2 text-sm font-bold text-red-700 ref-appr" data-id="${f.id}" data-appr="0">رفض</button>
+                    <button type="button" class="gpms-pill ref-dl" data-id="${f.id}" data-name="${esc(f.original_filename || "reference.pdf")}">معاينة</button>
+                  </div>
+                </td>`;
+              tbodyPending.appendChild(tr);
+            });
+          }
+          pendingEmpty?.classList.toggle("hidden", !isReviewer || pending.length > 0);
+
+          document.querySelectorAll(".ref-dl").forEach((btn) => {
+            btn.addEventListener("click", () =>
+              downloadRef(Number(btn.getAttribute("data-id")), btn.getAttribute("data-name"))
+            );
+          });
+
+          document.querySelectorAll(".ref-appr").forEach((btn) => {
+            btn.addEventListener("click", async () => {
+              const id = Number(btn.getAttribute("data-id"));
+              const appr = btn.getAttribute("data-appr") === "1";
+              try {
+                const r = await fetch(`${API}/references/files/${id}/review`, {
+                  method: "PATCH",
+                  headers: { ...headersAuth, "Content-Type": "application/json" },
+                  body: JSON.stringify({ approved: appr, note: appr ? null : "مرفوض من المراجعة" }),
+                });
+                const body = await r.json().catch(() => ({}));
+                if (!r.ok) {
+                  showAlert(typeof body.detail === "string" ? body.detail : "فشلت العملية", false);
+                  return;
+                }
+                showAlert(appr ? "تم الاعتماد — سيظهر الملف الآن للجميع في المراجع المعتمدة." : "تم الرفض.", true);
+                await loadBundle();
+              } catch {
+                showAlert("تعذر الاتصال بالخادم", false);
+              }
+            });
+          });
+
+          if (window.lucide) lucide.createIcons();
+        }
+
+        refUploadForm?.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          if (!token) return;
+          const titleEl = document.getElementById("refUploadTitle");
+          const descEl = document.getElementById("refUploadDesc");
+          const fileEl = document.getElementById("refUploadFile");
+          const submitBtn = document.getElementById("refUploadSubmit");
+          if (!fileEl?.files?.length) {
+            showAlert("اختر ملف PDF", false);
+            return;
+          }
+          const fd = new FormData();
+          fd.append("title", titleEl.value.trim());
+          fd.append("description", descEl.value.trim());
+          fd.append("file", fileEl.files[0]);
+          submitBtn.disabled = true;
+          try {
+            const r = await fetch(`${API}/references/files/upload`, { method: "POST", headers: headersAuth, body: fd });
+            const body = await r.json().catch(() => ({}));
+            if (!r.ok) {
+              showAlert(typeof body.detail === "string" ? body.detail : "فشل الرفع", false);
+              return;
+            }
+            showAlert("تم الإرسال. الملف قيد المراجعة — بعد اعتماد المشرف أو المنسق يظهر تلقائياً للجميع.", true);
+            refUploadForm.reset();
+            await loadBundle();
+          } catch {
+            showAlert("تعذر الرفع", false);
+          } finally {
+            submitBtn.disabled = false;
+          }
+        });
+
+        await loadBundle();
+      });
+    })();
+    </script>
+  </body>
+</html>
+

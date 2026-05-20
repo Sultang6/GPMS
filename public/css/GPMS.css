@@ -1,0 +1,472 @@
+:root {
+  --gpms-maroon: #7a2e2e;
+  --gpms-charcoal: #2f343c;
+}
+
+/* Make native controls feel consistent in RTL. */
+html {
+  direction: rtl;
+  overflow-x: hidden;
+}
+
+html[lang="en"],
+body.gpms-ltr {
+  direction: ltr;
+}
+
+html[lang="en"] .gpms-input[dir="ltr"],
+body.gpms-ltr .gpms-input[dir="ltr"] {
+  text-align: left;
+}
+
+html[lang="en"] .gpms-icon-end,
+body.gpms-ltr .gpms-icon-end {
+  right: auto;
+  left: 0.75rem;
+}
+
+html[lang="en"] .gpms-icon-start,
+body.gpms-ltr .gpms-icon-start {
+  left: auto;
+  right: 0.75rem;
+}
+
+html[lang="en"] .gpms-input.pr-11,
+body.gpms-ltr .gpms-input.pr-11 {
+  padding-right: 0.9rem;
+  padding-left: 2.75rem;
+}
+
+html[lang="en"] .gpms-login-arrow,
+body.gpms-ltr .gpms-login-arrow {
+  transform: scaleX(-1);
+}
+
+/* مبدّل اللغة — صفحة تسجيل الدخول */
+.gpms-lang-toggle {
+  display: flex;
+  max-width: 16rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 0.25rem;
+  gap: 0.25rem;
+}
+
+.gpms-lang-btn {
+  flex: 1;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #64748b;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.gpms-lang-btn:hover {
+  color: var(--gpms-maroon, #7a2e2e);
+}
+
+.gpms-lang-btn.is-active {
+  background: var(--gpms-maroon, #7a2e2e);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(122, 46, 46, 0.25);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* شعار جامعة حفر الباطن — صفحة تسجيل الدخول فقط */
+.gpms-login-logo-wrap {
+  max-width: 11rem;
+  margin-inline: auto;
+  padding: 0.25rem;
+  background: transparent;
+}
+
+.gpms-login-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ——— الشريط الجانبي (يعمل RTL + LTR بدون اختفاء) ——— */
+.gpms-sidebar,
+#sidebar {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-end: 0;
+  z-index: 40;
+  width: 18.5rem;
+  background: var(--gpms-charcoal, #2f343c);
+  color: rgb(241 245 249);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease;
+}
+
+/* مغلق على الجوال فقط */
+@media (max-width: 1023px) {
+  .gpms-sidebar.gpms-sidebar-closed,
+  #sidebar.gpms-sidebar-closed,
+  #sidebar.translate-x-full:not(.gpms-sidebar-open) {
+    transform: translateX(100%);
+  }
+
+  html[lang="en"] .gpms-sidebar.gpms-sidebar-closed,
+  html[lang="en"] #sidebar.gpms-sidebar-closed,
+  html[lang="en"] #sidebar.translate-x-full:not(.gpms-sidebar-open),
+  body.gpms-ltr .gpms-sidebar.gpms-sidebar-closed,
+  body.gpms-ltr #sidebar.gpms-sidebar-closed,
+  body.gpms-ltr #sidebar.translate-x-full:not(.gpms-sidebar-open) {
+    inset-inline-end: auto;
+    inset-inline-start: 0;
+    transform: translateX(-100%);
+  }
+}
+
+@media (min-width: 1024px) {
+  .gpms-sidebar,
+  #sidebar {
+    position: static;
+    transform: none !important;
+    flex-shrink: 0;
+  }
+}
+
+html[lang="en"] #gpmsLangGlobalWrap,
+body.gpms-ltr #gpmsLangGlobalWrap {
+  margin-inline-start: auto;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Sidebar + wide tables: يمنع تمدد عمود المحتوى بعرض أوسع من الشاشة (الجدول يُمرَّر أفقياً داخل المنطقة فقط). */
+.min-h-dvh.lg\:flex > div.flex-1 {
+  min-width: 0;
+}
+
+.gpms-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 0.9rem;
+  padding: 0.85rem 0.9rem;
+  color: rgba(226, 232, 240, 0.92);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.gpms-nav-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.gpms-nav-item.is-active {
+  background: linear-gradient(180deg, rgba(122, 46, 46, 0.95) 0%, rgba(98, 36, 36, 0.95) 100%);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(122, 46, 46, 0.25);
+}
+
+.gpms-stat-card {
+  border-radius: 1.15rem;
+  border: 1px solid rgb(226 232 240);
+  background: #fff;
+  padding: 1rem 1rem;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.05);
+}
+
+.gpms-stat-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.gpms-stat-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: rgb(71 85 105);
+}
+
+.gpms-stat-icon {
+  display: inline-flex;
+  height: 2.25rem;
+  width: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.9rem;
+}
+
+.gpms-stat-value {
+  margin-top: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: rgb(15 23 42);
+}
+
+.gpms-stat-sub {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: rgb(100 116 139);
+}
+
+a.gpms-pill {
+  text-decoration: none;
+}
+
+.gpms-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgb(226 232 240);
+  background: #fff;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: rgb(71 85 105);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.gpms-pill:hover {
+  border-color: rgba(122, 46, 46, 0.35);
+  background: rgba(122, 46, 46, 0.04);
+}
+
+.gpms-section {
+  border-radius: 1.15rem;
+  border: 1px solid rgb(226 232 240);
+  background: #fff;
+  box-shadow: 0 18px 60px rgba(15, 23, 42, 0.06);
+}
+
+.gpms-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+
+.gpms-table th,
+.gpms-table td {
+  padding: 0.9rem 0.9rem;
+  border-bottom: 1px solid rgb(226 232 240);
+  font-size: 0.9rem;
+}
+
+.gpms-table th {
+  background: rgb(248 250 252);
+  color: rgb(51 65 85);
+  font-weight: 900;
+  text-align: start;
+}
+
+.gpms-table tr:hover td {
+  background: rgba(122, 46, 46, 0.03);
+}
+
+.gpms-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 900;
+  border: 1px solid rgb(226 232 240);
+  background: #fff;
+  color: rgb(71 85 105);
+}
+
+.gpms-badge--pending {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.22);
+  color: rgb(161 98 7);
+}
+
+.gpms-badge--approved {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.22);
+  color: rgb(4 120 87);
+}
+
+.gpms-badge--delayed {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: rgb(185 28 28);
+}
+
+.gpms-chat-bubble {
+  max-width: 85%;
+  border-radius: 1rem;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.9rem;
+  line-height: 1.4rem;
+  border: 1px solid rgb(226 232 240);
+}
+
+.gpms-chat-bubble--me {
+  background: linear-gradient(180deg, rgba(122, 46, 46, 0.92) 0%, rgba(98, 36, 36, 0.92) 100%);
+  border-color: rgba(122, 46, 46, 0.25);
+  color: #fff;
+}
+
+.gpms-chat-bubble--other {
+  background: #fff;
+  color: rgb(51 65 85);
+}
+
+.gpms-chat-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 3.5rem;
+  min-height: 1.4rem;
+}
+
+.gpms-chat-typing span {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 9999px;
+  background: rgb(148 163 184);
+  animation: gpms-chat-dot 1.2s infinite ease-in-out;
+}
+
+.gpms-chat-typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.gpms-chat-typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes gpms-chat-dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+.gpms-input {
+  width: 100%;
+  border-radius: 0.9rem;
+  border: 1px solid rgb(226 232 240);
+  background: #fff;
+  padding: 0.95rem 0.9rem;
+  font-size: 0.95rem;
+  line-height: 1.25rem;
+  outline: none;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.gpms-input:focus {
+  border-color: color-mix(in srgb, var(--gpms-maroon) 55%, rgb(226 232 240));
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--gpms-maroon) 18%, transparent);
+}
+
+.gpms-input::placeholder {
+  color: rgb(148 163 184);
+}
+
+select.gpms-input {
+  padding-left: 2.5rem; /* leave room for default arrow on some browsers */
+}
+
+.gpms-button {
+  border-radius: 0.9rem;
+  padding: 0.95rem 1rem;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(180deg, #7a2e2e 0%, #622424 100%);
+  box-shadow: 0 14px 30px rgba(122, 46, 46, 0.25);
+  transition: transform 0.08s ease, filter 0.12s ease;
+}
+
+.gpms-button:hover {
+  filter: brightness(1.03);
+}
+
+.gpms-button:active {
+  transform: translateY(1px);
+}
+
+.gpms-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(122, 46, 46, 0.22);
+}
+
+.gpms-table-wrap {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  min-height: 12rem;
+  max-height: min(70vh, 42rem);
+  border-radius: 0.75rem;
+}
+
+.gpms-table-wrap .gpms-table {
+  width: 100%;
+}
+
+.gpms-table td.gpms-actions-cell {
+  min-width: 11rem;
+  vertical-align: top;
+}
+
+.gpms-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.gpms-modal-backdrop.hidden {
+  display: none;
+}
+
+.gpms-modal-panel {
+  width: 100%;
+  max-width: 36rem;
+  max-height: min(92vh, 40rem);
+  overflow-y: auto;
+  border-radius: 1rem;
+  border: 1px solid rgb(226 232 240);
+  background: #fff;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.18);
+}
+
+.gpms-modal-panel textarea.gpms-input {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.gpms-grade-form-block + .gpms-grade-form-block {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgb(241 245 249);
+}
+

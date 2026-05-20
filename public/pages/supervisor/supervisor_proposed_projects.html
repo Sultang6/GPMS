@@ -1,0 +1,379 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script>
+      (function () {
+        function gpmsPublicBase() {
+          if (location.protocol === "file:") {
+            var u = location.href.split("#")[0].split("?")[0];
+            var i = u.toLowerCase().indexOf("/pages/");
+            if (i >= 0) return u.slice(0, i + 1);
+            return u.slice(0, u.lastIndexOf("/") + 1);
+          }
+          var p = location.pathname.replace(/\\/g, "/");
+          var idx = p.indexOf("/pages/");
+          if (idx >= 0) return p.slice(0, idx + 1);
+          var slash = p.lastIndexOf("/");
+          return slash >= 0 ? p.slice(0, slash + 1) : "/";
+        }
+        window.gpmsPublicBase = gpmsPublicBase;
+        var base = document.createElement("base");
+        base.href = gpmsPublicBase();
+        document.head.appendChild(base);
+      })();
+    </script>
+        <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPMS | المشاريع المقترحة</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              tajawal: ["Tajawal", "system-ui", "Segoe UI", "Arial", "sans-serif"],
+            },
+            colors: {
+              gpms: {
+                maroon: "#7A2E2E",
+                maroonDark: "#622424",
+                charcoal: "#2F343C",
+                bg: "#F4F5F7",
+              },
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, .08)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="css/GPMS.css" />
+  </head>
+
+  <body class="min-h-dvh bg-gpms-bg font-tajawal text-slate-800" data-page="supervisor-proposals">
+    <div class="min-h-dvh lg:flex">
+      <aside
+        id="sidebar"
+        class="gpms-sidebar translate-x-full bg-gpms-charcoal text-slate-100 shadow-2xl lg:static lg:translate-x-0"
+      >
+        <div class="flex h-full flex-col">
+          <div class="px-5 pb-4 pt-5">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                <i data-lucide="graduation-cap" class="h-6 w-6 text-white"></i>
+              </div>
+              <div class="leading-tight">
+                <div class="text-sm font-bold text-white">GPMS</div>
+                <div class="text-xs text-slate-300" data-i18n="sidebarSupervisor">لوحة تحكم المشرف</div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="px-3 pb-5">
+            <a class="gpms-nav-item" href="pages/supervisor/supervisor_dashboard.html">
+              <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+              <span data-i18n="navDashboard">لوحة التحكم</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/supervisor/supervisor_review_reports.html">
+              <i data-lucide="file-check-2" class="h-5 w-5"></i>
+              <span data-i18n="navReviewReports">تقييم التقارير</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/supervisor/supervisor_enter_grades.html">
+              <i data-lucide="square-pen" class="h-5 w-5"></i>
+              <span data-i18n="navEnterGrades">إدخال الدرجات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/supervisor/supervisor_student_notifications.html">
+              <i data-lucide="bell" class="h-5 w-5"></i>
+              <span data-i18n="navStudentNotifications">إشعارات الطلاب</span>
+            </a>
+            <a class="gpms-nav-item is-active" href="pages/supervisor/supervisor_proposed_projects.html">
+              <i data-lucide="folder-open" class="h-5 w-5"></i>
+              <span data-i18n="navProposedProjects">المشاريع المقترحة</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/community.html">
+              <i data-lucide="users" class="h-5 w-5"></i>
+              <span data-i18n="navCommunity">المجتمع والمحادثات</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/chatbot.html">
+              <i data-lucide="bot" class="h-5 w-5"></i>
+              <span data-i18n="navChatbot">المساعد الذكي</span>
+            </a>
+            <a class="gpms-nav-item" href="pages/shared/reference_library.html">
+              <i data-lucide="library" class="h-5 w-5"></i>
+              <span data-i18n="navReferenceLibrary">مكتبة المراجع</span>
+            </a>
+          </nav>
+
+          <div class="mt-auto border-t border-white/10 px-4 py-4">
+            <a href="GPMS.html#logout" class="gpms-nav-item">
+              <i data-lucide="log-out" class="h-5 w-5"></i>
+              <span data-i18n="navLogout">تسجيل الخروج</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-slate-950/40 lg:hidden"></div>
+
+      <div class="flex-1">
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-gpms-bg/90 backdrop-blur">
+          <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+                id="sidebarToggle"
+                aria-label="فتح القائمة"
+              >
+                <i data-lucide="menu" class="h-5 w-5"></i>
+              </button>
+              <div>
+                <h1 class="text-lg font-extrabold text-slate-900 sm:text-xl">المشاريع المقترحة</h1>
+                <p class="text-sm text-slate-500">اتخاذ قرار: اعتماد/رفض/طلب تعديل (واجهة).</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          <section class="gpms-section p-5 sm:p-6">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 class="text-base font-extrabold text-slate-900 sm:text-lg">قائمة المقترحات</h2>
+                <p class="mt-1 text-sm text-slate-500">يمكن التصفية حسب الحالة (واجهة).</p>
+              </div>
+              <button class="gpms-pill">
+                <i data-lucide="filter" class="h-4 w-4"></i>
+                <span>تصفية</span>
+              </button>
+            </div>
+
+            <div class="gpms-table-wrap mt-4 rounded-xl border border-slate-200">
+              <table class="gpms-table min-w-[720px]">
+                <thead>
+                  <tr>
+                    <th>المقترح</th>
+                    <th>الطالب</th>
+                    <th>التاريخ</th>
+                    <th>الحالة</th>
+                    <th>إجراء</th>
+                  </tr>
+                </thead>
+                <tbody id="proposalsTableBody">
+                  <tr><td colspan="5" class="text-center text-sm text-slate-500">جاري التحميل...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/gpms-i18n-extra.js"></script>
+    <script src="js/gpms-i18n.js"></script>
+    <script src="js/gpms-config.js"></script>
+    <script src="js/GPMS.js"></script>
+    <script src="js/gpms-lang-toggle.js"></script>
+    <script src="js/gpms-page-i18n.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const API = window.GPMS_CONFIG?.apiBaseUrl || "http://localhost:8000/api/v1";
+      const session = (() => { try { return JSON.parse(localStorage.getItem("gpms_session_v1")); } catch { return null; } })();
+      const token = session?.accessToken || "";
+      const userId = session?.userId;
+      const authHeaders = { Authorization: `Bearer ${token}` };
+      const tr = (k, v) => (window.GPMS_I18N?.t ? window.GPMS_I18N.t(k, v) : k);
+      function esc(v) { return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+      const tbody = document.getElementById("proposalsTableBody");
+
+      async function loadProposals() {
+        try {
+          const res = await fetch(`${API}/projects?status_filter=Pending&supervisor_id=${userId}`, { headers: authHeaders });
+          if (!res.ok) { tbody.innerHTML = `<tr><td colspan="5" class="text-center text-sm text-red-500">${tr("loadFailed")}</td></tr>`; return; }
+          const projects = await res.json();
+          const list = Array.isArray(projects) ? projects : [];
+
+          if (list.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center text-sm text-slate-500">${tr("noPendingProposals")}</td></tr>`;
+            return;
+          }
+
+          const rows = [];
+          for (const p of list) {
+            let studentsText = "—";
+            try {
+              const stRes = await fetch(`${API}/projects/${p.project_id}/students`, { headers: authHeaders });
+              if (stRes.ok) {
+                const students = await stRes.json();
+                const stList = Array.isArray(students) ? students : [];
+                studentsText = stList.map(st => st.full_name || st.email || `#${st.id}`).join("، ") || "—";
+              }
+            } catch {}
+
+            let fileBtnHtml = "";
+            try {
+              const fRes = await fetch(`${API}/projects/${p.project_id}/proposal-file`, { headers: authHeaders });
+              if (fRes.ok) {
+                const fData = await fRes.json();
+                if (fData.file_path) {
+                  const dl = `${API}/submissions/download/${encodeURIComponent(fData.file_path)}`;
+                  fileBtnHtml = `<button type="button" class="gpms-pill" data-gpms-auth-download="${dl}" data-gpms-auth-open-tab><i data-lucide="eye" class="h-4 w-4"></i><span>${tr("viewFile")}</span></button>`;
+                }
+              }
+            } catch {}
+
+            const dateStr = p.created_at ? new Date(p.created_at).toLocaleDateString("ar-SA") : "—";
+            const statusBadge = p.status === "Pending"
+              ? `<span class="gpms-badge gpms-badge--pending"><i data-lucide="clock" class="h-4 w-4"></i> ${tr("statusPending")}</span>`
+              : `<span class="gpms-badge">${esc(p.status)}</span>`;
+
+            rows.push(`<tr>
+              <td>
+                <div class="font-extrabold text-slate-900">${esc(p.title || "بدون عنوان")}</div>
+                <div class="mt-1 text-xs text-slate-500 max-w-xs truncate">${esc(p.description || "")}</div>
+              </td>
+              <td>${esc(studentsText)}</td>
+              <td>${esc(dateStr)}</td>
+              <td>${statusBadge}</td>
+              <td class="gpms-actions-cell">
+                <div class="flex flex-wrap gap-2">
+                  ${fileBtnHtml}
+                  <button class="gpms-pill btn-approve" data-id="${p.project_id}">
+                    <i data-lucide="check" class="h-4 w-4"></i>
+                    <span>${tr("approve")}</span>
+                  </button>
+                  <button class="gpms-pill btn-reject" data-id="${p.project_id}">
+                    <i data-lucide="x" class="h-4 w-4"></i>
+                    <span>${tr("reject")}</span>
+                  </button>
+                  <button class="gpms-pill btn-request-edit" data-id="${p.project_id}" data-students='${JSON.stringify((p.student_ids || []))}'>
+                    <i data-lucide="square-pen" class="h-4 w-4"></i>
+                    <span>${tr("requestRevision")}</span>
+                  </button>
+                </div>
+                <div id="rejectForm-${p.project_id}" class="hidden mt-3 space-y-2 rounded-xl border border-slate-200 bg-white p-3">
+                  <textarea placeholder="${tr("rejectReasonPh")}" class="gpms-input min-h-[60px] reject-reason" data-id="${p.project_id}"></textarea>
+                  <button class="gpms-button w-full py-2 btn-confirm-reject" data-id="${p.project_id}">${tr("confirm")}</button>
+                </div>
+              </td>
+            </tr>`);
+          }
+
+          tbody.innerHTML = rows.join("");
+          if (typeof lucide !== "undefined") lucide.createIcons();
+          bindActions();
+        } catch (err) {
+          console.error("Load proposals error:", err);
+          tbody.innerHTML = `<tr><td colspan="5" class="text-center text-sm text-red-500">${tr("loadError")}</td></tr>`;
+        }
+      }
+
+      function bindActions() {
+        document.querySelectorAll(".btn-approve").forEach(btn => {
+          btn.addEventListener("click", async () => {
+            if (!confirm("هل تريد اعتماد هذا المقترح؟")) return;
+            btn.disabled = true;
+            try {
+              const res = await fetch(`${API}/projects/${btn.dataset.id}`, {
+                method: "PATCH",
+                headers: { ...authHeaders, "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "Approved" })
+              });
+              if (res.ok) {
+                alert("تم اعتماد المقترح بنجاح");
+                loadProposals();
+              } else {
+                alert("فشل اعتماد المقترح");
+              }
+            } catch { alert("خطأ في الاتصال"); }
+            btn.disabled = false;
+          });
+        });
+
+        document.querySelectorAll(".btn-reject").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const form = document.getElementById(`rejectForm-${btn.dataset.id}`);
+            form.classList.toggle("hidden");
+            form.dataset.action = "reject";
+          });
+        });
+
+        document.querySelectorAll(".btn-request-edit").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const form = document.getElementById(`rejectForm-${btn.dataset.id}`);
+            form.classList.toggle("hidden");
+            form.dataset.action = "edit";
+          });
+        });
+
+        document.querySelectorAll(".btn-confirm-reject").forEach(btn => {
+          btn.addEventListener("click", async () => {
+            const id = btn.dataset.id;
+            const form = document.getElementById(`rejectForm-${id}`);
+            const reason = form.querySelector(`.reject-reason[data-id="${id}"]`).value.trim();
+            const action = form.dataset.action;
+
+            if (!reason) { alert("الرجاء إدخال السبب / الملاحظات"); return; }
+
+            btn.disabled = true;
+            btn.textContent = "جاري المعالجة...";
+
+            const newStatus = action === "reject" ? "Rejected" : "Pending";
+            try {
+              const patchRes = await fetch(`${API}/projects/${id}`, {
+                method: "PATCH",
+                headers: { ...authHeaders, "Content-Type": "application/json" },
+                body: JSON.stringify({ status: newStatus })
+              });
+
+              if (patchRes.ok) {
+                try {
+                  const projRes = await fetch(`${API}/projects/${id}/students`, { headers: authHeaders });
+                  if (projRes.ok) {
+                    const students = await projRes.json();
+                    const stList = Array.isArray(students) ? students : [];
+                    for (const st of stList) {
+                      await fetch(`${API}/notifications`, {
+                        method: "POST",
+                        headers: { ...authHeaders, "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          user_id: st.id,
+                          title: action === "reject" ? "تم رفض المقترح" : "مطلوب تعديل على المقترح",
+                          content: reason
+                        })
+                      }).catch(() => {});
+                    }
+                  }
+                } catch {}
+
+                alert(action === "reject" ? "تم رفض المقترح" : "تم إرسال طلب التعديل");
+                loadProposals();
+              } else {
+                alert("فشلت العملية");
+              }
+            } catch { alert("خطأ في الاتصال"); }
+            btn.disabled = false;
+            btn.textContent = "تأكيد";
+          });
+        });
+      }
+
+      loadProposals();
+      document.addEventListener("gpms:langchange", loadProposals);
+    });
+    </script>
+  </body>
+</html>
+
