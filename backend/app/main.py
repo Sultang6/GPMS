@@ -73,3 +73,12 @@ def list_audit_logs(
         }
         for log in logs
     ]
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://gpms-1-s08s.onrender.com"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
