@@ -426,7 +426,7 @@ function wireLoginForm() {
         window.location.href = target;
       }
     } catch {
-      showToast("تعذر الاتصال بالخادم. تأكد من تشغيل الباك اند على المنفذ 8000.");
+      showToast("تعذر الاتصال بالخادم.");
     }
   });
 }
