@@ -3,7 +3,7 @@
 const GPMS_STORAGE_KEY = "gpms_session_v1";
 const API_BASE_URL =
   (typeof window !== "undefined" && window.GPMS_CONFIG?.apiBaseUrl) ||
-  "http://localhost:8000/api/v1";
+  "https://gpms-6nww.onrender.com/api/v1";
 
 function gpmsPaths() {
   return window.GPMS_CONFIG?.paths || {};

@@ -5,7 +5,7 @@
 window.GPMS_CONFIG = {
   /** "auto" للتطوير المحلي — غيّر إلى "/" عند الرفع على جذر الدومين */
   siteRoot: "auto",
-  apiBaseUrl: "http://localhost:8000/api/v1",
+  apiBaseUrl: "https://gpms-6nww.onrender.com/api/v1",
   logo: "assets/images/uhb-logo.png",
 
   paths: {

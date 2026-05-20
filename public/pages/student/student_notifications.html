@@ -172,7 +172,7 @@
     <script src="js/gpms-page-i18n.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const API = window.GPMS_CONFIG?.apiBaseUrl || "http://localhost:8000/api/v1";
+      const API = window.GPMS_CONFIG?.apiBaseUrl || "https://gpms-6nww.onrender.com/api/v1";
       const session = (() => { try { return JSON.parse(localStorage.getItem("gpms_session_v1")); } catch { return null; } })();
       const token = session?.accessToken || "";
       const authHeaders = { Authorization: `Bearer ${token}` };
